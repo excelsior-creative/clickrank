@@ -1,0 +1,39 @@
+---
+description: Guidance on using base shadcn/ui components as building blocks for more complex Aceternity UI structures.
+globs: ["**/components/ui/*.tsx"]
+---
+
+# Base UI Components (shadcn/ui)
+
+These are the fundamental building blocks of the application. They are designed to be accessible, unstyled, and highly customizable.
+
+## 1. Installation
+
+Always use the CLI to install new base components:
+`npx shadcn@latest add [component-name] --cwd ./apps/app`
+
+## 2. Usage Standards
+
+- **Imports**: Always import from `@/components/ui/[component]`.
+- **Customization**: Use the `cn()` utility for merging custom classes with the default ones.
+- **Controlled vs Uncontrolled**: Favor controlled components for complex forms.
+
+## 3. Core Components Reference
+
+- **Buttons**: Use for all triggers. Supports `variant` (default, destructive, outline, secondary, ghost, link).
+- **Inputs/Labels**: Use for all form fields. Combine with `react-hook-form` and `zod` for validation.
+- **Dialogs/Sheets**: Use for modals and side-drawers. Aceternity's `animated-modal` often wraps these.
+- **Cards**: Use for grouping content. Aceternity provides many specialized card variants (e.g., `3d-card`, `glare-card`) that should be used for marketing pages.
+
+## 4. Integration with Aceternity
+
+When a Pro template requires a base component (e.g., a Login form requiring a Button and Input):
+1.  Check if the component is already in `apps/app/src/components/ui/`.
+2.  If not, run the `shadcn add` command.
+3.  Combine the base component's functionality with Aceternity's animations.
+
+## 5. Accessibility (A11y)
+
+- All components are built on top of Radix UI primitives and are accessible by default.
+- Do not remove ARIA attributes.
+- Ensure proper focus management when composing complex UI.

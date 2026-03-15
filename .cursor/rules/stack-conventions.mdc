@@ -1,0 +1,60 @@
+---
+description: "Core project conventions for Next.js + Payload CMS + Tailwind"
+globs: "**/*.ts,**/*.tsx,**/*.js,**/*.jsx"
+alwaysApply: true
+---
+
+# Project Stack — Do Not Suggest Alternatives
+
+## Tech Stack
+- Next.js 15+ (App Router only — never suggest Pages Router)
+- Payload CMS 3.x (our headless CMS — never suggest Contentful, Sanity, Strapi)
+- TypeScript (strict mode)
+- Tailwind CSS v4
+- Vercel for deployment
+- React Server Components by default
+
+## Code Style
+- Use functional components with TypeScript interfaces
+- Prefer named exports over default exports
+- Use kebab-case for directories (e.g., components/hero-section)
+- PascalCase for component files
+- Use `const` arrow functions for components
+- Never use `any` — use `unknown` or define a type
+
+## Component Rules
+- Server Components by default — only add `'use client'` when needed
+- Minimize 'use client', 'useEffect', and 'useState'
+- Wrap client components in Suspense with fallback
+- Use dynamic loading for non-critical components
+
+## Styling
+- Tailwind CSS utility classes only — no inline styles, no CSS modules
+- Mobile-first responsive design (sm:, md:, lg:, xl:)
+- Use CSS variables for theme colors
+- Ensure WCAG AA color contrast (4.5:1 for text, 3:1 for large text)
+
+## Performance
+- Optimize images: use next/image with WebP, include size data, lazy load
+- Optimize Web Vitals (LCP, CLS, INP)
+- Eliminate async waterfalls — use Promise.all for parallel data fetching
+- Use Suspense boundaries for streaming
+
+## SEO
+- Every page must have proper metadata (title, description, Open Graph)
+- Use semantic HTML (<nav>, <main>, <article>, <section>)
+- Implement structured data (JSON-LD) where appropriate
+- Ensure all images have descriptive alt text
+
+## Accessibility
+- Proper ARIA attributes on interactive elements
+- Keyboard navigation support for all interactive components
+- Visible focus states
+- Skip-to-content link on every page
+
+## Payload CMS Conventions
+- Collections use kebab-case slugs
+- Use Payload's built-in access control — never bypass
+- Rich text fields use the Lexical editor
+- Media uploads go through Payload's upload collection
+- Use Payload's local API for server-side data fetching

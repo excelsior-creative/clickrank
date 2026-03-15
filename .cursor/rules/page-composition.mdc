@@ -1,0 +1,46 @@
+---
+description: Patterns and rules for composing full pages using Aceternity UI components.
+globs: ["**/app/**/page.tsx", "**/app/**/layout.tsx"]
+---
+
+# Page Composition Patterns
+
+Use these patterns to build high-converting, modern pages using Aceternity UI components.
+
+## 1. Landing Page Pattern
+
+A standard high-quality landing page should follow this sequence:
+
+1.  **Navigation**: `reference/aceternity/navbars/navbar-classic.tsx` or `navbar-pill.tsx`.
+2.  **Hero**: `reference/aceternity/hero-sections/hero-beams-grid.tsx` or `hero-gradients.tsx`.
+3.  **Logo Cloud**: `reference/aceternity/logo-clouds/logo-cloud-marquee.tsx`.
+4.  **Features**: `reference/aceternity/feature-sections/features-with-sticky-scroll.tsx` or `bento-grid.tsx`.
+5.  **Testimonials**: `reference/aceternity/testimonials/testimonials-grid-carousel.tsx`.
+6.  **CTA**: `reference/aceternity/cta-sections/cta-dashed-grid-lines.tsx`.
+7.  **Footer**: `reference/aceternity/footers/huge-footer-with-grid.tsx`.
+
+## 2. Auth Page Pattern (Login/Signup)
+
+1.  **Layout**: Centered or split-screen with an image.
+2.  **Component**: `reference/aceternity/login-signup/login-with-socials-and-email.tsx` or `registration-form-with-images.tsx`.
+3.  **Background**: Use `background-beams` or `aurora-background` for a premium feel.
+
+## 3. Dashboard Pattern
+
+1.  **Sidebar**: `reference/aceternity/sidebars/collapsible-sidebar.tsx`.
+2.  **Top Bar**: Breadcrumbs + User profile.
+3.  **Content**: Use `bento-grid-skeletons.tsx` for data visualization areas.
+
+## 4. Blog/Content Pattern
+
+1.  **Layout**: `reference/aceternity/blog-content/blog-content-with-toc.tsx`.
+2.  **Sidebar**: Related posts or newsletter signup using `simple-blog-with-grid.tsx`.
+
+## Technical Implementation Rules
+
+- **Shared Layouts**: Use `layout.tsx` for Navbars and Footers that persist across pages.
+- **Lazy Loading**: Use `next/dynamic` for heavy animation components (e.g., `BackgroundBeams`, `WavyBackground`) to improve initial load time.
+- **Theme Support**: Ensure all composed pages support both Dark and Light modes using Tailwind `dark:` variants.
+- **Section Spacing**: Maintain consistent vertical spacing using `py-20` or `py-40` classes as seen in the reference library.
+
+When a user asks to "build a landing page", synthesize these components into a cohesive `page.tsx`.

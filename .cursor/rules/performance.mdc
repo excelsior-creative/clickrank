@@ -1,0 +1,38 @@
+---
+description: Guidelines for maintaining high performance and Core Web Vitals across the project.
+globs: ["**/*.tsx", "**/next.config.ts", "**/vercel.json"]
+---
+
+# Performance & Core Web Vitals Standards
+
+Maintain a Lighthouse performance score of 90+ by following these rules.
+
+## 1. Image Optimization
+- Always use `next/image` for images.
+- Provide `width` and `height` to prevent Layout Shift (CLS).
+- Use `priority` for Hero images or any images above the fold (LCP).
+- Leverage AVIF/WebP formats (configured in `next.config.ts`).
+- Ensure images are appropriately sized; don't load a 4000px image for a 400px thumbnail.
+
+## 2. Font Optimization
+- Use `next/font` for local and Google fonts.
+- Set `display: 'swap'` to ensure text is visible during font load.
+- Avoid loading too many font weights/styles.
+
+## 3. Bundle & Code Splitting
+- Use `dynamic()` imports for heavy components that are not immediately visible (e.g., modals, complex charts, below-the-fold animations).
+- Check `next.config.ts`'s `optimizePackageImports` when adding new heavy libraries like `framer-motion` or `lucide-react`.
+
+## 4. Animation Performance
+- Use `framer-motion` efficiently.
+- Prefer `transform` and `opacity` animations over layout properties (`width`, `height`, `top`, `left`).
+- Use `layoutId` sparingly.
+- Set `will-change` only when necessary for hardware acceleration.
+
+## 5. Caching & Data Fetching
+- Use `unstable_cache` for expensive Payload CMS queries.
+- Implement proper revalidation strategies (`revalidateTag`, `revalidatePath`).
+- Use React Server Components (RSC) by default to reduce client-side JavaScript.
+
+## 6. Static Asset Caching
+- Ensure `vercel.json` contains immutable caching headers for all static assets (images, fonts, scripts).

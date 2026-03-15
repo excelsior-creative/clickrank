@@ -1,0 +1,32 @@
+---
+description: "Tailwind CSS patterns and responsive design rules"
+globs: "**/*.tsx,**/*.jsx,**/*.css"
+alwaysApply: false
+---
+
+# Tailwind CSS Standards
+
+## Responsive Design
+- Always mobile-first: base styles for mobile, sm: for 640px+, md: for 768px+, lg: for 1024px+, xl: for 1280px+
+- Use fluid typography with clamp() when possible
+- Test at 320px, 768px, 1024px, 1440px breakpoints
+
+## Spacing & Layout
+- Use Tailwind's spacing scale consistently (don't mix arbitrary values unless necessary)
+- Prefer gap-* over margin for flex/grid children
+- Use container with mx-auto and px-4 for page-level containers
+
+## Colors & Theming
+- Define brand colors in tailwind.config as CSS variables
+- Use semantic color names (primary, secondary, accent, muted)
+- Always check contrast ratios for accessibility
+
+## Typography
+- Use font-sans for body, font-display (or a custom display font) for headings
+- Ensure readable line-height (leading-relaxed for body text)
+- Max line width: max-w-prose for long-form content
+
+## Patterns to Avoid
+- Never use @apply in component files (defeats utility-first purpose)
+- Never use !important — restructure instead
+- Avoid deeply nested arbitrary values — extend config instead

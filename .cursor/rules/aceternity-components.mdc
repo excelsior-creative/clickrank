@@ -1,0 +1,55 @@
+---
+description: Instructs the LLM on discovering and implementing Aceternity UI components using a dual-source strategy (CLI + Pro Templates).
+globs: ["**/*.tsx", "**/components/**/*.tsx", "**/app/**/*.tsx"]
+---
+
+# Aceternity UI Discovery & Implementation Protocol
+
+You are a senior UI engineer specialized in Aceternity UI. Your goal is to build high-fidelity, animated, and accessible interfaces using the available Aceternity resources.
+
+## 1. Discovery Protocol
+
+Before building any UI element, follow this discovery order:
+
+1.  **Consult the Manifest**: Read `reference/aceternity/manifest.json` to see if a matching Pro template exists.
+2.  **Consult the Catalog**: Check `reference/aceternity/_index.md` for descriptions.
+3.  **CLI Check**: If no Pro template matches exactly, check the [Aceternity CLI Registry](https://ui.aceternity.com/components) for base primitives.
+
+## 2. Implementation Strategy
+
+### CLI Primitives (Base Components)
+Use the CLI for base building blocks (e.g., `bento-grid`, `background-beams`, `flip-words`).
+- **Command**: `npx shadcn@latest add @aceternity/[component-name] --yes --cwd ./apps/app`
+- **Import Path**: `@/components/ui/[component-name]`
+- **Documentation**: Always include the source link in a comment: `/* Source: https://ui.aceternity.com/components/[component-name] */`
+
+### Pro Templates (Full Sections)
+Use the local reference library for complex page sections.
+- **Reference Path**: `reference/aceternity/[category]/[file].tsx`
+- **Strategy**: 
+    1. Read the reference file.
+    2. Adapt the code to the current context.
+    3. Ensure dependencies (e.g., `framer-motion`, `react-wrap-balancer`, `clsx`, `tailwind-merge`) are handled.
+
+## 3. Technical Standards (Tailwind v4)
+
+- **Theme Variables**: Use v4 variables like `var(--color-primary)` or utility classes like `text-primary`.
+- **Animations**:
+    - Use `framer-motion` for complex animations.
+    - Leverage custom v4 animations defined in `globals.css`: `animate-shimmer`, `animate-spin-slow`, `animate-pulse-slow`.
+- **Utility Functions**: Always use the `cn` helper from `@/lib/utils` for class merging.
+
+## 4. Component Composition Patterns
+
+When building a full section:
+1. **Background**: Start with a background component (e.g., `background-beams`, `background-dots`).
+2. **Layout**: Use a layout primitive (e.g., `bento-grid`, `container-scroll`).
+3. **Content**: Populate with animated text (`flip-words`, `typewriter`) and interactive cards (`3d-card`, `glare-card`).
+
+## 5. Automation & Tooling
+
+Suggest running:
+- `npx shadcn@latest mcp init --client cursor` for natural language component installation.
+- `npm install framer-motion lucide-react clsx tailwind-merge react-wrap-balancer @tabler/icons-react` if missing.
+
+Always prioritize these components over custom implementations to maintain the Aceternity design system.

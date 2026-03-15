@@ -1,0 +1,35 @@
+---
+description: Patterns and rules for maintaining high SEO standards and automatic sitemap generation.
+globs: ["**/*.tsx", "**/lib/metadata.ts", "**/sitemap.ts"]
+---
+
+# SEO & Sitemap Optimization Standards
+
+Follow these rules to ensure maximum search engine visibility and accessibility.
+
+## 1. Page Metadata
+- Use `generatePageMetadata` for static pages and `generateArticleMetadata` for blog posts.
+- **Title Tag**: Keep between 50-60 characters. Include primary keywords early.
+- **Meta Description**: Keep between 150-160 characters. Use a clear call-to-action.
+- **Canonical URLs**: Always ensure every page has a canonical URL pointing to the preferred version of the page.
+- **Open Graph (OG)**: Ensure every page has an OG image (1200x630) and proper tags for social sharing.
+
+## 2. Structured Data (JSON-LD)
+- Always include `Organization` and `WebSite` schemas on every page (handled in root layout).
+- Use `generateArticleSchema` for all blog posts.
+- Use `generateBreadcrumbSchema` for deep hierarchies.
+- Ensure all schemas use the `SITE_URL` from `lib/metadata.ts`.
+
+## 3. Automatic Sitemap
+- Maintain `src/app/sitemap.ts` to include all public-facing pages.
+- Dynamic collections (like `Articles`) must be fetched and mapped to sitemap entries.
+- Set appropriate `changeFrequency` and `priority` based on page importance.
+
+## 4. Content Structure
+- **Heading Hierarchy**: Use exactly one `<h1>` per page. Follow with logical `<h2>`, `<h3>` nested structure.
+- **Image Alt Text**: Every `next/image` must have a descriptive, keyword-rich `alt` attribute.
+- **Internal Linking**: Link to other relevant pages within the content using descriptive anchor text.
+
+## 5. Local SEO
+- Include location-specific keywords (e.g., "Orange County") naturally in content and metadata where relevant.
+- Use `formatKeywordWithLocation` helper for AI-generated content targeting.

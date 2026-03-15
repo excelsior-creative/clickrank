@@ -1,0 +1,19 @@
+{
+  "name": "nextjs-payload-template",
+  "private": true,
+  "scripts": {
+    "sync-env": "vercel env pull apps/app/.env.local",
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "seed": "turbo seed",
+    "tsc": "turbo run type-check"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3",
+    "vercel": "^50.9.5"
+  },
+  "packageManager": "pnpm@9.15.2"
+}
