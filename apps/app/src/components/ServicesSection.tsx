@@ -1,73 +1,70 @@
 import React from 'react'
 import Header from './Header'
 import { Container } from './Container'
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
-import { Code2, Layout, Zap, Shield, Smartphone, Globe } from 'lucide-react'
+import { Search, FileCheck, BarChart3, Shield, Zap, Users } from 'lucide-react'
 
-const services = [
+const tools = [
   {
-    title: 'Custom Development',
-    description: 'Bespoke web applications built with Next.js and Payload CMS tailored to your needs.',
-    icon: Code2,
+    title: 'In-Depth Research',
+    description: 'We conduct thorough market research to identify trending products and emerging digital solutions worth reviewing.',
+    icon: Search,
   },
   {
-    title: 'UI/UX Design',
-    description: 'Beautiful, intuitive interfaces designed with modern user experience principles.',
-    icon: Layout,
+    title: 'Hands-On Testing',
+    description: 'Every product we review undergoes rigorous hands-on testing to evaluate features, usability, and value.',
+    icon: FileCheck,
   },
   {
-    title: 'Performance Optimization',
-    description: 'Lightning-fast load times and optimized Core Web Vitals for better SEO and conversion.',
-    icon: Zap,
+    title: 'Data Analysis',
+    description: 'We analyze user feedback, ratings, and performance metrics to provide data-driven recommendations.',
+    icon: BarChart3,
   },
   {
-    title: 'Enterprise Security',
-    description: 'Robust access control and secure data handling patterns built into every project.',
+    title: 'Quality Assurance',
+    description: 'Our quality standards ensure only legitimate, high-value products make it to our recommendations.',
     icon: Shield,
   },
   {
-    title: 'Responsive Design',
-    description: 'Seamless experiences across all devices, from mobile phones to large desktops.',
-    icon: Smartphone,
+    title: 'Fast Updates',
+    description: 'We regularly update our reviews to reflect product changes, new features, and current market conditions.',
+    icon: Zap,
   },
   {
-    title: 'Global Delivery',
-    description: 'Edge-native deployments using Cloudflare for low latency and high availability worldwide.',
-    icon: Globe,
+    title: 'Community Feedback',
+    description: 'We incorporate feedback from our community of readers to continuously improve our review process.',
+    icon: Users,
   },
 ]
 
 export const ServicesSection = () => {
   return (
-    <section className="py-20 md:py-24 bg-muted/30">
+    <section className="py-20 md:py-28 bg-dark-light">
       <Container>
         <Header
-          badge="Our Services"
-          title="What We Offer"
-          subtitle="Comprehensive solutions for modern web development, leveraging the best of the Next.js and Payload ecosystem."
+          badge="What we offer"
+          title="Our Tools & Process"
+          subtitle="We employ a comprehensive methodology to ensure every review is thorough, unbiased, and valuable to our readers."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-          {services.map((service, index) => (
-            <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-border/50 bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-brand/10 flex items-center justify-center mb-4 group-hover:bg-brand group-hover:text-white transition-colors duration-300">
-                  <service.icon className="w-6 h-6 text-brand group-hover:text-white" />
-                </div>
-                <CardTitle className="text-xl group-hover:text-brand transition-colors">
-                  {service.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground leading-relaxed">
-                  {service.description}
-                </p>
-              </CardContent>
-            </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
+          {tools.map((tool, index) => (
+            <div 
+              key={index} 
+              className="group p-6 rounded-xl bg-dark border border-white/5 hover:border-brand/30 transition-all duration-300"
+            >
+              <div className="w-12 h-12 rounded-lg bg-brand/10 flex items-center justify-center mb-4 group-hover:bg-brand/20 transition-colors duration-300">
+                <tool.icon className="w-6 h-6 text-brand" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-brand transition-colors">
+                {tool.title}
+              </h3>
+              <p className="text-gray-400 leading-relaxed text-sm">
+                {tool.description}
+              </p>
+            </div>
           ))}
         </div>
       </Container>
     </section>
   )
 }
-

@@ -1,6 +1,6 @@
 import React from "react";
 import { getPayload } from "payload";
-import config from "@/payload.config";
+import config from "@payload-config";
 import { draftMode } from "next/headers";
 import { Container } from "@/components/Container";
 import Image from "next/image";
@@ -9,24 +9,7 @@ import { RichText } from "@/components/RichText";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 import { PayloadRedirects } from "@/components/PayloadRedirects";
 
-export async function generateStaticParams() {
-  const payload = await getPayload({ config });
-  const { docs } = await payload.find({
-    collection: "posts",
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  });
-
-  return docs
-    .map((post) => post.slug)
-    .filter(Boolean)
-    .map((slug) => ({ slug }));
-}
+export const dynamic = 'force-dynamic';
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -59,20 +42,20 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const featuredImage = post.featuredImage as Media;
 
   return (
-    <article className="py-20">
+    <article className="py-20 bg-dark">
       {draft && <LivePreviewListener />}
       <PayloadRedirects disableNotFound url={url} />
       <Container>
         <div className="max-w-3xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{post.title}</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">{post.title}</h1>
             {post.excerpt && (
-              <p className="text-xl text-muted-foreground">{post.excerpt}</p>
+              <p className="text-xl text-gray-400">{post.excerpt}</p>
             )}
           </div>
 
           {featuredImage?.url && (
-            <div className="relative aspect-video mb-12 rounded-2xl overflow-hidden shadow-xl">
+            <div className="relative aspect-video mb-12 rounded-2xl overflow-hidden border border-white/5">
               <Image
                 src={featuredImage.url}
                 alt={featuredImage.alt || post.title}
@@ -82,10 +65,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </div>
           )}
 
-          <RichText data={post.content} className="max-w-none" />
+          <div className="prose prose-invert prose-lg max-w-none">
+            <RichText data={post.content} className="max-w-none" />
+          </div>
         </div>
       </Container>
     </article>
   );
 }
-

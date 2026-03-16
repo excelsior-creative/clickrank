@@ -1,48 +1,63 @@
 import React from 'react'
 import Header from './Header'
 import { Container } from './Container'
+import Link from 'next/link'
+import { Button } from './ui/button'
+import { ArrowRight } from 'lucide-react'
 
 export const AboutSection = () => {
   return (
-    <section className="py-20 md:py-24">
+    <section className="py-20 md:py-28 bg-dark">
       <Container>
         <Header
           badge="About Us"
-          title="Building the Future of Content Management"
-          subtitle="We combine the power of Next.js 15 and Payload CMS 3.0 to deliver high-performance, developer-friendly templates."
+          title="Passion and Dedication Leads to Accuracy"
+          subtitle="We thoroughly research and test digital products to provide you with honest, unbiased reviews that help you make the best purchasing decisions."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-16 items-center">
           <div className="space-y-6">
-            <h3 className="text-2xl font-bold">Our Mission</h3>
-            <p className="text-muted-foreground leading-relaxed">
-              We believe that managing content should be a seamless experience for both developers
-              and editors. Our goal is to provide a rock-solid foundation that leverages the latest
-              technologies while maintaining simplicity and scalability.
+            <h3 className="text-2xl md:text-3xl font-bold text-white">Our Commitment to Quality Reviews</h3>
+            <p className="text-gray-400 leading-relaxed">
+              At ClickRank, we understand that navigating the world of digital products can be overwhelming. 
+              That&apos;s why our team of experts spends countless hours researching, testing, and analyzing 
+              products across various categories including software, online courses, e-books, and digital tools.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
-              By using a code-first approach with Payload CMS and the powerful rendering
-              capabilities of Next.js, we empower teams to build and deploy complex,
-              content-driven applications in record time.
+            <p className="text-gray-400 leading-relaxed">
+              Our mission is simple: to provide you with comprehensive, unbiased reviews that highlight both 
+              the strengths and weaknesses of each product. We believe in transparency and honesty, ensuring 
+              you have all the information needed to make confident purchasing decisions.
             </p>
+            <div className="pt-4">
+              <Button asChild className="bg-brand hover:bg-brand-light text-dark font-bold rounded-full px-6">
+                <Link href="/about">
+                  Discover More
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
           </div>
 
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold">The Tech Stack</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                { title: 'Payload CMS 3.0', description: 'Next-gen headless CMS' },
-                { title: 'Next.js 15', description: 'App Router & React 19' },
-                { title: 'Cloudflare D1', description: 'Edge-native SQLite database' },
-                { title: 'Tailwind CSS', description: 'Utility-first styling' },
-                { title: 'Framer Motion', description: 'Smooth animations' },
-                { title: 'TypeScript', description: 'End-to-end type safety' },
-              ].map((item, index) => (
-                <div key={index} className="p-4 rounded-xl border border-border bg-card/50">
-                  <h4 className="font-bold text-brand">{item.title}</h4>
-                  <p className="text-sm text-muted-foreground">{item.description}</p>
+          <div className="relative">
+            <div className="bg-dark-light rounded-2xl p-8 border border-white/5">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="text-center p-4">
+                  <div className="text-3xl md:text-4xl font-bold text-brand mb-2">500+</div>
+                  <div className="text-sm text-gray-400">Products Reviewed</div>
                 </div>
-              ))}
+                <div className="text-center p-4">
+                  <div className="text-3xl md:text-4xl font-bold text-brand mb-2">50K+</div>
+                  <div className="text-sm text-gray-400">Happy Readers</div>
+                </div>
+                <div className="text-center p-4">
+                  <div className="text-3xl md:text-4xl font-bold text-brand mb-2">100+</div>
+                  <div className="text-sm text-gray-400">Categories Covered</div>
+                </div>
+                <div className="text-center p-4">
+                  <div className="text-3xl md:text-4xl font-bold text-brand mb-2">4.9/5</div>
+                  <div className="text-sm text-gray-400">Trust Score</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -50,4 +65,3 @@ export const AboutSection = () => {
     </section>
   )
 }
-

@@ -8,30 +8,13 @@ import { PayloadRedirects } from "@/components/PayloadRedirects";
 import { RenderBlocks } from "@/blocks/RenderBlocks";
 import { RenderHero } from "@/heros/RenderHero";
 
+export const dynamic = 'force-dynamic';
+
 type Args = {
   params: Promise<{
     slug?: string;
   }>;
 };
-
-export async function generateStaticParams() {
-  const payload = await getPayload({ config });
-  const { docs } = await payload.find({
-    collection: "pages",
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  });
-
-  return docs
-    .map((page) => page.slug)
-    .filter((slug) => Boolean(slug && slug !== "home"))
-    .map((slug) => ({ slug }));
-}
 
 export default async function CMSPage({ params }: Args) {
   const { isEnabled: draft } = await draftMode();

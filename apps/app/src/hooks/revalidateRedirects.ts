@@ -7,6 +7,6 @@ export const revalidateRedirects: CollectionAfterChangeHook = ({
   req: { payload },
 }) => {
   payload.logger.info("Revalidating redirects");
-  revalidateTag("redirects");
+  revalidateTag("redirects", "default");
   return doc;
 };

@@ -1,5 +1,4 @@
 import React from "react";
-import Badge from "./ui/badge";
 import { cn } from "@/lib/utils";
 
 const Header = ({
@@ -16,18 +15,26 @@ const Header = ({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center space-y-4 my-12 md:my-20 tracking-tight text-center",
+        "flex flex-col items-center justify-center space-y-4 my-12 md:my-16 tracking-tight text-center",
         className
       )}
     >
-      {badge && <Badge variant="brand">{badge}</Badge>}
+      {badge && (
+        <div className="inline-flex items-center gap-2">
+          <span className="w-8 h-[2px] bg-brand" />
+          <span className="text-brand font-semibold text-sm uppercase tracking-wider">
+            {badge}
+          </span>
+          <span className="w-8 h-[2px] bg-brand" />
+        </div>
+      )}
       {title && (
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-white">
           {title}
         </h2>
       )}
       {subtitle && (
-        <p className="text-center max-w-2xl text-muted-foreground md:text-lg">
+        <p className="text-center max-w-2xl text-gray-400 md:text-lg">
           {subtitle}
         </p>
       )}

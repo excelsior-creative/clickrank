@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
-export const SITE_NAME = "Template Site";
-export const SITE_TAGLINE = "Built with Next.js & Payload CMS";
+export const SITE_NAME = "ClickRank";
+export const SITE_TAGLINE = "Honest ClickBank Product Reviews";
 export const DEFAULT_DESCRIPTION =
-  "A high-performance project template with integrated SEO and AI features.";
+  "Your trusted source for honest digital product reviews. We help you make informed decisions with unbiased, thorough analysis of ClickBank products and digital courses.";
 
 export const DEFAULT_OG_IMAGE = "/og-image.jpg";
 
@@ -19,11 +19,13 @@ export const defaultMetadata: Metadata = {
   },
   description: DEFAULT_DESCRIPTION,
   keywords: [
-    "Next.js",
-    "Payload CMS",
-    "React",
-    "Tailwind CSS",
-    "SEO optimized",
+    "ClickBank reviews",
+    "digital products",
+    "product reviews",
+    "online courses",
+    "e-books",
+    "software reviews",
+    "affiliate marketing",
   ],
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
@@ -45,7 +47,7 @@ export const defaultMetadata: Metadata = {
         url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} - Project Template`,
+        alt: `${SITE_NAME} - Honest Product Reviews`,
       },
     ],
   },
@@ -189,4 +191,3 @@ export function generateArticleMetadata({
       : { index: true, follow: true },
   };
 }
-

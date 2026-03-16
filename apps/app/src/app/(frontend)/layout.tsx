@@ -24,8 +24,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <div className="flex min-h-screen flex-col" data-theme="frontend">
+      <body className={`${inter.className} bg-dark text-white`}>
+        <div className="flex min-h-screen flex-col bg-dark" data-theme="frontend">
           <Providers>
             <SearchProvider>
               <AdminBar
