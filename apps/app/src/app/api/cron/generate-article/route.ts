@@ -61,7 +61,7 @@ function buildLexicalRoot(nodes: LexicalNode[]) {
   }
 }
 
-// ─── OpenAI Article Generator ─────────────────────────────────────────────────
+// ─── Claude Article Generator (via OpenRouter) ────────────────────────────────
 
 interface GeneratedArticle {
   title: string
@@ -70,14 +70,14 @@ interface GeneratedArticle {
   sections: Array<{ heading?: string; content: string }>
 }
 
-async function generateArticleWithOpenAI(
+async function generateArticleWithClaude(
   keyword: string,
   companyContext: string,
   customPrompt?: string,
 ): Promise<GeneratedArticle> {
-  const apiKey = process.env.OPENAI_API_KEY
+  const apiKey = process.env.OPENROUTER_API_KEY
   if (!apiKey) {
-    throw new Error('OPENAI_API_KEY is not configured')
+    throw new Error('OPENROUTER_API_KEY is not configured')
   }
 
   const systemPrompt = `You are an expert affiliate marketer writing SEO-optimized product review articles for a ClickBank review site. 
@@ -106,14 +106,17 @@ Return ONLY a valid JSON object (no markdown fences) with this exact structure:
   ]
 }`
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+  // Use OpenRouter to access Claude claude-3-5-haiku (fast, cost-efficient for bulk article gen)
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${apiKey}`,
+      'HTTP-Referer': 'https://clickrank.vercel.app',
+      'X-Title': 'ClickRank Article Generator',
     },
     body: JSON.stringify({
-      model: 'gpt-4o',
+      model: 'anthropic/claude-3-5-haiku',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
@@ -125,14 +128,14 @@ Return ONLY a valid JSON object (no markdown fences) with this exact structure:
 
   if (!response.ok) {
     const errorText = await response.text()
-    throw new Error(`OpenAI API error ${response.status}: ${errorText}`)
+    throw new Error(`Claude API error ${response.status}: ${errorText}`)
   }
 
   const data = await response.json()
   const rawContent = data.choices?.[0]?.message?.content
 
   if (!rawContent) {
-    throw new Error('No content returned from OpenAI')
+    throw new Error('No content returned from Claude')
   }
 
   // Strip markdown fences if present
@@ -187,10 +190,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  // 2. Check OpenAI key early — graceful error, don't crash
-  if (!process.env.OPENAI_API_KEY) {
+  // 2. Check OpenRouter key early — graceful error, don't crash
+  if (!process.env.OPENROUTER_API_KEY) {
     return NextResponse.json(
-      { error: 'OPENAI_API_KEY is not configured. Add it as a Vercel environment variable.' },
+      { error: 'OPENROUTER_API_KEY is not configured. Add it as a Vercel environment variable.' },
       { status: 500 },
     )
   }
@@ -243,8 +246,8 @@ export async function GET(request: NextRequest) {
     const keyword = pickUnusedKeyword(allKeywords, recentSlugs)
     console.log(`[generate-article] Selected keyword: "${keyword}"`)
 
-    // 8. Generate article via OpenAI
-    const article = await generateArticleWithOpenAI(keyword, companyContext, postGenPrompt)
+    // 8. Generate article via Claude (OpenRouter)
+    const article = await generateArticleWithClaude(keyword, companyContext, postGenPrompt)
     console.log(`[generate-article] Generated article: "${article.title}"`)
 
     // 9. Convert to Lexical JSON
