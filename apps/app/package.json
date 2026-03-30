@@ -19,6 +19,7 @@
     "reset:password": "tsx ./scripts/reset-password.ts"
   },
   "dependencies": {
+    "@google/genai": "^1.47.0",
     "@libsql/client": "^0.14.0",
     "@payloadcms/admin-bar": "^3.79.0",
     "@payloadcms/db-postgres": "^3.77.0",
@@ -52,6 +53,7 @@
     "react-dom": "^19.0.0",
     "react-google-recaptcha-v3": "^1.11.0",
     "react-wrap-balancer": "^1.1.1",
+    "replicate": "^1.4.0",
     "sharp": "^0.33.5",
     "slugify": "^1.6.6",
     "tailwind-merge": "^3.0.0",
