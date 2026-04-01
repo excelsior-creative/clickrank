@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Editorial Authority | Precision Intelligence Reports</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#fbf8ff",
+              "inverse-surface": "#2c2f45",
+              "on-primary-fixed-variant": "#00513e",
+              "outline-variant": "#bbcac2",
+              "surface": "#fbf8ff",
+              "tertiary-fixed": "#dee0ff",
+              "surface-container-highest": "#dfe0fe",
+              "secondary": "#4a5b97",
+              "on-secondary": "#ffffff",
+              "inverse-on-surface": "#f0efff",
+              "on-secondary-container": "#384a84",
+              "primary-fixed": "#74f9d0",
+              "inverse-primary": "#54ddb5",
+              "on-surface": "#171a2f",
+              "on-tertiary-fixed": "#11183d",
+              "surface-container-lowest": "#ffffff",
+              "background": "#fbf8ff",
+              "on-secondary-fixed-variant": "#32437e",
+              "secondary-fixed": "#dce1ff",
+              "error-container": "#ffdad6",
+              "tertiary-container": "#9399c5",
+              "surface-tint": "#006b54",
+              "primary-container": "#07b08b",
+              "on-error": "#ffffff",
+              "surface-dim": "#d6d8f5",
+              "on-primary-fixed": "#002117",
+              "tertiary": "#555c84",
+              "error": "#ba1a1a",
+              "on-background": "#171a2f",
+              "outline": "#6c7a74",
+              "on-tertiary": "#ffffff",
+              "on-error-container": "#93000a",
+              "tertiary-fixed-dim": "#bec4f2",
+              "on-tertiary-fixed-variant": "#3e446b",
+              "secondary-fixed-dim": "#b6c4ff",
+              "surface-container-low": "#f4f2ff",
+              "surface-variant": "#dfe0fe",
+              "on-primary-container": "#003b2d",
+              "on-primary": "#ffffff",
+              "surface-container": "#edecff",
+              "on-secondary-fixed": "#00164e",
+              "on-surface-variant": "#3c4a44",
+              "primary": "#006b54",
+              "surface-container-high": "#e6e6ff",
+              "secondary-container": "#aabcfe",
+              "on-tertiary-container": "#2a3157",
+              "primary-fixed-dim": "#54ddb5"
+            },
+            fontFamily: {
+              "headline": ["Manrope", "sans-serif"],
+              "body": ["Inter", "sans-serif"],
+              "label": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-[#0B0E23]/80 backdrop-blur-xl shadow-sm dark:shadow-none">
+<div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+<div class="text-xl font-extrabold tracking-tighter text-[#0B0E23] dark:text-white font-headline">
+                The Editorial Authority
+            </div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-[#07B08B] border-b-2 border-[#07B08B] pb-1 font-headline font-bold tracking-tight" href="#">Home</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium font-headline font-bold tracking-tight hover:text-[#07B08B] transition-colors duration-200" href="#">Reviews</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium font-headline font-bold tracking-tight hover:text-[#07B08B] transition-colors duration-200" href="#">Categories</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium font-headline font-bold tracking-tight hover:text-[#07B08B] transition-colors duration-200" href="#">Compare</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium font-headline font-bold tracking-tight hover:text-[#07B08B] transition-colors duration-200" href="#">Guides</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">search</button>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2 rounded-xl font-bold tracking-tight scale-95 active:scale-100 transition-transform">
+                    Subscribe
+                </button>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-20 md:pb-0">
+<!-- Hero Section: Intentional Asymmetry -->
+<section class="max-w-7xl mx-auto px-6 py-12 md:py-24 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-7">
+<span class="inline-block bg-surface-container-highest text-on-secondary-container px-4 py-1 rounded-full font-label text-xs font-bold uppercase tracking-widest mb-6">Featured Intelligence Report</span>
+<h1 class="font-headline text-5xl md:text-7xl font-extrabold text-on-surface tracking-tighter leading-[1.1] mb-8">
+                    The Future of <span class="text-primary italic">High-Performance</span> Workspaces.
+                </h1>
+<p class="text-lg md:text-xl text-on-surface-variant max-w-xl mb-10 leading-relaxed">
+                    Our editorial team spent 400 hours benchmarking the latest ergonomic ecosystems. We don't just review; we curate the definitive standard.
+                </p>
+<div class="flex flex-wrap gap-4">
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-8 py-4 rounded-xl font-bold text-lg shadow-xl shadow-primary/20">Read the Verdict</button>
+<button class="bg-surface-container-low text-on-surface px-8 py-4 rounded-xl font-bold text-lg hover:bg-surface-container-high transition-colors">View All Guides</button>
+</div>
+</div>
+<div class="lg:col-span-5 relative">
+<div class="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative z-10">
+<img class="w-full h-full object-cover" data-alt="Minimalist modern workspace with premium lamp and desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD809UeuxoTKa_TZYXAOx832P-ffjwEKdfIBkagOY-nrE7LEH-eEpqv43Snmw4kn1CX2pIWlbOYAsK0v_0w4UZraObLZyRfTthtPkZiI_uh3iHpm67Nq1JAKn8jUqPzcGyotgFDeSz23OV735uvUa5M8KYYB4Xp6aGJ8lpT0op6GMng7Ez7pbsNtp4U0ewUAFfHTELJWIF9BJJVonMh38xMKTczfwcMQfReti7JxjhJ7Q-vlN9MosRET70iVrSdmcVAGnf3n5afGKQN"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent"></div>
+<div class="absolute bottom-8 left-8 right-8 text-white">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary text-xs font-bold px-2 py-1 rounded-full">9.8 Score</span>
+<span class="text-xs font-medium opacity-80">Editor's Choice 2024</span>
+</div>
+<h3 class="font-headline text-2xl font-bold">The Lumina Pro Ecosystem</h3>
+</div>
+</div>
+<!-- Overlapping Element -->
+<div class="absolute -bottom-6 -left-6 bg-white dark:bg-on-surface p-6 rounded-3xl shadow-2xl z-20 max-w-[200px] border-4 border-surface">
+<p class="text-xs text-on-surface-variant uppercase tracking-widest font-bold mb-2">Build Quality</p>
+<div class="h-2 w-full bg-surface-container-low rounded-full mb-4">
+<div class="h-full bg-primary w-[94%] rounded-full"></div>
+</div>
+<p class="text-3xl font-headline font-black text-on-surface">94%</p>
+<p class="text-[10px] text-on-surface-variant leading-tight mt-1">Surpassing 2023 industry standards by 12 points.</p>
+</div>
+</div>
+</section>
+<!-- Top-Rated Products: Bento Grid -->
+<section class="bg-surface-container-low py-24">
+<div class="max-w-7xl mx-auto px-6">
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="font-headline text-4xl font-extrabold tracking-tighter mb-2">Top-Rated Products</h2>
+<p class="text-on-surface-variant font-medium">Precision-tested and performance-verified.</p>
+</div>
+<a class="text-primary font-bold flex items-center gap-1 hover:underline" href="#">
+                        View Ranking System
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Major Card -->
+<div class="md:col-span-2 md:row-span-2 bg-surface-container-lowest rounded-[2rem] p-8 shadow-sm group hover:shadow-xl transition-all duration-300">
+<div class="flex justify-between items-start mb-8">
+<span class="text-xs font-bold uppercase tracking-tighter px-3 py-1 bg-primary/10 text-primary rounded-full">Audio Engineering</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-headline font-bold text-lg">9.6</span>
+</div>
+</div>
+<img class="w-full aspect-video object-cover rounded-2xl mb-8 group-hover:scale-[1.02] transition-transform duration-500" data-alt="High-end professional studio headphones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3MjNTEgZtmI90yLzva5YyOfUGgVbd6_5db62leB0Tr-HEmy_HpqrFpLYRNxJ_DADj7oXMPWATa_bEbKmOgbN69td8-Z7rhXTqjX7CbBgt7nSvm_9w6cIq7sb9u__8T90A2SZroSGgPM4VgolCe_BAzhSZ_jxjKnuAL_oW7KNlYjeuTb18vxRuDTTE4FbW5J5S5tJBTY2im160oPHS4Br-MbqcBFwmfLSZVmUiwp-GxvqNbdBjrNCFm0wOcF2j0TG0xZkrVj1jdmNC"/>
+<h3 class="font-headline text-3xl font-extrabold mb-4">SonicMaster Reference-1</h3>
+<p class="text-on-surface-variant mb-8 line-clamp-2">The new benchmark for neutral frequency response and spatial imaging in studio environments.</p>
+<button class="w-full bg-surface-container-high text-on-surface py-4 rounded-xl font-bold hover:bg-primary hover:text-white transition-all">Read Full Report</button>
+</div>
+<!-- Small Card 1 -->
+<div class="bg-surface-container-lowest rounded-[2rem] p-6 shadow-sm group hover:shadow-lg transition-all">
+<div class="flex justify-between items-center mb-6">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-headline font-bold">8.9</span>
+</div>
+<span class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Optics</span>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden mb-4">
+<img class="w-full h-full object-cover" data-alt="Professional mirrorless camera body" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5ZiKMk3TfTE5UWZNCm-wVGtQwYe4EyOemGc8IjkeSAjfliJlehwrBoT9plCAnkUCCQ76u0pt2YsSCqPNgehKGpn1DUhVy5xvxyQ55LUrANaYUs_z7xKbXWIg5A5wrNiscHpL6Gdjefu824qqjcqPJ3QuoHLw5sBlbgSf_10OCh4opoWzM8JtwKsRKeRTnUzmllrQgxhV5LPEZQQ5oRNQP9r6x8t3fOyEqZYeVre1it9oKnjPT79Y2cwrCQomtP240fxaAANRwT7js"/>
+</div>
+<h4 class="font-headline font-bold text-lg mb-2">Visio G7 X-Pro</h4>
+<a class="text-primary text-sm font-bold" href="#">Compare Specs</a>
+</div>
+<!-- Small Card 2 -->
+<div class="bg-surface-container-lowest rounded-[2rem] p-6 shadow-sm group hover:shadow-lg transition-all">
+<div class="flex justify-between items-center mb-6">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-headline font-bold">9.2</span>
+</div>
+<span class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Compute</span>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden mb-4">
+<img class="w-full h-full object-cover" data-alt="Sleek silver laptop on minimalist desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfsiJeZRU6NhkWxArKtCITKncoCJDJN_ECCbfHnwWNUgjc8f0ZGn4kMLqmjCWzsqLh3AGgtdRP8UOSry1XfPHuijbjvtx0gWuaBihUzct7ruHquyAPnhs85A99FAuR7d4FiuteaH5XjOWIXNgMajYIFgF4GlImK4OTqIzZxffOj6pe1m1dO2q_IV2Vuxr7Q7uhgOaSgVSU5puHKfuHYIiJ4PCxvOj3MLyMptaWTxJzfAJBl6P56mwrY-_NPPqsuSQcO3GFqKM88UqX"/>
+</div>
+<h4 class="font-headline font-bold text-lg mb-2">AeroBook M3 Ultra</h4>
+<a class="text-primary text-sm font-bold" href="#">Compare Specs</a>
+</div>
+<!-- Wide Card -->
+<div class="md:col-span-2 bg-gradient-to-br from-on-surface to-[#2c2f45] rounded-[2rem] p-8 text-white relative overflow-hidden group">
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div>
+<span class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-4 block">Newest Release</span>
+<h3 class="font-headline text-2xl font-bold mb-2">Obsidian Pro Watch</h3>
+<p class="text-white/70 text-sm max-w-[200px]">The first titanium smartwatch with 14-day lab-tested battery.</p>
+</div>
+<div class="flex items-center gap-4 mt-6">
+<div class="text-3xl font-headline font-black">9.1</div>
+<div class="h-10 w-[2px] bg-white/20"></div>
+<button class="text-white font-bold flex items-center gap-2 hover:translate-x-1 transition-transform">
+                                    Full Review
+                                    <span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<img class="absolute -right-12 -bottom-12 w-64 h-64 object-cover opacity-60 group-hover:scale-110 transition-transform duration-700 pointer-events-none" data-alt="Premium smart watch with titanium finish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrPZFacrhkqoRFTb3T_0aOetHfR8QVrMopg9yWPR4-MG-x_cvEWryGkTqkNEh68OZNVliTQH5rjmTij0fOkRcaBeemFh3b89eDkjgcSTfaQP8OPxag7CD72TuZn6DuB5Ucq9LMGhOyLGbuIRYwTlo88YKvOAjcCMRgcmw763djd8DhSAG7Y3TLSx2EcZ1CnMndKjzimKaFhY2FQL1oH7QQXziZRvdD3bKcOuZskpr2RrTzqjINQmkcN8s0pxhJfy2VtqdCUFPHVIR8"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Comparison Guides Section: The Data Grid -->
+<section class="py-24 max-w-7xl mx-auto px-6">
+<h2 class="font-headline text-4xl font-extrabold tracking-tighter mb-12">Comparison Intelligence</h2>
+<div class="bg-surface-container-lowest rounded-[2.5rem] overflow-hidden shadow-sm border-t-8 border-primary">
+<div class="overflow-x-auto no-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="p-8 font-headline font-bold text-on-surface-variant border-b border-surface">Metric Intelligence</th>
+<th class="p-8 font-headline font-bold text-on-surface border-b border-surface">Lumina Pro</th>
+<th class="p-8 font-headline font-bold text-on-surface border-b border-surface">Vertex Hub</th>
+<th class="p-8 font-headline font-bold text-on-surface border-b border-surface">Aura Base</th>
+</tr>
+</thead>
+<tbody class="font-label">
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="p-8 text-on-surface-variant font-medium">Build Quality Score</td>
+<td class="p-8 font-bold text-primary">9.4/10</td>
+<td class="p-8 font-bold">8.8/10</td>
+<td class="p-8 font-bold">8.1/10</td>
+</tr>
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low/30 transition-colors">
+<td class="p-8 text-on-surface-variant font-medium">Energy Efficiency Class</td>
+<td class="p-8 font-bold">A++</td>
+<td class="p-8 font-bold text-primary">A+++</td>
+<td class="p-8 font-bold">A+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="p-8 text-on-surface-variant font-medium">Market Reliability Rating</td>
+<td class="p-8 font-bold text-primary">Platinum</td>
+<td class="p-8 font-bold">Gold</td>
+<td class="p-8 font-bold">Gold</td>
+</tr>
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low/30 transition-colors">
+<td class="p-8 text-on-surface-variant font-medium">MSRP (Intelligence Est.)</td>
+<td class="p-8 font-bold">$1,299</td>
+<td class="p-8 font-bold">$1,450</td>
+<td class="p-8 font-bold">$999</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="mt-8 flex justify-center">
+<button class="bg-surface-container-highest text-on-secondary-container px-12 py-4 rounded-xl font-bold hover:opacity-80 transition-opacity">Compare 24+ Ecosystems</button>
+</div>
+</section>
+<!-- Recent Reviews: Vertical List with Surface Depth -->
+<section class="py-24 bg-surface-container-low">
+<div class="max-w-7xl mx-auto px-6">
+<h2 class="font-headline text-4xl font-extrabold tracking-tighter mb-12 text-center">Recent Technical Audits</h2>
+<div class="space-y-6">
+<!-- Review Item 1 -->
+<div class="flex flex-col md:flex-row gap-8 items-center bg-surface-container-lowest p-6 rounded-[2rem] hover:bg-surface hover:shadow-lg transition-all">
+<div class="w-full md:w-48 h-32 flex-shrink-0 rounded-2xl overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Minimalist luxury coffee machine" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMXj-CC10t1jZVY929FOevElf2gCkLYPYTQuZipLP6ETYXlMTUAqjCMuCslwRILebO6bd-X4WlZvmlDk4bz32vv9vt9wxCdqQYXAEz9fKE-T1uK9ppXmQb73Twsdy94R84OV54rDBG1ed87A8OSMs6mOEQeZ-zZtoD9Pe2uqm3Gbar2lQGCZ2P2SQ6n1vJNb6Vzy_MrmzKpnjqNE_axNekjODCpqs5NsONTzuecAYKTQd56URJ9PDMd-PuQQmkLunfhhnTM_xK7_3b"/>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-4 mb-2">
+<span class="text-xs font-bold text-primary uppercase tracking-widest">Kitchen Science</span>
+<span class="text-xs text-on-surface-variant">• 2 hours ago</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-2">BrewMaster AI: Over-Engineered or Essential?</h3>
+<p class="text-on-surface-variant line-clamp-1">Testing the predictive extraction algorithms in the latest Gen-4 machines.</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-center">
+<div class="text-sm font-bold text-on-surface-variant uppercase">Audit</div>
+<div class="text-2xl font-headline font-black text-primary">8.4</div>
+</div>
+<button class="material-symbols-outlined bg-surface-container-high p-4 rounded-full text-on-surface">arrow_forward</button>
+</div>
+</div>
+<!-- Review Item 2 -->
+<div class="flex flex-col md:flex-row gap-8 items-center bg-surface-container-lowest p-6 rounded-[2rem] hover:bg-surface hover:shadow-lg transition-all">
+<div class="w-full md:w-48 h-32 flex-shrink-0 rounded-2xl overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Latest flagship tablet with stylus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJdvXKYW8DMSHJfl0lIQXyNNbuMkteG_WL-qHPogew2daWfWNXBL3FeEuYwF8MNP6HhAdkmkcABLBUiYilg8RyAfy4CvsikgXbUVrDAlze_5Uk2Wx0Zbkd3lf4bCJjXcAoTNm1dL-fDefgQBsbQXEs43VbpWpmTAPzUvibnQAb035orBpbd37qz-Aq9jyPwHNt-FFJa5pfCU19b0ckiFTIbjBCsTy5xgJPFVJSU9rxsQddx_ZSYDbXLzxJNxoNystLRCzxC3LjzeoA"/>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-4 mb-2">
+<span class="text-xs font-bold text-primary uppercase tracking-widest">Mobile Compute</span>
+<span class="text-xs text-on-surface-variant">• 5 hours ago</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-2">Canvas Pro 13: The Creative Benchmarks</h3>
+<p class="text-on-surface-variant line-clamp-1">Pressure sensitivity and parallax measurements across 12 creative applications.</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-center">
+<div class="text-sm font-bold text-on-surface-variant uppercase">Audit</div>
+<div class="text-2xl font-headline font-black text-primary">9.0</div>
+</div>
+<button class="material-symbols-outlined bg-surface-container-high p-4 rounded-full text-on-surface">arrow_forward</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-6 mt-auto bg-[#f4f2ff] dark:bg-[#0B0E23]">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+<div>
+<div class="font-['Manrope'] font-black text-[#0B0E23] dark:text-white text-2xl mb-4">
+                    The Editorial Authority
+                </div>
+<p class="font-['Inter'] text-sm text-slate-500 dark:text-slate-400 max-w-sm mb-6">
+                    Precision intelligence reports for the modern connoisseur. We provide rigorous, data-driven analysis of premium hardware and lifestyle ecosystems.
+                </p>
+<p class="font-['Inter'] text-sm text-slate-500 dark:text-slate-400">
+                    © 2024 The Editorial Authority. Precision Intelligence Reports.
+                </p>
+</div>
+<div class="flex flex-wrap md:justify-end gap-x-8 gap-y-4">
+<a class="text-slate-500 hover:text-[#07B08B] transition-all duration-300 font-['Inter'] text-sm" href="#">Privacy Policy</a>
+<a class="text-slate-500 hover:text-[#07B08B] transition-all duration-300 font-['Inter'] text-sm" href="#">Terms of Service</a>
+<a class="text-slate-500 hover:text-[#07B08B] transition-all duration-300 font-['Inter'] text-sm" href="#">Affiliate Disclosure</a>
+<a class="text-slate-500 hover:text-[#07B08B] transition-all duration-300 font-['Inter'] text-sm" href="#">Contact</a>
+</div>
+</div>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 bg-white dark:bg-[#0B0E23] md:hidden z-50 rounded-t-3xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] border-t border-slate-100 dark:border-slate-800">
+<a class="flex flex-col items-center justify-center bg-[#f4f2ff] dark:bg-[#171a2f] text-[#07B08B] rounded-xl px-4 py-2 Active: opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-['Inter'] text-[10px] font-semibold uppercase tracking-widest mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 hover:bg-slate-50 dark:hover:bg-[#171a2f] Active: opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-['Inter'] text-[10px] font-semibold uppercase tracking-widest mt-1">Browse</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 hover:bg-slate-50 dark:hover:bg-[#171a2f] Active: opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined">compare_arrows</span>
+<span class="font-['Inter'] text-[10px] font-semibold uppercase tracking-widest mt-1">Compare</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 hover:bg-slate-50 dark:hover:bg-[#171a2f] Active: opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="font-['Inter'] text-[10px] font-semibold uppercase tracking-widest mt-1">Saved</span>
+</a>
+</nav>
+</body></html>
