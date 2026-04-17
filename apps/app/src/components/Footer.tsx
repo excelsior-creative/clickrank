@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { AffiliateDisclosure } from "./AffiliateDisclosure";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { Facebook, Linkedin, Twitter, Youtube } from "lucide-react";
@@ -142,7 +143,11 @@ export const Footer = async () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-12 pt-8 border-t border-white/5">
+          <AffiliateDisclosure variant="footer" className="mb-6 max-w-3xl" />
+        </div>
+
+        <div className="mt-6 pt-6 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-gray-500 text-center md:text-left">
             Copyright © {new Date().getFullYear()} ClickRank.NET. All rights reserved.
           </p>

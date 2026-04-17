@@ -279,8 +279,11 @@ export async function generateArticleForProduct(
   const customPrompt = settings?.postGeneration?.prompt
 
   const systemContext = [
-    'You are an expert affiliate marketer writing SEO-optimized product review articles for a ClickBank review site.',
-    'Write in a conversational, trustworthy tone.',
+    'You are an editorial reviewer for ClickRank, a ClickBank product review site.',
+    'Write honest-favorable reviews: lead with genuine strengths, acknowledge one or two real limitations, and never fabricate features, statistics, testimonials, studies, or first-person experience.',
+    'Voice: conversational, direct, confident. Use contractions. Avoid em-dashes. Avoid exclamation marks in body copy. Avoid "In today\'s fast-paced world" style openers.',
+    'Do NOT claim first-person testing ("I tried it for 30 days") — use analysis-driven phrasing ("In our analysis", "Looking at user feedback") instead.',
+    'Do NOT make medical, financial, or income claims. Present vendor claims as vendor claims, not as fact.',
     companyContext ? `Context: ${companyContext}` : '',
     customPrompt ? `Additional instructions: ${customPrompt}` : '',
   ]
@@ -299,13 +302,13 @@ ${product.vendorUrl ? `Product URL: ${product.vendorUrl}` : ''}
 
   const prompt = `${systemContext}
 
-Write a ~1500 word SEO affiliate review article about this ClickBank product:
+Write a ~1500 word SEO review article about this ClickBank product:
 
 ${productContext}
 
 Return ONLY valid JSON (no markdown fences) with this exact structure:
 {
-  "title": "SEO-optimized article title (60-70 chars)",
+  "title": "SEO-optimized article title, 60-70 chars, sentence case",
   "slug": "kebab-case-slug-from-title",
   "excerpt": "Compelling excerpt under 160 characters",
   "content": "Full article in Markdown format with ## for H2 and ### for H3",
@@ -314,17 +317,26 @@ Return ONLY valid JSON (no markdown fences) with this exact structure:
   "keywords": "comma, separated, relevant, keywords"
 }
 
-The article must include these sections:
-## What Is ${product.name}?
-## Key Features & Benefits
-## Pros and Cons
-## Who Is This For?
-## How Does It Work?
-## Real Results: What Users Are Saying
-## Pricing and Value
-## Our Verdict
+The article MUST open with this exact section (verbatim heading, paragraph can rephrase but must include the disclosure):
 
-End with a strong CTA encouraging readers to click through and learn more.`
+## Affiliate disclosure
+ClickRank earns a commission when readers buy through links on this page. Our reviews stay independent — compensation never determines what we cover or how we rate a product.
+
+Then include these sections (in this order, but feel free to rename them if a specific product has a more natural shape):
+## What ${product.name} actually is
+## Who it's for
+## What you get
+## What's good about it
+## What could be better
+## Pricing and what it includes
+## Bottom line
+
+Rules:
+- For "What's good about it": 3-5 real, specific strengths. No empty superlatives.
+- For "What could be better": 1-2 honest, fair caveats. Constructive tone. NEVER skip this section.
+- Do not fabricate user quotes, testimonials, ratings, or studies. If you don't have a verifiable source, don't assert the claim.
+- End with a clear call-to-action linking to the product page. Use the affiliate link if provided: ${product.affiliateUrl || '(no affiliate URL provided — write the CTA without a hard link)'}
+- Title and headings in sentence case, not Title Case.`
 
   const rawArticle = await withRetry(async () => {
     const response = await ai.models.generateContent({
