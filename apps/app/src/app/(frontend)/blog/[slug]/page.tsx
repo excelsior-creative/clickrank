@@ -8,6 +8,9 @@ import { Media, Post } from "@/payload-types";
 import { RichText } from "@/components/RichText";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 import { PayloadRedirects } from "@/components/PayloadRedirects";
+import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
+import { generateArticleSchema } from "@/lib/structured-data";
+import { SITE_NAME, SITE_URL } from "@/lib/metadata";
 
 export const dynamic = 'force-dynamic';
 
@@ -40,13 +43,41 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   }
 
   const featuredImage = post.featuredImage as Media;
+  const articleSchema = generateArticleSchema(post);
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.title,
+        item: `${SITE_URL}/blog/${post.slug}`,
+      },
+    ],
+  };
+  const combinedSchema = {
+    "@context": "https://schema.org",
+    "@graph": [articleSchema, breadcrumbSchema].map((s) => {
+      const { "@context": _ctx, ...rest } = s as Record<string, unknown>;
+      return rest;
+    }),
+  };
 
   return (
     <article className="py-20 bg-dark">
       {draft && <LivePreviewListener />}
       <PayloadRedirects disableNotFound url={url} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(combinedSchema) }}
+      />
       <Container>
         <div className="max-w-3xl mx-auto">
+          <AffiliateDisclosure variant="banner" className="mb-8" />
+
           <div className="mb-8">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">{post.title}</h1>
             {post.excerpt && (
@@ -67,6 +98,14 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
           <div className="prose prose-invert prose-lg max-w-none">
             <RichText data={post.content} className="max-w-none" />
+          </div>
+
+          <div className="mt-16 pt-8 border-t border-white/5">
+            <AffiliateDisclosure variant="inline" />
+            <p className="mt-6 text-sm text-gray-500">
+              Published by {SITE_NAME}. If you spot an inaccuracy,
+              email us and we&apos;ll correct it.
+            </p>
           </div>
         </div>
       </Container>

@@ -1,0 +1,39 @@
+# Asks for Brandon
+
+Outstanding items the autonomous CEO needs from Brandon. Each ask
+is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
+
+## 🟡 Needs decision
+
+### Data access
+
+- Google Search Console access (read-only API credential or nightly
+  CSV dump to a path I can read). Without this, KR3.1–KR3.2 can't
+  be measured.
+- ClickBank affiliate commission export — weekly CSV would be ideal.
+  Without this, no EPC data, no conversion truth.
+- Vercel analytics / deployment logs — even a read-only viewer
+  token exposed as an env var I can query would work.
+- Read-only Postgres (Neon) connection string so I can run audit
+  queries each night (`SELECT count(*), max(publishedDate) FROM posts…`).
+
+### Cron status
+
+- Is the `/api/cron/generate-article` cron currently firing
+  successfully in production? I can't see Vercel logs from the
+  sandbox. If you could confirm (or paste last-run status into
+  `/ceo/journal/`), it closes a blind spot.
+
+## 🟢 FYI
+
+- First CEO run was 2026-04-17. `/ceo` folder scaffolding created.
+- FTC disclosure was not being rendered on blog post pages before
+  tonight. That's now fixed structurally. Any posts that were
+  published before tonight were non-compliant — worth a legal
+  scan of anything already indexed. (I don't have visibility
+  into what's published.)
+- The ClickBank marketplace scraper in `clickbankService.ts` has
+  guessed selectors and is very likely silently failing back to
+  the 8-product curated list. Not urgent, but worth knowing.
+- Footer social links are `href="#"` placeholders. Newsletter
+  form is decorative-only. Logged in backlog.
