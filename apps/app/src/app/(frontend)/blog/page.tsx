@@ -1,4 +1,5 @@
 import React from "react";
+import { unstable_cache } from "next/cache";
 import { getPayload } from "payload";
 import config from "@/payload.config";
 import { Container } from "@/components/Container";
@@ -6,23 +7,29 @@ import { PostCard } from "@/components/PostCard";
 import Header from "@/components/Header";
 import { Post } from "@/payload-types";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
-export default async function BlogPage() {
-  const payload = await getPayload({ config });
-  let posts: Post[] = [];
-
-  try {
+const getPublishedPosts = unstable_cache(
+  async (): Promise<Post[]> => {
+    const payload = await getPayload({ config });
     const result = await payload.find({
       collection: "posts",
       sort: "-publishedDate",
+      depth: 1,
       where: {
-        _status: {
-          equals: "published",
-        },
+        _status: { equals: "published" },
       },
     });
-    posts = result.docs as Post[];
+    return result.docs as Post[];
+  },
+  ["published-posts-index"],
+  { revalidate: 300, tags: ["posts"] },
+);
+
+export default async function BlogPage() {
+  let posts: Post[] = [];
+  try {
+    posts = await getPublishedPosts();
   } catch (error) {
     console.error("Failed to fetch blog posts during page render.", error);
   }
@@ -31,9 +38,9 @@ export default async function BlogPage() {
     <div className="py-20">
       <Container>
         <Header
-          badge="Blog"
-          title="All Articles"
-          subtitle="Insights, updates, and tutorials from our team about modern web development and design."
+          badge="Reviews"
+          title="ClickBank product reviews"
+          subtitle="Honest, analysis-driven reviews of trending ClickBank products. Updated as the marketplace shifts so your picks stay current."
         />
         
         {posts.length > 0 ? (

@@ -11,6 +11,7 @@ import {
   suggestArticleTags,
   getRandomPublishTime,
 } from '@/services/contentGenerationService'
+import { qaReview } from '@/services/qaService'
 
 /**
  * Cron job endpoint for automated article generation
@@ -65,6 +66,18 @@ export async function GET(request: NextRequest) {
     const article = await generateArticleForProduct(product, settings)
     console.log(`[generate-article] Generated article: "${article.title}"`)
 
+    // 7b. Editorial QA gate — flags fabrications, missing disclosure, thin content
+    const qa = qaReview(article)
+    console.log(
+      `[generate-article] QA: ${qa.passed ? 'passed' : 'failed'} (${qa.wordCount} words, ${qa.errors.length} errors, ${qa.warnings.length} warnings)`,
+    )
+    if (qa.errors.length > 0) {
+      console.error('[generate-article] QA errors:', qa.errors)
+    }
+    if (qa.warnings.length > 0) {
+      console.warn('[generate-article] QA warnings:', qa.warnings)
+    }
+
     // 8. Generate featured image via Replicate (optional — skip if no key)
     let featuredImageId: number | undefined
     if (process.env.REPLICATE_API_KEY) {
@@ -118,22 +131,35 @@ export async function GET(request: NextRequest) {
       console.log(`[generate-article] Slug conflict — using: ${finalSlug}`)
     }
 
-    // 11. Convert markdown to Lexical
-    const content = markdownToLexical(article.content)
+    // 11. Rewrite raw affiliate URL → /go/{slug} for click tracking
+    const rawAffiliateUrl = product.affiliateUrl?.trim() || product.vendorUrl?.trim() || ''
+    const trackedCta = `/go/${finalSlug}`
+    const contentMarkdown = rawAffiliateUrl
+      ? article.content.split(rawAffiliateUrl).join(trackedCta)
+      : article.content
 
-    // 12. Create post in Payload (draft)
+    // 12. Convert markdown to Lexical
+    const content = markdownToLexical(contentMarkdown)
+
+    // 13. Create post in Payload (draft)
     const publishTime = getRandomPublishTime()
+
+    // Prefix title when QA fails so editors notice in the admin list
+    const reviewTitle = qa.passed ? article.title : `[QA REVIEW] ${article.title}`
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const post = await (payload.create as any)({
       collection: 'posts',
       data: {
-        title: article.title,
+        title: reviewTitle,
         slug: finalSlug,
         content,
         excerpt: article.excerpt,
         _status: 'draft',
         publishedDate: publishTime.toISOString(),
+        affiliateUrl: rawAffiliateUrl || undefined,
+        productName: product.name,
+        clickCount: 0,
         ...(featuredImageId ? { meta: { image: featuredImageId } } : {}),
         ...(suggestedTagIds.length > 0 ? { tags: suggestedTagIds } : {}),
       },
@@ -152,6 +178,12 @@ export async function GET(request: NextRequest) {
         name: product.name,
         category: product.category,
         gravity: product.gravity,
+      },
+      qa: {
+        passed: qa.passed,
+        wordCount: qa.wordCount,
+        errors: qa.errors,
+        warnings: qa.warnings,
       },
       scheduledPublish: publishTime.toISOString(),
     })

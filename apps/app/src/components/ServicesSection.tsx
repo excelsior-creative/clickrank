@@ -1,38 +1,38 @@
 import React from 'react'
 import Header from './Header'
 import { Container } from './Container'
-import { Search, FileCheck, BarChart3, Shield, Zap, Users } from 'lucide-react'
+import { Search, BarChart3, Shield, Zap, BookOpen, AlertTriangle } from 'lucide-react'
 
 const tools = [
   {
-    title: 'In-Depth Research',
-    description: 'We conduct thorough market research to identify trending products and emerging digital solutions worth reviewing.',
+    title: 'Marketplace tracking',
+    description: 'We pull trending ClickBank products nightly and rank by gravity score, so reviews reflect what is actually selling.',
     icon: Search,
   },
   {
-    title: 'Hands-On Testing',
-    description: 'Every product we review undergoes rigorous hands-on testing to evaluate features, usability, and value.',
-    icon: FileCheck,
+    title: 'Structured reviews',
+    description: 'Every review follows the same shape: what it is, who it is for, strengths, honest caveats, pricing, verdict. No fluff.',
+    icon: BookOpen,
   },
   {
-    title: 'Data Analysis',
-    description: 'We analyze user feedback, ratings, and performance metrics to provide data-driven recommendations.',
+    title: 'Analysis, not hype',
+    description: 'We read vendor docs and public user feedback. We do not invent testimonials, studies, or first-person experience we did not have.',
     icon: BarChart3,
   },
   {
-    title: 'Quality Assurance',
-    description: 'Our quality standards ensure only legitimate, high-value products make it to our recommendations.',
+    title: 'Honest caveats',
+    description: 'Every review includes at least one real limitation. A product with no downsides on paper is a red flag, not a sales pitch.',
+    icon: AlertTriangle,
+  },
+  {
+    title: 'Transparent disclosure',
+    description: 'Affiliate relationship disclosed on every review and in the footer. Compensation never changes what we cover or how we rate.',
     icon: Shield,
   },
   {
-    title: 'Fast Updates',
-    description: 'We regularly update our reviews to reflect product changes, new features, and current market conditions.',
+    title: 'Fresh content',
+    description: 'New reviews are published on a nightly cadence. Stale reviews get revisited when the marketplace or vendor shifts.',
     icon: Zap,
-  },
-  {
-    title: 'Community Feedback',
-    description: 'We incorporate feedback from our community of readers to continuously improve our review process.',
-    icon: Users,
   },
 ]
 
@@ -41,9 +41,9 @@ export const ServicesSection = () => {
     <section className="py-20 md:py-28 bg-dark-light">
       <Container>
         <Header
-          badge="What we offer"
-          title="Our Tools & Process"
-          subtitle="We employ a comprehensive methodology to ensure every review is thorough, unbiased, and valuable to our readers."
+          badge="How we review"
+          title="What goes into every review"
+          subtitle="A repeatable methodology built on public data and a clear editorial standard — not guesswork and not fabricated experience."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">

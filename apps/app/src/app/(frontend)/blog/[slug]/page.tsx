@@ -11,8 +11,10 @@ import { PayloadRedirects } from "@/components/PayloadRedirects";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { generateArticleSchema } from "@/lib/structured-data";
 import { SITE_NAME, SITE_URL } from "@/lib/metadata";
+import { ArrowUpRight } from "lucide-react";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
+export const dynamicParams = true;
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -99,6 +101,22 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           <div className="prose prose-invert prose-lg max-w-none">
             <RichText data={post.content} className="max-w-none" />
           </div>
+
+          {post.affiliateUrl && (
+            <div className="mt-12">
+              <a
+                href={`/go/${post.slug}`}
+                rel="sponsored nofollow noopener"
+                className="inline-flex items-center gap-2 rounded-full bg-brand px-8 py-4 text-base font-bold text-dark transition-colors hover:bg-brand-light"
+              >
+                Check current pricing{post.productName ? ` for ${post.productName}` : ""}
+                <ArrowUpRight className="h-5 w-5" />
+              </a>
+              <p className="mt-3 text-xs text-gray-500">
+                Affiliate link — we earn a commission on qualifying purchases at no extra cost to you.
+              </p>
+            </div>
+          )}
 
           <div className="mt-16 pt-8 border-t border-white/5">
             <AffiliateDisclosure variant="inline" />

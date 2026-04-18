@@ -249,5 +249,32 @@ export const Posts: CollectionConfig = {
         ],
       },
     },
+    {
+      name: 'affiliateUrl',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        description:
+          'ClickBank hoplink (or other affiliate URL) for this product. Surfaced via /go/{slug} for click tracking.',
+      },
+    },
+    {
+      name: 'productName',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        description: 'Display name of the reviewed product (used in CTA buttons).',
+      },
+    },
+    {
+      name: 'clickCount',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Outbound affiliate clicks recorded via /go/{slug}.',
+      },
+    },
   ],
 }

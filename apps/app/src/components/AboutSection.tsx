@@ -10,28 +10,31 @@ export const AboutSection = () => {
     <section className="py-20 md:py-28 bg-dark">
       <Container>
         <Header
-          badge="About Us"
-          title="Passion and Dedication Leads to Accuracy"
-          subtitle="We thoroughly research and test digital products to provide you with honest, unbiased reviews that help you make the best purchasing decisions."
+          badge="About"
+          title="Honest analysis, not hype"
+          subtitle="We read the claims, vendor docs, and public user feedback so you don't have to. Every review tells you what a ClickBank product actually is, who it's for, and where it falls short."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-16 items-center">
           <div className="space-y-6">
-            <h3 className="text-2xl md:text-3xl font-bold text-white">Our Commitment to Quality Reviews</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-white">How we review</h3>
             <p className="text-gray-400 leading-relaxed">
-              At ClickRank, we understand that navigating the world of digital products can be overwhelming. 
-              That&apos;s why our team of experts spends countless hours researching, testing, and analyzing 
-              products across various categories including software, online courses, e-books, and digital tools.
+              ClickRank is a ClickBank affiliate review site. We track the
+              marketplace, surface trending products, and publish structured
+              reviews that lead with real strengths, include at least one
+              honest limitation, and never fabricate testimonials, studies, or
+              first-person claims.
             </p>
             <p className="text-gray-400 leading-relaxed">
-              Our mission is simple: to provide you with comprehensive, unbiased reviews that highlight both 
-              the strengths and weaknesses of each product. We believe in transparency and honesty, ensuring 
-              you have all the information needed to make confident purchasing decisions.
+              We earn a commission when a reader buys through a link on this
+              site. Compensation never decides what we cover or how we rate a
+              product — see our affiliate disclosure at the bottom of every
+              page.
             </p>
             <div className="pt-4">
               <Button asChild className="bg-brand hover:bg-brand-light text-dark font-bold rounded-full px-6">
                 <Link href="/about">
-                  Discover More
+                  Read the full editorial standard
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -40,24 +43,24 @@ export const AboutSection = () => {
 
           <div className="relative">
             <div className="bg-dark-light rounded-2xl p-8 border border-white/5">
-              <div className="grid grid-cols-2 gap-6">
-                <div className="text-center p-4">
-                  <div className="text-3xl md:text-4xl font-bold text-brand mb-2">500+</div>
-                  <div className="text-sm text-gray-400">Products Reviewed</div>
-                </div>
-                <div className="text-center p-4">
-                  <div className="text-3xl md:text-4xl font-bold text-brand mb-2">50K+</div>
-                  <div className="text-sm text-gray-400">Happy Readers</div>
-                </div>
-                <div className="text-center p-4">
-                  <div className="text-3xl md:text-4xl font-bold text-brand mb-2">100+</div>
-                  <div className="text-sm text-gray-400">Categories Covered</div>
-                </div>
-                <div className="text-center p-4">
-                  <div className="text-3xl md:text-4xl font-bold text-brand mb-2">4.9/5</div>
-                  <div className="text-sm text-gray-400">Trust Score</div>
-                </div>
-              </div>
+              <ul className="space-y-4 text-gray-300">
+                <li className="flex gap-3">
+                  <span className="text-brand font-bold">01.</span>
+                  <span>Pull trending products from the ClickBank marketplace by gravity score.</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand font-bold">02.</span>
+                  <span>Write a structured review: what it is, who it's for, strengths, honest caveats, pricing, verdict.</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand font-bold">03.</span>
+                  <span>Refuse fabricated testimonials, studies, medical/financial/income claims.</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand font-bold">04.</span>
+                  <span>Disclose the affiliate relationship on every page — no exceptions.</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
