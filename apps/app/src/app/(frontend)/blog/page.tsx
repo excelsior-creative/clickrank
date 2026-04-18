@@ -6,7 +6,10 @@ import { PostCard } from "@/components/PostCard";
 import Header from "@/components/Header";
 import { Post } from "@/payload-types";
 
-export const dynamic = 'force-dynamic';
+// ISR: revalidate every hour as a safety net. On-demand revalidation
+// from Posts.afterChange keeps this fresh whenever a post is published
+// or updated.
+export const revalidate = 3600;
 
 export default async function BlogPage() {
   const payload = await getPayload({ config });
@@ -31,9 +34,9 @@ export default async function BlogPage() {
     <div className="py-20">
       <Container>
         <Header
-          badge="Blog"
-          title="All Articles"
-          subtitle="Insights, updates, and tutorials from our team about modern web development and design."
+          badge="Reviews"
+          title="All reviews"
+          subtitle="Honest, independent reviews of digital products from the ClickBank marketplace. Leading with real strengths, naming real caveats, and keeping affiliate relationships transparent."
         />
         
         {posts.length > 0 ? (

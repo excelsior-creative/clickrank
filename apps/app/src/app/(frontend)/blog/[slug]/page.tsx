@@ -12,7 +12,10 @@ import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { generateArticleSchema } from "@/lib/structured-data";
 import { SITE_NAME, SITE_URL } from "@/lib/metadata";
 
-export const dynamic = 'force-dynamic';
+// ISR: revalidate every hour as a safety net. On-demand revalidation
+// from Posts.afterChange handles immediate freshness when a post is
+// published or edited.
+export const revalidate = 3600;
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

@@ -19,7 +19,7 @@ Update nightly where data is available.
 | Metric | Latest | As of | Notes |
 |--------|--------|-------|-------|
 | Successful runs (last 7d) | unknown | 2026-04-17 | No run log pre-CEO session |
-| QA pass rate | n/a | — | No QA stage yet |
+| QA pass rate | n/a | 2026-04-18 | QA stage shipped tonight; baseline will populate from next real run |
 | Avg generation time / post | unknown | — | Need logs |
 
 ## What we wish we had
