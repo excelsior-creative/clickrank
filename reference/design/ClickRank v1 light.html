@@ -1,0 +1,1129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ClickRank — Honest reviews of ClickBank digital products</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=Instrument+Serif:ital@0;1&family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+/*EDITMODE-BEGIN*/
+/* tweak defaults mirrored below in JS */
+/*EDITMODE-END*/
+
+:root{
+  --paper: oklch(98.2% 0.006 85);
+  --paper-2: oklch(96% 0.008 85);
+  --rule: oklch(86% 0.012 85);
+  --rule-soft: oklch(92% 0.010 85);
+  --ink: oklch(22% 0.012 80);
+  --ink-2: oklch(38% 0.012 80);
+  --ink-3: oklch(55% 0.012 80);
+  --primary: oklch(42% 0.085 155);         /* deep editorial green */
+  --primary-ink: oklch(30% 0.06 155);
+  --primary-wash: oklch(95% 0.02 155);
+  --mark: oklch(68% 0.14 55);              /* warm accent — reserved for rating */
+  --mark-soft: oklch(92% 0.04 70);
+  --neg: oklch(52% 0.12 28);
+
+  --serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --serif-it: "Instrument Serif", "Source Serif 4", Georgia, serif;
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --maxw: 1240px;
+  --gutter: clamp(20px, 4vw, 40px);
+}
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+a{ color:inherit; text-decoration:none; }
+img{ max-width:100%; display:block; }
+
+.wrap{ max-width:var(--maxw); margin:0 auto; padding:0 var(--gutter); }
+
+/* ============ TOP NAV ============ */
+.topbar{
+  border-bottom:1px solid var(--rule);
+  background:var(--paper);
+  position:sticky; top:0; z-index:40;
+  backdrop-filter:saturate(140%) blur(6px);
+  background:color-mix(in oklch, var(--paper) 88%, transparent);
+}
+.topbar-inner{
+  display:flex; align-items:center; gap:28px;
+  height:68px;
+}
+.brand{
+  display:flex; align-items:baseline; gap:8px;
+  font-family:var(--serif); font-weight:600;
+  font-size:24px; letter-spacing:-0.01em;
+}
+.brand .dot{
+  width:8px; height:8px; border-radius:2px; background:var(--primary);
+  display:inline-block; transform:translateY(-4px);
+}
+.brand em{
+  font-family:var(--serif-it); font-style:italic; color:var(--primary-ink);
+  font-weight:400;
+}
+nav.primary{
+  display:flex; gap:22px; margin-left:12px;
+  font-size:14px; color:var(--ink-2);
+}
+nav.primary a{
+  padding:6px 0;
+  border-bottom:1px solid transparent;
+  transition:border-color .15s, color .15s;
+}
+nav.primary a:hover, nav.primary a.active{ color:var(--ink); border-color:var(--ink); }
+
+.searchwrap{
+  margin-left:auto;
+  display:flex; align-items:center; gap:10px;
+  padding:8px 12px;
+  background:var(--paper-2);
+  border:1px solid var(--rule);
+  border-radius:999px;
+  min-width:280px;
+  transition:border-color .15s, background .15s;
+}
+.searchwrap:focus-within{ border-color:var(--ink-3); background:var(--paper); }
+.searchwrap svg{ width:14px; height:14px; opacity:.6; flex:none; }
+.searchwrap input{
+  border:0; outline:0; background:transparent; width:100%;
+  font:inherit; font-size:13.5px; color:var(--ink);
+}
+.searchwrap kbd{
+  font-family:var(--mono); font-size:11px;
+  color:var(--ink-3); padding:2px 6px;
+  border:1px solid var(--rule); border-radius:4px;
+  background:var(--paper);
+}
+
+@media (max-width:820px){
+  nav.primary{ display:none; }
+  .searchwrap{ min-width:0; flex:1; }
+  .searchwrap kbd{ display:none; }
+}
+
+/* ============ DISCLOSURE STRIP ============ */
+.disclosure-strip{
+  background:var(--ink);
+  color:oklch(88% 0.008 80);
+  font-size:12px;
+  font-family:var(--mono);
+  letter-spacing:0.02em;
+}
+.disclosure-strip .wrap{
+  display:flex; align-items:center; justify-content:space-between;
+  height:32px; gap:16px;
+}
+.disclosure-strip .tag{
+  display:inline-flex; align-items:center; gap:8px;
+}
+.disclosure-strip .tag::before{
+  content:""; width:6px; height:6px; border-radius:50%;
+  background:var(--mark);
+}
+.disclosure-strip .sub{
+  color:oklch(70% 0.01 80);
+}
+@media (max-width:640px){ .disclosure-strip .sub{ display:none; } }
+
+/* ============ HERO ============ */
+.hero{
+  padding: clamp(56px, 9vw, 120px) 0 clamp(48px, 7vw, 96px);
+  border-bottom:1px solid var(--rule);
+  position:relative;
+  overflow:hidden;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap:clamp(32px, 5vw, 72px);
+  align-items:end;
+}
+@media (max-width:880px){ .hero-grid{ grid-template-columns:1fr; gap:48px; } }
+
+.kicker{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--ink-3);
+  display:inline-flex; align-items:center; gap:10px;
+  margin-bottom:28px;
+}
+.kicker .line{ width:28px; height:1px; background:var(--ink-3); display:inline-block; }
+
+h1.display{
+  font-family:var(--serif);
+  font-weight:380;
+  font-size: clamp(44px, 7.2vw, 104px);
+  line-height:0.98;
+  letter-spacing:-0.025em;
+  margin:0 0 28px;
+  color:var(--ink);
+  text-wrap:balance;
+}
+h1.display em{
+  font-family:var(--serif-it);
+  font-style:italic;
+  font-weight:400;
+  color:var(--primary-ink);
+}
+h1.display .strike{
+  position:relative; white-space:nowrap;
+}
+h1.display .strike::after{
+  content:"";
+  position:absolute; left:-2%; right:-2%; top:58%;
+  border-top:2px solid var(--mark);
+  transform:rotate(-2deg);
+}
+
+.hero-lede{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size: clamp(17px, 1.6vw, 20px);
+  line-height:1.5;
+  color:var(--ink-2);
+  max-width:44ch;
+  margin:0 0 36px;
+}
+
+.hero-cta{
+  display:flex; gap:14px; align-items:center; flex-wrap:wrap;
+}
+
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:14px 22px;
+  font-family:var(--sans); font-size:14px; font-weight:500;
+  border-radius:999px;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:transform .15s, background .15s, border-color .15s, color .15s;
+}
+.btn-primary{ background:var(--ink); color:var(--paper); }
+.btn-primary:hover{ background:var(--primary-ink); }
+.btn-ghost{ background:transparent; color:var(--ink); border-color:var(--rule); }
+.btn-ghost:hover{ border-color:var(--ink); }
+.btn .arr{ transition:transform .2s; }
+.btn:hover .arr{ transform:translateX(3px); }
+
+/* hero right: featured pick card */
+.featured-pick{
+  border:1px solid var(--rule);
+  background:var(--paper);
+  padding:28px;
+  position:relative;
+}
+.featured-pick::before{
+  content:"EDITOR'S PICK / WEEK 16";
+  position:absolute; top:-10px; left:20px;
+  background:var(--paper);
+  font-family:var(--mono); font-size:10.5px;
+  letter-spacing:0.16em; color:var(--ink-3);
+  padding:0 8px;
+}
+.featured-pick .placeholder{
+  aspect-ratio: 4/3;
+  background: repeating-linear-gradient(
+    135deg,
+    var(--paper-2) 0 8px,
+    var(--paper) 8px 16px
+  );
+  border:1px solid var(--rule);
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:20px;
+}
+.featured-pick .placeholder span{
+  font-family:var(--mono); font-size:11px; color:var(--ink-3);
+  letter-spacing:0.08em; text-transform:uppercase;
+  padding:4px 8px; background:var(--paper);
+}
+.featured-pick .cat{
+  font-family:var(--mono); font-size:11px; letter-spacing:0.14em;
+  color:var(--ink-3); text-transform:uppercase; margin-bottom:10px;
+}
+.featured-pick h3{
+  font-family:var(--serif); font-weight:420;
+  font-size:26px; line-height:1.1; margin:0 0 12px;
+  letter-spacing:-0.015em;
+}
+.featured-pick p.take{
+  font-family:var(--serif); font-weight:300;
+  color:var(--ink-2); margin:0 0 20px; font-size:15px;
+  line-height:1.5;
+}
+
+/* ============ RATING MARK (signature visual) ============ */
+.rating-mark{
+  display:flex; align-items:center; gap:14px;
+  padding:14px 0;
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+}
+.rating-mark .score{
+  font-family:var(--serif);
+  font-weight:380;
+  font-size:44px;
+  line-height:1;
+  letter-spacing:-0.03em;
+  color:var(--ink);
+  font-feature-settings:"tnum" 1, "lnum" 1;
+}
+.rating-mark .score sup{
+  font-size:18px; color:var(--ink-3); vertical-align:top;
+  margin-left:2px; font-weight:400;
+}
+.rating-mark .bars{
+  flex:1; display:grid; grid-template-columns:repeat(10, 1fr);
+  gap:3px; height:14px;
+}
+.rating-mark .bars span{
+  background:var(--rule);
+  border-radius:1px;
+}
+.rating-mark .bars span.on{ background:var(--mark); }
+.rating-mark .label{
+  font-family:var(--mono); font-size:10.5px;
+  letter-spacing:0.14em; color:var(--ink-3);
+  text-transform:uppercase;
+  writing-mode:initial;
+}
+
+.verdict-pill{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:0.14em;
+  text-transform:uppercase;
+  padding:5px 10px;
+  border-radius:999px;
+  background:var(--primary-wash); color:var(--primary-ink);
+  border:1px solid color-mix(in oklch, var(--primary) 18%, transparent);
+}
+.verdict-pill.warn{ background:var(--mark-soft); color:oklch(40% 0.1 55); border-color:color-mix(in oklch, var(--mark) 25%, transparent); }
+.verdict-pill.skip{ background:oklch(95% 0.02 28); color:var(--neg); border-color:color-mix(in oklch, var(--neg) 25%, transparent); }
+
+/* tiny ticker of scroll pulses */
+.hero-meta{
+  margin-top:18px; display:flex; justify-content:space-between; align-items:center;
+  font-family:var(--mono); font-size:11.5px; letter-spacing:0.08em;
+  color:var(--ink-3);
+}
+.hero-meta .dot{
+  width:6px; height:6px; border-radius:50%; background:var(--primary);
+  display:inline-block; margin-right:8px; animation:pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{ opacity:.4; transform:scale(1); }
+  50%{ opacity:1; transform:scale(1.3); }
+}
+
+/* ============ STATS / TRUST ROW ============ */
+.trust-row{
+  border-bottom:1px solid var(--rule);
+  padding:28px 0;
+}
+.trust-row .row{
+  display:grid; grid-template-columns:repeat(4, 1fr);
+  gap:0;
+}
+.trust-row .cell{
+  padding:8px 20px;
+  border-left:1px solid var(--rule-soft);
+  display:flex; flex-direction:column; gap:4px;
+}
+.trust-row .cell:first-child{ border-left:0; padding-left:0; }
+.trust-row .num{
+  font-family:var(--serif); font-weight:380;
+  font-size: clamp(28px, 3.2vw, 40px);
+  letter-spacing:-0.02em; line-height:1;
+  color:var(--ink);
+}
+.trust-row .lbl{
+  font-family:var(--mono); font-size:11px; letter-spacing:0.14em;
+  color:var(--ink-3); text-transform:uppercase;
+}
+@media (max-width:720px){
+  .trust-row .row{ grid-template-columns:repeat(2,1fr); row-gap:24px; }
+  .trust-row .cell:nth-child(3){ border-left:0; padding-left:0; }
+}
+
+/* ============ SECTION HEAD ============ */
+.section-head{
+  display:flex; align-items:baseline; justify-content:space-between;
+  gap:24px;
+  padding-top: clamp(60px, 8vw, 96px);
+  padding-bottom: 32px;
+  border-bottom:1px solid var(--rule);
+  margin-bottom: 40px;
+}
+.section-head .left{ flex:1; }
+.section-head .eyebrow{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:0.16em;
+  color:var(--ink-3); text-transform:uppercase; margin-bottom:14px;
+}
+.section-head h2{
+  font-family:var(--serif); font-weight:380;
+  font-size: clamp(32px, 4.2vw, 52px);
+  letter-spacing:-0.02em; line-height:1.05;
+  margin:0 0 12px; max-width:22ch;
+  text-wrap:balance;
+}
+.section-head h2 em{ font-family:var(--serif-it); font-style:italic; color:var(--primary-ink); }
+.section-head p{
+  font-family:var(--serif); font-weight:300;
+  font-size:17px; color:var(--ink-2); max-width:54ch; margin:0;
+}
+.section-head .link{
+  font-family:var(--sans); font-size:13.5px; color:var(--ink);
+  display:inline-flex; align-items:center; gap:8px;
+  padding-bottom:3px; border-bottom:1px solid var(--ink);
+  white-space:nowrap;
+}
+.section-head .link:hover{ color:var(--primary-ink); border-color:var(--primary-ink); }
+@media (max-width:720px){ .section-head{ flex-direction:column; align-items:flex-start; } }
+
+/* ============ CATEGORY CHIPS ============ */
+.categories{
+  display:flex; gap:8px; flex-wrap:wrap;
+  padding-bottom:40px;
+}
+.cat-chip{
+  font-family:var(--sans); font-size:13px;
+  padding:8px 16px; border:1px solid var(--rule);
+  border-radius:999px;
+  display:inline-flex; align-items:center; gap:8px;
+  cursor:pointer; background:var(--paper);
+  transition:border-color .15s, background .15s, color .15s;
+  color:var(--ink-2);
+}
+.cat-chip:hover{ border-color:var(--ink); color:var(--ink); }
+.cat-chip.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.cat-chip .count{
+  font-family:var(--mono); font-size:11px; color:var(--ink-3);
+}
+.cat-chip.active .count{ color:oklch(70% 0.01 80); }
+
+/* ============ REVIEW CARD GRID ============ */
+.review-grid{
+  display:grid; grid-template-columns:repeat(3, 1fr);
+  gap:0;
+  border-top:1px solid var(--rule);
+}
+@media (max-width:960px){ .review-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:640px){ .review-grid{ grid-template-columns:1fr; } }
+
+.review-card{
+  padding:28px;
+  border-right:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  display:flex; flex-direction:column; gap:16px;
+  position:relative;
+  background:var(--paper);
+  cursor:pointer;
+  transition:background .2s;
+}
+.review-card:hover{ background:var(--paper-2); }
+.review-card:hover .arr-inline{ transform:translate(4px,-4px); }
+@media (min-width:960px){
+  .review-grid .review-card:nth-child(3n){ border-right:0; }
+}
+@media (max-width:960px) and (min-width:641px){
+  .review-grid .review-card:nth-child(2n){ border-right:0; }
+}
+@media (max-width:640px){
+  .review-card{ border-right:0; }
+}
+
+.review-card .top{
+  display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+}
+.review-card .cat-tag{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:0.14em;
+  color:var(--ink-3); text-transform:uppercase;
+}
+.review-card .arr-inline{
+  width:22px; height:22px; flex:none;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--ink-3);
+  transition:transform .2s;
+}
+.review-card h3{
+  font-family:var(--serif); font-weight:420;
+  font-size:22px; line-height:1.15;
+  letter-spacing:-0.015em;
+  margin:0;
+}
+.review-card .dek{
+  font-family:var(--serif); font-weight:300;
+  color:var(--ink-2); font-size:14.5px; line-height:1.5;
+  margin:0;
+}
+.review-card .meta{
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:var(--mono); font-size:11px; letter-spacing:0.08em;
+  color:var(--ink-3); text-transform:uppercase;
+  margin-top:auto; padding-top:14px;
+  border-top:1px solid var(--rule-soft);
+}
+.review-card .meta .author{ color:var(--ink-2); }
+
+/* compact inline rating for cards */
+.rating-inline{
+  display:flex; align-items:center; gap:10px;
+}
+.rating-inline .n{
+  font-family:var(--serif); font-weight:400; font-size:22px;
+  letter-spacing:-0.02em; line-height:1;
+  font-feature-settings:"tnum" 1;
+}
+.rating-inline .bars{
+  display:grid; grid-template-columns:repeat(10,1fr); gap:2px;
+  width:90px; height:8px;
+}
+.rating-inline .bars span{ background:var(--rule); border-radius:1px; }
+.rating-inline .bars span.on{ background:var(--mark); }
+
+/* ============ PROCESS STRIP ============ */
+.process{
+  background:var(--ink);
+  color:var(--paper);
+  padding: clamp(80px, 10vw, 140px) 0;
+  margin-top: clamp(80px, 10vw, 140px);
+  position:relative;
+}
+.process .section-head{ border-color:oklch(35% 0.015 80); padding-top:0; }
+.process .section-head .eyebrow{ color:oklch(68% 0.014 80); }
+.process .section-head h2{ color:var(--paper); }
+.process .section-head h2 em{ color:var(--mark); }
+.process .section-head p{ color:oklch(80% 0.01 80); }
+
+.process-grid{
+  display:grid; grid-template-columns:repeat(3, 1fr);
+  gap:0; border-top:1px solid oklch(35% 0.015 80);
+}
+@media (max-width:880px){ .process-grid{ grid-template-columns:1fr 1fr; } }
+@media (max-width:560px){ .process-grid{ grid-template-columns:1fr; } }
+
+.step{
+  padding:36px 28px 32px;
+  border-right:1px solid oklch(35% 0.015 80);
+  border-bottom:1px solid oklch(35% 0.015 80);
+  display:flex; flex-direction:column; gap:14px;
+  min-height:240px;
+}
+@media (min-width:881px){ .process-grid .step:nth-child(3n){ border-right:0; } }
+@media (max-width:880px) and (min-width:561px){ .process-grid .step:nth-child(2n){ border-right:0; } }
+@media (max-width:560px){ .step{ border-right:0; } }
+
+.step .num{
+  font-family:var(--mono); font-size:11px; letter-spacing:0.16em;
+  color:oklch(68% 0.014 80); text-transform:uppercase;
+}
+.step h4{
+  font-family:var(--serif); font-weight:420;
+  font-size:24px; line-height:1.1;
+  letter-spacing:-0.015em;
+  margin:0;
+}
+.step p{
+  font-family:var(--serif); font-weight:300;
+  font-size:15px; color:oklch(80% 0.01 80);
+  margin:0; line-height:1.5;
+}
+.step .glyph{
+  width:32px; height:32px;
+  border:1px solid oklch(50% 0.015 80);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--mark);
+  margin-bottom:auto;
+}
+
+/* ============ COMMITMENT / ABOUT ============ */
+.commitment{
+  padding: clamp(80px, 10vw, 140px) 0;
+  border-bottom:1px solid var(--rule);
+}
+.commit-grid{
+  display:grid; grid-template-columns: 1fr 1.2fr;
+  gap: clamp(40px, 8vw, 96px);
+  align-items:start;
+}
+@media (max-width:880px){ .commit-grid{ grid-template-columns:1fr; gap:32px; } }
+.commitment h2{
+  font-family:var(--serif); font-weight:380;
+  font-size: clamp(34px, 4.6vw, 60px);
+  letter-spacing:-0.022em; line-height:1.02;
+  margin:0; text-wrap:balance;
+  position:sticky; top:100px;
+}
+.commitment h2 em{ font-family:var(--serif-it); font-style:italic; color:var(--primary-ink); }
+.commitment .body p{
+  font-family:var(--serif); font-weight:380;
+  font-size:18px; line-height:1.6; color:var(--ink-2);
+  margin:0 0 20px;
+}
+.commitment .body p:first-child::first-letter{
+  font-family:var(--serif); font-weight:420;
+  font-size:72px; line-height:0.85; float:left;
+  padding:6px 10px 0 0; color:var(--ink);
+}
+.commitment .body .sig{
+  margin-top:36px;
+  display:flex; align-items:center; gap:14px;
+  padding-top:24px; border-top:1px solid var(--rule);
+}
+.commitment .body .sig .avatar{
+  width:48px; height:48px; border-radius:50%;
+  background: repeating-linear-gradient(45deg, var(--paper-2) 0 6px, var(--paper) 6px 12px);
+  border:1px solid var(--rule);
+  flex:none;
+}
+.commitment .body .sig .who{ font-family:var(--sans); font-size:13px; }
+.commitment .body .sig .who strong{ display:block; color:var(--ink); font-weight:500; }
+.commitment .body .sig .who span{ color:var(--ink-3); font-family:var(--mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; }
+
+/* ============ FOOTER ============ */
+footer{
+  padding: 72px 0 40px;
+  background:var(--paper);
+  border-top:1px solid var(--rule);
+}
+.foot-grid{
+  display:grid; grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap:32px;
+  padding-bottom:60px;
+  border-bottom:1px solid var(--rule);
+}
+@media (max-width:720px){ .foot-grid{ grid-template-columns:1fr 1fr; row-gap:40px; } }
+.foot-col h5{
+  font-family:var(--mono); font-size:11px; letter-spacing:0.16em;
+  text-transform:uppercase; color:var(--ink-3);
+  margin:0 0 16px;
+}
+.foot-col ul{ list-style:none; padding:0; margin:0; }
+.foot-col li{ margin-bottom:10px; font-size:14px; color:var(--ink-2); }
+.foot-col li a:hover{ color:var(--ink); }
+.foot-intro p{
+  font-family:var(--serif); font-weight:300;
+  font-size:16px; color:var(--ink-2); line-height:1.55;
+  max-width:34ch; margin:16px 0 0;
+}
+.foot-bottom{
+  padding-top:32px;
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:var(--mono); font-size:11.5px; letter-spacing:0.08em;
+  color:var(--ink-3);
+  flex-wrap:wrap; gap:12px;
+}
+.foot-disclosure{
+  margin-top:36px; padding:20px; border:1px dashed var(--rule);
+  font-family:var(--serif); font-weight:300;
+  font-size:14.5px; color:var(--ink-2); line-height:1.55;
+}
+.foot-disclosure strong{ color:var(--ink); font-family:var(--sans); font-weight:500; font-size:11.5px; letter-spacing:0.14em; text-transform:uppercase; display:block; margin-bottom:8px; }
+
+/* ============ TWEAKS PANEL ============ */
+#tweaks{
+  position:fixed; bottom:20px; right:20px; width:300px;
+  background:var(--paper); border:1px solid var(--ink);
+  padding:16px; font-family:var(--sans);
+  z-index:100; display:none;
+  box-shadow:0 12px 40px oklch(20% 0.01 80 / 0.18);
+}
+#tweaks.on{ display:block; }
+#tweaks h6{
+  margin:0 0 14px; font-family:var(--mono); font-size:11px;
+  letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-3);
+  display:flex; justify-content:space-between; align-items:center;
+}
+#tweaks h6 button{
+  background:none; border:0; font-family:var(--mono); font-size:11px;
+  color:var(--ink-3); cursor:pointer; letter-spacing:0.1em;
+}
+#tweaks .row{ margin-bottom:14px; }
+#tweaks label{ font-size:11.5px; color:var(--ink-2); display:block; margin-bottom:6px; font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; }
+#tweaks .swatches{ display:flex; gap:6px; }
+#tweaks .sw{
+  width:28px; height:28px; border-radius:50%; border:2px solid transparent;
+  cursor:pointer;
+}
+#tweaks .sw.active{ border-color:var(--ink); }
+#tweaks select, #tweaks input[type=range]{
+  width:100%; font:inherit; padding:6px; border:1px solid var(--rule); background:var(--paper);
+}
+
+/* subtle entrance */
+.fade-up{
+  opacity:0; transform:translateY(12px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+.fade-up.in{ opacity:1; transform:none; }
+
+</style>
+</head>
+<body>
+
+<!-- ============ DISCLOSURE STRIP ============ -->
+<div class="disclosure-strip">
+  <div class="wrap">
+    <span class="tag">Independent reviews · Reader-supported</span>
+    <span class="sub">We may earn commission when you buy through our links — it never changes what we write.</span>
+  </div>
+</div>
+
+<!-- ============ TOP NAV ============ -->
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="#">
+      <span class="dot"></span>ClickRank<em>·net</em>
+    </a>
+    <nav class="primary">
+      <a class="active" href="#">Reviews</a>
+      <a href="#">Rankings</a>
+      <a href="#">Categories</a>
+      <a href="#">How we test</a>
+      <a href="#">About</a>
+    </nav>
+    <div class="searchwrap">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+      <input placeholder="Search 500+ product reviews…" id="searchInput" />
+      <kbd>⌘K</kbd>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="kicker fade-up"><span class="line"></span>Issue 16 · Week of April 14, 2026</div>
+      <h1 class="display fade-up">
+        Honest reviews of digital products,
+        <em>before</em> you spend a cent.
+      </h1>
+      <p class="hero-lede fade-up">
+        ClickRank reads, tests, and ranks the courses, guides, and software sold across the ClickBank marketplace — so you don't have to guess whether the sales page is telling the truth.
+      </p>
+      <div class="hero-cta fade-up">
+        <a href="#reviews" class="btn btn-primary">Browse this week's reviews <span class="arr">→</span></a>
+        <a href="#about" class="btn btn-ghost">How we test</a>
+      </div>
+      <div class="hero-meta fade-up">
+        <span><span class="dot"></span>3 new reviews published this week</span>
+        <span id="liveClock">—</span>
+      </div>
+    </div>
+
+    <aside class="featured-pick fade-up">
+      <div class="placeholder"><span>Cover · Product screenshot</span></div>
+      <div class="cat">Side Hustle · Course</div>
+      <h3>The Freelance Pivot — is the $97 really the last price?</h3>
+      <p class="take">
+        A surprisingly solid framework buried under three upsells and one very aggressive countdown. We dug past the funnel.
+      </p>
+      <div class="rating-mark" data-score="8.4">
+        <span class="score">8.4<sup>/10</sup></span>
+        <div class="bars" aria-hidden="true"></div>
+        <span class="label">Our&nbsp;score</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:12px;flex-wrap:wrap;">
+        <span class="verdict-pill">Recommended, with caveats</span>
+        <span style="font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0.08em;">5,800-word review</span>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ TRUST ROW ============ -->
+<section class="trust-row">
+  <div class="wrap row">
+    <div class="cell"><span class="num" data-count="500">500<span style="font-size:.55em;color:var(--ink-3);">+</span></span><span class="lbl">Products reviewed</span></div>
+    <div class="cell"><span class="num" data-count="50">50K<span style="font-size:.55em;color:var(--ink-3);">+</span></span><span class="lbl">Monthly readers</span></div>
+    <div class="cell"><span class="num" data-count="100">100<span style="font-size:.55em;color:var(--ink-3);">+</span></span><span class="lbl">Categories covered</span></div>
+    <div class="cell"><span class="num">4.9<span style="font-size:.55em;color:var(--ink-3);">/5</span></span><span class="lbl">Reader trust score</span></div>
+  </div>
+</section>
+
+<!-- ============ RECENT REVIEWS ============ -->
+<section class="wrap" id="reviews">
+  <div class="section-head">
+    <div class="left">
+      <div class="eyebrow">The Review Desk · Recent work</div>
+      <h2>The products we <em>looked at</em> this month.</h2>
+      <p>Every review below was tested by a named editor, dated, and includes a disclosure. Filter by category to narrow down — or read the rankings if you want our top picks.</p>
+    </div>
+    <a href="#" class="link">View all reviews <span>→</span></a>
+  </div>
+
+  <div class="categories" id="cats">
+    <button class="cat-chip active" data-cat="all">All <span class="count">24</span></button>
+    <button class="cat-chip" data-cat="health">Health &amp; Fitness <span class="count">62</span></button>
+    <button class="cat-chip" data-cat="hustle">Side Hustle <span class="count">48</span></button>
+    <button class="cat-chip" data-cat="self">Self-Improvement <span class="count">39</span></button>
+    <button class="cat-chip" data-cat="software">Software &amp; SaaS <span class="count">56</span></button>
+    <button class="cat-chip" data-cat="survival">Survival &amp; Prep <span class="count">27</span></button>
+    <button class="cat-chip" data-cat="spiritual">Spiritual <span class="count">18</span></button>
+    <button class="cat-chip" data-cat="home">Home &amp; Garden <span class="count">31</span></button>
+    <button class="cat-chip" data-cat="relationships">Relationships <span class="count">22</span></button>
+  </div>
+
+  <div class="review-grid" id="grid"></div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="left">
+        <div class="eyebrow">The Process · How we test</div>
+        <h2>Every review, the <em>same</em> six steps.</h2>
+        <p>We don't score products from a sales page. Each item is bought, opened, and worked through before we publish a word — then updated as it changes.</p>
+      </div>
+    </div>
+
+    <div class="process-grid">
+      <div class="step">
+        <span class="num">Step 01</span>
+        <div class="glyph"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="4"/><path d="M9 9l4 4"/></svg></div>
+        <h4>Market research</h4>
+        <p>We watch what's actually selling on ClickBank, what's climbing search, and what readers are asking about — not what affiliate networks want us to push.</p>
+      </div>
+      <div class="step">
+        <span class="num">Step 02</span>
+        <div class="glyph"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7l3 3 5-6"/></svg></div>
+        <h4>Hands-on testing</h4>
+        <p>We buy the product, work through it the way a real reader would, and document every upsell, every broken link, every "bonus" that turned out to be filler.</p>
+      </div>
+      <div class="step">
+        <span class="num">Step 03</span>
+        <div class="glyph"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11V5M6 11V3M10 11V7"/></svg></div>
+        <h4>Data analysis</h4>
+        <p>We cross-reference refund rates, ClickBank gravity, independent user reports, and BBB complaints before we settle on a score we're willing to defend.</p>
+      </div>
+      <div class="step">
+        <span class="num">Step 04</span>
+        <div class="glyph"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h8v8H3z"/><path d="M3 7h8"/></svg></div>
+        <h4>Editor review</h4>
+        <p>A second editor reads the draft with the product open alongside. If they can't reproduce a claim in the review, the claim comes out.</p>
+      </div>
+      <div class="step">
+        <span class="num">Step 05</span>
+        <div class="glyph"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 2v10M2 7h10"/></svg></div>
+        <h4>Regular updates</h4>
+        <p>Digital products change — prices, modules, names. Every review is revisited on a 90-day cycle and updated, not quietly replaced.</p>
+      </div>
+      <div class="step">
+        <span class="num">Step 06</span>
+        <div class="glyph"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="4" cy="7" r="2"/><circle cx="10" cy="7" r="2"/></svg></div>
+        <h4>Reader feedback</h4>
+        <p>Thousands of readers tell us when they bought, what they thought, and whether we got it right. Their notes feed the next update.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMMITMENT / ABOUT ============ -->
+<section class="commitment" id="about">
+  <div class="wrap commit-grid">
+    <h2>Passion and dedication lead&nbsp;to <em>accurate</em> reviews.</h2>
+    <div class="body">
+      <p>Navigating the world of ClickBank digital products is overwhelming on purpose. Countdown timers, layered upsells, anonymous testimonials, and sales pages that tell you everything and nothing — it's a system designed to make "wait, let me think" feel expensive.</p>
+      <p>ClickRank exists to slow that down. A small team of editors, each with a real name and a real beat, spends an average of 14 hours on every product before we publish. We've recommended 164 products this year. We've told readers to skip 201. The scores live on the page, the dates live on the page, and the affiliate disclosure lives everywhere it should.</p>
+      <p>Our only job is to be the second opinion you wished you had before the last one.</p>
+      <div class="sig">
+        <div class="avatar"></div>
+        <div class="who">
+          <strong>Mara Wendell</strong>
+          <span>Editor in chief · Since 2023</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col foot-intro">
+        <a class="brand" href="#"><span class="dot"></span>ClickRank<em>·net</em></a>
+        <p>Independent reviews of the digital products sold on ClickBank. Reader-supported. Edited by people with names.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Reviews</h5>
+        <ul>
+          <li><a href="#">Recent reviews</a></li>
+          <li><a href="#">Top-rated</a></li>
+          <li><a href="#">Skip list</a></li>
+          <li><a href="#">By category</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Transparency</h5>
+        <ul>
+          <li><a href="#">How we test</a></li>
+          <li><a href="#">Affiliate disclosure</a></li>
+          <li><a href="#">Editorial standards</a></li>
+          <li><a href="#">Corrections</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>The desk</h5>
+        <ul>
+          <li><a href="#">About us</a></li>
+          <li><a href="#">Editors</a></li>
+          <li><a href="#">Newsletter</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-disclosure">
+      <strong>FTC Affiliate disclosure</strong>
+      ClickRank is a reader-supported publication. Some links on this site are affiliate links — if you click through and purchase, we may earn a commission at no additional cost to you. Our editorial is independent of those relationships: we review products we believe in, and we flag products we don't, regardless of commission. Scores and verdicts are decided before the affiliate check is negotiated.
+    </div>
+
+    <div class="foot-bottom">
+      <span>© 2026 ClickRank Media Co.</span>
+      <span>Terms · Privacy · Cookies</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ TWEAKS ============ -->
+<div id="tweaks" aria-hidden="true">
+  <h6>Tweaks <button id="closeTw">close</button></h6>
+  <div class="row">
+    <label>Primary color</label>
+    <div class="swatches" id="swatches">
+      <button class="sw active" data-p="155" style="background:oklch(42% 0.085 155)"></button>
+      <button class="sw" data-p="240" style="background:oklch(42% 0.09 240)"></button>
+      <button class="sw" data-p="30" style="background:oklch(42% 0.10 30)"></button>
+      <button class="sw" data-p="305" style="background:oklch(42% 0.10 305)"></button>
+      <button class="sw" data-p="80" style="background:oklch(38% 0.02 80)"></button>
+    </div>
+  </div>
+  <div class="row">
+    <label>Display type</label>
+    <select id="typeSel">
+      <option value="serif">Editorial serif (Source Serif 4)</option>
+      <option value="sans">Neutral sans (Geist)</option>
+      <option value="mixed">Serif + italic accents</option>
+    </select>
+  </div>
+  <div class="row">
+    <label>Rating visual</label>
+    <select id="ratingSel">
+      <option value="bars">10-segment bar (default)</option>
+      <option value="number">Numeric only</option>
+      <option value="dots">Filled dots</option>
+    </select>
+  </div>
+  <div class="row">
+    <label>Density</label>
+    <input type="range" id="densRange" min="0" max="2" value="1" step="1" />
+    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0.08em;margin-top:4px;"><span>Airy</span><span>Default</span><span>Dense</span></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   Review data
+========================================================= */
+const REVIEWS = [
+  {cat:"hustle", catLabel:"Side Hustle · Course", title:"The Freelance Pivot — is the $97 really the last price?", dek:"A surprisingly solid framework buried under three upsells and one very aggressive countdown. We dug past the funnel.", score:8.4, verdict:"Recommended", author:"Mara Wendell", date:"Apr 14, 2026"},
+  {cat:"health", catLabel:"Weight Loss · Program", title:"Metabolic Reset 21 — what the 'science' actually says", dek:"The landing page cites 14 studies. We read all 14. Three are real. The program itself? Surprisingly reasonable.", score:6.8, verdict:"With caveats", author:"Jules Ortiz", date:"Apr 11, 2026"},
+  {cat:"software", catLabel:"Software · Marketing", title:"FunnelMint Pro vs ClickFunnels — a week with each", dek:"One costs a fifth of the other. The cheaper one is not worse, but it isn't the same tool either.", score:7.9, verdict:"Recommended", author:"Dan Ko", date:"Apr 10, 2026"},
+  {cat:"self", catLabel:"Self-Improvement · Audio", title:"The 5-Minute Mindset — or, buying a podcast as a course", dek:"$67 for 90 minutes of audio you could get free elsewhere. The workbook is the only thing worth anything.", score:3.1, verdict:"Skip", author:"Priya S.", date:"Apr 08, 2026"},
+  {cat:"survival", catLabel:"Survival · Guide", title:"Blackout Ready — the preparedness guide that's actually practical", dek:"Most 'prepper' products lean toward fear. This one just gives you a checklist and a grocery list. Refreshing.", score:8.7, verdict:"Recommended", author:"Tom H.", date:"Apr 06, 2026"},
+  {cat:"hustle", catLabel:"Side Hustle · SaaS", title:"AffiliateAI — the AI-content play, tested over 30 days", dek:"Generates 40 articles a day. 38 of them are unusable. We tried to make the other 2 work and it still didn't.", score:2.6, verdict:"Skip", author:"Dan Ko", date:"Apr 03, 2026"},
+  {cat:"relationships", catLabel:"Relationships · eBook", title:"The Reconnection Blueprint — honest take", dek:"Written by someone who clearly cares. Also written at the length of a blog post and priced like a textbook.", score:5.4, verdict:"With caveats", author:"Lena R.", date:"Apr 01, 2026"},
+  {cat:"spiritual", catLabel:"Spiritual · Meditation", title:"Abundance Frequencies — what is actually on the tracks", dek:"We ran the audio through a spectrogram. Here's what's on it, what isn't, and what the $47 is really buying.", score:4.2, verdict:"With caveats", author:"Priya S.", date:"Mar 29, 2026"},
+  {cat:"home", catLabel:"Home · DIY Plans", title:"Backyard Greenhouse Plans 2026 — do they build?", dek:"We printed the plans, bought the lumber, and built one. It works. The parts list needs a correction, though.", score:8.1, verdict:"Recommended", author:"Tom H.", date:"Mar 27, 2026"},
+];
+
+const grid = document.getElementById('grid');
+
+function starBars(score, small=false){
+  // 10-segment bar; integer-portion filled
+  const filled = Math.round(score);
+  return Array.from({length:10}, (_,i)=>`<span class="${i<filled?'on':''}"></span>`).join('');
+}
+
+function dots(score){
+  const filled = Math.round(score);
+  return Array.from({length:10}, (_,i)=>`<span class="${i<filled?'on':''}" style="width:8px;height:8px;border-radius:50%;background:${i<filled?'var(--mark)':'var(--rule)'};display:inline-block;"></span>`).join(' ');
+}
+
+function verdictPillClass(v){
+  if(v==="Skip") return "verdict-pill skip";
+  if(v==="With caveats") return "verdict-pill warn";
+  return "verdict-pill";
+}
+
+let activeRatingStyle = 'bars';
+
+function renderCards(filter='all'){
+  const items = filter==='all' ? REVIEWS : REVIEWS.filter(r=>r.cat===filter);
+  grid.innerHTML = items.map(r => {
+    let ratingHtml;
+    if(activeRatingStyle==='bars'){
+      ratingHtml = `<div class="rating-inline"><span class="n">${r.score.toFixed(1)}</span><div class="bars">${starBars(r.score)}</div></div>`;
+    } else if(activeRatingStyle==='number'){
+      ratingHtml = `<div class="rating-inline"><span class="n" style="font-size:32px;">${r.score.toFixed(1)}</span><span style="font-family:var(--mono);font-size:10.5px;color:var(--ink-3);letter-spacing:0.14em;text-transform:uppercase;">out of 10</span></div>`;
+    } else {
+      ratingHtml = `<div class="rating-inline"><span class="n">${r.score.toFixed(1)}</span><div style="display:flex;gap:3px;align-items:center;">${dots(r.score)}</div></div>`;
+    }
+    return `
+      <article class="review-card" data-cat="${r.cat}">
+        <div class="top">
+          <span class="cat-tag">${r.catLabel}</span>
+          <span class="arr-inline"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 11L11 3M5 3h6v6"/></svg></span>
+        </div>
+        <h3>${r.title}</h3>
+        <p class="dek">${r.dek}</p>
+        ${ratingHtml}
+        <span class="${verdictPillClass(r.verdict)}">${r.verdict}</span>
+        <div class="meta">
+          <span class="author">By ${r.author}</span>
+          <span>${r.date}</span>
+        </div>
+      </article>`;
+  }).join('');
+  // update "All" count
+  const allChip = document.querySelector('.cat-chip[data-cat="all"] .count');
+  if(allChip) allChip.textContent = items.length;
+}
+renderCards();
+
+// Category chips
+document.getElementById('cats').addEventListener('click', e => {
+  const btn = e.target.closest('.cat-chip'); if(!btn) return;
+  document.querySelectorAll('.cat-chip').forEach(b => b.classList.toggle('active', b===btn));
+  renderCards(btn.dataset.cat);
+});
+
+/* hero rating bars */
+document.querySelectorAll('.rating-mark').forEach(el => {
+  const score = parseFloat(el.dataset.score);
+  el.querySelector('.bars').innerHTML = starBars(score);
+});
+
+/* live clock */
+function tick(){
+  const d = new Date();
+  const s = d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', hour12:true}) + ' · NEW YORK';
+  const el = document.getElementById('liveClock'); if(el) el.textContent = s;
+}
+tick(); setInterval(tick, 30000);
+
+/* fade up on observe */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }});
+}, {threshold:0.08});
+document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+/* search: softly highlight matching cards */
+const searchIn = document.getElementById('searchInput');
+searchIn.addEventListener('input', () => {
+  const q = searchIn.value.trim().toLowerCase();
+  document.querySelectorAll('.review-card').forEach(card => {
+    const txt = card.textContent.toLowerCase();
+    card.style.opacity = q && !txt.includes(q) ? 0.25 : 1;
+  });
+});
+document.addEventListener('keydown', e => {
+  if((e.metaKey || e.ctrlKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); searchIn.focus(); }
+});
+
+/* =========================================================
+   TWEAKS
+========================================================= */
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "primaryHue": 155,
+  "typeMode": "serif",
+  "ratingStyle": "bars",
+  "density": 1
+}/*EDITMODE-END*/;
+
+let tweaks = {...TWEAK_DEFAULTS};
+const panel = document.getElementById('tweaks');
+
+function applyTweaks(){
+  const c = Math.min(0.1, 0.085);
+  document.documentElement.style.setProperty('--primary', `oklch(42% ${c} ${tweaks.primaryHue})`);
+  document.documentElement.style.setProperty('--primary-ink', `oklch(30% 0.06 ${tweaks.primaryHue})`);
+  document.documentElement.style.setProperty('--primary-wash', `oklch(95% 0.02 ${tweaks.primaryHue})`);
+
+  // type mode
+  document.querySelectorAll('h1.display, .hero-lede, .featured-pick h3, .featured-pick p.take, .section-head h2, .step h4, .commitment h2, .commitment .body p, .review-card h3, .review-card .dek').forEach(el => {
+    if(tweaks.typeMode === 'sans') el.style.fontFamily = 'var(--sans)';
+    else el.style.fontFamily = '';
+  });
+
+  // rating style
+  activeRatingStyle = tweaks.ratingStyle;
+  const activeCat = document.querySelector('.cat-chip.active')?.dataset.cat || 'all';
+  renderCards(activeCat);
+
+  // density
+  const gutterMap = {0: '60px', 1: '40px', 2: '20px'};
+  document.querySelectorAll('.review-card').forEach(c => c.style.padding = gutterMap[tweaks.density] || '28px');
+}
+
+document.getElementById('closeTw').addEventListener('click', () => {
+  window.parent.postMessage({type:'__deactivate_edit_mode'}, '*');
+  panel.classList.remove('on');
+});
+document.getElementById('swatches').addEventListener('click', e => {
+  const b = e.target.closest('.sw'); if(!b) return;
+  document.querySelectorAll('.sw').forEach(s=>s.classList.toggle('active', s===b));
+  tweaks.primaryHue = parseFloat(b.dataset.p);
+  applyTweaks();
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{primaryHue: tweaks.primaryHue}}, '*');
+});
+document.getElementById('typeSel').addEventListener('change', e => {
+  tweaks.typeMode = e.target.value; applyTweaks();
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{typeMode: tweaks.typeMode}}, '*');
+});
+document.getElementById('ratingSel').addEventListener('change', e => {
+  tweaks.ratingStyle = e.target.value; applyTweaks();
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{ratingStyle: tweaks.ratingStyle}}, '*');
+});
+document.getElementById('densRange').addEventListener('input', e => {
+  tweaks.density = parseInt(e.target.value,10); applyTweaks();
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{density: tweaks.density}}, '*');
+});
+
+// edit mode protocol — listener first, then announce
+window.addEventListener('message', (ev) => {
+  if(ev.data?.type === '__activate_edit_mode'){
+    panel.classList.add('on');
+  } else if(ev.data?.type === '__deactivate_edit_mode'){
+    panel.classList.remove('on');
+  }
+});
+window.parent.postMessage({type:'__edit_mode_available'}, '*');
+
+applyTweaks();
+</script>
+</body>
+</html>
