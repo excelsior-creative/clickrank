@@ -11,6 +11,7 @@ import {
   suggestArticleTags,
   getRandomPublishTime,
 } from '@/services/contentGenerationService'
+import { runQA, summarizeQA } from '@/services/qaService'
 
 /**
  * Cron job endpoint for automated article generation
@@ -64,6 +65,34 @@ export async function GET(request: NextRequest) {
     // 7. Generate article via Gemini (includes humanization)
     const article = await generateArticleForProduct(product, settings)
     console.log(`[generate-article] Generated article: "${article.title}"`)
+
+    // 7b. Editorial QA gate. Errors block persistence. Warnings are logged.
+    const qa = runQA(article, product)
+    console.log(`[generate-article] QA ${summarizeQA(qa)}`)
+    for (const w of qa.warnings) {
+      console.warn(`[generate-article] QA warning ${w.code}: ${w.message}`)
+    }
+    if (!qa.passed) {
+      for (const e of qa.issues) {
+        console.error(`[generate-article] QA error ${e.code}: ${e.message}`)
+      }
+      return NextResponse.json(
+        {
+          success: false,
+          stage: 'qa',
+          reason: 'generated_article_failed_qa',
+          product: { name: product.name, category: product.category },
+          article: { title: article.title, slug: article.slug },
+          qa: {
+            passed: qa.passed,
+            stats: qa.stats,
+            issues: qa.issues,
+            warnings: qa.warnings,
+          },
+        },
+        { status: 422 },
+      )
+    }
 
     // 8. Generate featured image via Replicate (optional — skip if no key)
     let featuredImageId: number | undefined
@@ -152,6 +181,11 @@ export async function GET(request: NextRequest) {
         name: product.name,
         category: product.category,
         gravity: product.gravity,
+      },
+      qa: {
+        passed: qa.passed,
+        stats: qa.stats,
+        warnings: qa.warnings,
       },
       scheduledPublish: publishTime.toISOString(),
     })

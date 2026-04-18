@@ -4,21 +4,21 @@ Tagged by area: [pipeline] [content] [seo] [site] [conversion] [ops].
 
 ## Bugs / issues
 
-- [site] `Footer.tsx` social links are `href="#"` — dead anchors.
-  Either wire real URLs or remove until we have accounts.
-- [site] `Footer.tsx` newsletter form is a decorative `<input>` with
-  no onSubmit — actively deceptive. Either wire up or remove.
-- [site] `/blog` page `dynamic = 'force-dynamic'` — this kills ISR
-  and means every request hits Payload. Should be ISR with revalidate.
+- ~~[site] Footer social links `href="#"`~~ — resolved 2026-04-18
+  (removed the social icons row; no accounts = no links).
+- ~~[site] Footer newsletter decorative form~~ — resolved 2026-04-18
+  (removed until we actually ship a newsletter).
+- ~~[site] `/blog` force-dynamic~~ — resolved 2026-04-18 (switched
+  both `/blog` and `/blog/[slug]` to ISR with `revalidate = 3600`).
+- ~~[site] Blog header copy "Insights, updates…"~~ — resolved
+  2026-04-18 (ClickRank-voice subtitle).
+- ~~[pipeline] `filterUnusedProducts` fuzzy `slug.includes`~~ —
+  resolved 2026-04-18 (canonical-token intersection). Structured
+  product-history tracking is still a better long-term answer and
+  remains in `roadmap.md`.
 - [pipeline] Scraper selectors in `clickbankService.ts` are
   guesses — almost certainly failing silently and falling back.
   Either validate or remove the scraper entirely.
-- [pipeline] `filterUnusedProducts()` uses `slug.includes(productSlug.slice(0, 15))`
-  — fuzzy matching that will false-positive. Use structured
-  tracking (a covered-products table) instead.
-- [site] `Blog` page header copy says "Insights, updates, and
-  tutorials from our team about modern web development and design"
-  — leftover from template, doesn't match ClickRank.
 - [site] Newsletter input has no email validation, no CTA wiring.
 - [site] Home hero/about/services components — likely template
   copy that doesn't match a review site. Audit on a later night.

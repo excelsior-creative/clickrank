@@ -39,10 +39,11 @@ GET /api/cron/generate-article   (requires Bearer CRON_SECRET)
 
 ## Known limitations & gaps
 
-- ⚠️ **No QA stage.** Nothing checks for hallucinated features,
-  missing disclosure, dupe content, word count, or affiliate-link
-  presence. We're one bad Gemini response away from a
-  low-quality post entering the library.
+- ✅ **QA stage exists as of 2026-04-18.** See `qaService.ts`. Checks
+  disclosure, affiliate link, word count, headings, title/meta length,
+  fabrication tells, forbidden claims, em-dash residue. Errors block
+  persistence (422); warnings are logged. Not yet run against real
+  Gemini output — first real run will be the next cron fire.
 - ⚠️ **No `affiliateUrl` field on Posts.** The product's affiliate
   URL is generated but lives only in the markdown body. No
   structured CTA. (Schema migration → PR.)
@@ -59,12 +60,16 @@ GET /api/cron/generate-article   (requires Bearer CRON_SECRET)
 
 ## Next upgrades (priority order)
 
-1. QA stage (see roadmap).
-2. `affiliateUrl` field + rendered CTA on post page.
-3. Outbound click tracking via `/go/[slug]`.
-4. Product inventory persistence (so we don't rely on last-50-slugs
-   heuristic for dedup).
-5. Auto-publish behind a feature flag once QA stage is reliable.
+1. `affiliateUrl` + `ctaText` fields on Posts collection, pipeline
+   save + rendered sticky CTA on post page.
+2. Outbound click tracking via `/go/[slug]`.
+3. Product inventory persistence (so we don't rely on last-50-slugs
+   heuristic for dedup; tonight's token-intersection dedup is a
+   short-term improvement but still not authoritative).
+4. Tune the QA gate based on real output (false positives to back
+   off on, new fabrication patterns to add).
+5. Auto-publish behind a feature flag once QA gate has cleanly
+   passed ≥5 consecutive real drafts.
 
 ## Run log
 
@@ -75,3 +80,8 @@ Append nightly. Format:
   focus was compliance + structured data fixes so the pipeline's
   output is safe to render. No new draft generated. Cron will
   run at 10:00 UTC tomorrow regardless.
+- `2026-04-18` — no CEO-triggered pipeline run. Built the editorial
+  QA gate (first load-bearing safety check) and wired it into the
+  cron endpoint. Fixed the fuzzy dedup. Gate is unverified against
+  real Gemini output — next scheduled cron will be its first live
+  test. If it over-rejects, tune conservatively next night.

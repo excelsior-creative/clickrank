@@ -279,16 +279,61 @@ async function scrapeWithPuppeteer(
 }
 
 /**
- * Filter out products that have been covered recently.
+ * Normalize a product name into the canonical token set we use to detect
+ * whether it's already been covered. Strips stopwords and review-ish words
+ * so "Custom Keto Diet" and "custom-keto-diet-review-2026" collide.
+ */
+function canonicalTokens(input: string): string[] {
+  const stopwords = new Set([
+    'review',
+    'reviews',
+    'the',
+    'a',
+    'an',
+    'of',
+    'for',
+    'and',
+    'is',
+    'it',
+    'worth',
+    'scam',
+    'legit',
+    'honest',
+    '2025',
+    '2026',
+    '2027',
+  ])
+  return input
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .split(/\s+/)
+    .filter((token) => token && !stopwords.has(token))
+}
+
+/**
+ * True if a recent slug is about the same product as this candidate.
+ * Requires ALL of the candidate's significant tokens to appear in the slug,
+ * so single-word overlaps ("diet", "pro") don't cause false positives.
+ */
+function slugCoversProduct(slug: string, productName: string): boolean {
+  const slugTokens = new Set(canonicalTokens(slug))
+  const productTokens = canonicalTokens(productName)
+  if (productTokens.length === 0) return false
+  return productTokens.every((token) => slugTokens.has(token))
+}
+
+/**
+ * Filter out products whose canonical tokens all appear in a recent slug.
+ * Falls back to the full list if nothing survives (better to repeat a
+ * product than to crash the cron).
  */
 export function filterUnusedProducts(
   products: ClickBankProduct[],
   recentSlugs: string[],
 ): ClickBankProduct[] {
-  const unused = products.filter((product) => {
-    const productSlug = product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-    return !recentSlugs.some((slug) => slug.includes(productSlug.slice(0, 15)))
-  })
+  const unused = products.filter(
+    (product) => !recentSlugs.some((slug) => slugCoversProduct(slug, product.name)),
+  )
   return unused.length > 0 ? unused : products
 }
 

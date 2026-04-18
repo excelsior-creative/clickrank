@@ -4,7 +4,6 @@ import { Logo } from "./Logo";
 import { AffiliateDisclosure } from "./AffiliateDisclosure";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import { Facebook, Linkedin, Twitter, Youtube } from "lucide-react";
 
 type FooterNavItem = {
   id?: string;
@@ -77,31 +76,7 @@ export const Footer = async () => {
 
   return (
     <footer className="bg-dark-light border-t border-white/5">
-      {/* Newsletter Section */}
       <div className="max-w-7xl mx-auto px-4 md:px-10 py-12">
-        <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 rounded-xl p-6 md:p-8 border border-white/5 mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
-                Stay Updated with Latest Reviews
-              </h3>
-              <p className="text-gray-400 text-sm">
-                Subscribe to our newsletter for the latest digital product reviews and recommendations.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-full bg-dark border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-brand/50"
-              />
-              <button className="px-6 py-3 bg-brand hover:bg-brand-light text-dark font-bold rounded-full transition-colors">
-                Subscribe
-              </button>
-            </div>
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
             <Logo className="mb-4 inline-block" />
@@ -147,24 +122,10 @@ export const Footer = async () => {
           <AffiliateDisclosure variant="footer" className="mb-6 max-w-3xl" />
         </div>
 
-        <div className="mt-6 pt-6 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-6 pt-6 border-t border-white/5">
           <p className="text-sm text-gray-500 text-center md:text-left">
-            Copyright © {new Date().getFullYear()} ClickRank.NET. All rights reserved.
+            Copyright © {new Date().getFullYear()} {siteTitle}. All rights reserved.
           </p>
-          <div className="flex gap-3">
-            <a href="#" className="w-9 h-9 rounded bg-brand/10 flex items-center justify-center text-brand hover:bg-brand hover:text-dark transition-colors">
-              <Facebook className="w-4 h-4" />
-            </a>
-            <a href="#" className="w-9 h-9 rounded bg-brand/10 flex items-center justify-center text-brand hover:bg-brand hover:text-dark transition-colors">
-              <Linkedin className="w-4 h-4" />
-            </a>
-            <a href="#" className="w-9 h-9 rounded bg-brand/10 flex items-center justify-center text-brand hover:bg-brand hover:text-dark transition-colors">
-              <Twitter className="w-4 h-4" />
-            </a>
-            <a href="#" className="w-9 h-9 rounded bg-brand/10 flex items-center justify-center text-brand hover:bg-brand hover:text-dark transition-colors">
-              <Youtube className="w-4 h-4" />
-            </a>
-          </div>
         </div>
       </div>
     </footer>
