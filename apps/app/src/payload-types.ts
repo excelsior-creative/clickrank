@@ -220,6 +220,18 @@ export interface Post {
   };
   author: number | User;
   publishedDate?: string | null;
+  /**
+   * ClickBank hoplink (or other affiliate URL) for this product. Surfaced via /go/{slug} for click tracking.
+   */
+  affiliateUrl?: string | null;
+  /**
+   * Display name of the reviewed product (used in CTA buttons).
+   */
+  productName?: string | null;
+  /**
+   * Outbound affiliate clicks recorded via /go/{slug}.
+   */
+  clickCount?: number | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;

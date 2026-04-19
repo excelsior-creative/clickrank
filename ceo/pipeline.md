@@ -47,7 +47,13 @@ GET /api/cron/generate-article   (requires Bearer CRON_SECRET)
 - ⚠️ **No `affiliateUrl` field on Posts.** The product's affiliate
   URL is generated but lives only in the markdown body. No
   structured CTA. (Schema migration → PR.)
-- ⚠️ **No outbound click tracking.** Can't measure KR3.3.
+- ✅ **Outbound click tracking shipped 2026-04-19** as `/go/[slug]`
+  route. Resolves product slug → affiliate URL, 302 redirects, logs
+  a structured event to stdout. Content-generation prompt now emits
+  tracked `/go/[productSlug]` links by default. Persistence of
+  click events to a Payload collection is still queued. KR3.3 is
+  unblocked at the infrastructure layer; actual numbers require
+  Vercel log access (pending Brandon).
 - ⚠️ **Scraper is brittle.** Selectors are guesses. Fallback list
   has 8 products — limited variety.
 - ⚠️ **No BrowserDB of products.** No history of what's been
@@ -61,14 +67,18 @@ GET /api/cron/generate-article   (requires Bearer CRON_SECRET)
 ## Next upgrades (priority order)
 
 1. `affiliateUrl` + `ctaText` fields on Posts collection, pipeline
-   save + rendered sticky CTA on post page.
-2. Outbound click tracking via `/go/[slug]`.
-3. Product inventory persistence (so we don't rely on last-50-slugs
+   save + rendered sticky CTA on post page. (Schema migration → PR.)
+2. Teach QA gate's `hasAffiliateOrVendorLink` to recognize `/go/`
+   paths as valid affiliate references. (QA gate change → PR.)
+3. Persist `/go/[slug]` click events to a Payload collection so we
+   can query per-product click counts without log access. Requires
+   new collection + migration → PR.
+4. Product inventory persistence (so we don't rely on last-50-slugs
    heuristic for dedup; tonight's token-intersection dedup is a
    short-term improvement but still not authoritative).
-4. Tune the QA gate based on real output (false positives to back
+5. Tune the QA gate based on real output (false positives to back
    off on, new fabrication patterns to add).
-5. Auto-publish behind a feature flag once QA gate has cleanly
+6. Auto-publish behind a feature flag once QA gate has cleanly
    passed ≥5 consecutive real drafts.
 
 ## Run log
@@ -85,3 +95,13 @@ Append nightly. Format:
   cron endpoint. Fixed the fuzzy dedup. Gate is unverified against
   real Gemini output — next scheduled cron will be its first live
   test. If it over-rejects, tune conservatively next night.
+- `2026-04-19` — no CEO-triggered pipeline run. Pipeline gets two
+  non-invasive upgrades tonight: (1) content-gen prompt now emits
+  tracked `/go/[productSlug]` links for every CTA instead of raw
+  affiliate URLs; (2) `/go/[slug]` redirect route exists and logs
+  each click. Expected side effect on next scheduled cron: the QA
+  gate will start emitting `monetization.missingAffiliateLink`
+  warnings for articles whose only outbound link is a `/go/` path
+  (the gate's link matcher doesn't yet understand relative tracking
+  paths). Warnings are non-blocking; queued as a QA-gate PR to
+  teach the matcher.

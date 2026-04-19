@@ -346,6 +346,38 @@ export async function pickTrendingProduct(recentSlugs: string[]): Promise<ClickB
   return filtered[Math.floor(Math.random() * filtered.length)]!
 }
 
+/**
+ * Canonical slug for a ClickBank product, used as the key in `/go/[slug]`
+ * outbound tracking links. Lowercased, alphanum-and-dash, stopword-free.
+ * Example: "Custom Keto Diet" → "custom-keto-diet".
+ */
+export function productSlug(product: Pick<ClickBankProduct, 'name'>): string {
+  return product.name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+/**
+ * Look up a fallback/known product by its canonical slug. Used by the
+ * /go/[slug] redirect route to resolve a slug to an affiliate URL.
+ *
+ * Returns undefined if no product matches. Callers should treat missing
+ * lookups as a 404.
+ */
+export function getProductBySlug(slug: string): ClickBankProduct | undefined {
+  const normalized = slug.toLowerCase().replace(/[^a-z0-9-]+/g, '')
+  return FALLBACK_PRODUCTS.find((p) => productSlug(p) === normalized)
+}
+
+/**
+ * Read-only view of the fallback product list. Exposed so other callers
+ * (e.g., tracking, category hubs) can iterate without re-declaring the list.
+ */
+export function listFallbackProducts(): ReadonlyArray<ClickBankProduct> {
+  return FALLBACK_PRODUCTS
+}
+
 function shuffled<T>(arr: T[]): T[] {
   return [...arr].sort(() => Math.random() - 0.5)
 }

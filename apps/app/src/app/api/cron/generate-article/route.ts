@@ -147,10 +147,20 @@ export async function GET(request: NextRequest) {
       console.log(`[generate-article] Slug conflict — using: ${finalSlug}`)
     }
 
-    // 11. Convert markdown to Lexical
-    const content = markdownToLexical(article.content)
+    // 11. Rewrite any raw affiliate/vendor URL → /go/{postSlug} as a belt-
+    //     and-suspenders pass. The generation prompt already instructs the
+    //     model to emit /go/{productSlug} for every CTA, but if it leaks a
+    //     raw hoplink anyway we route it through the tracker.
+    const rawAffiliateUrl = product.affiliateUrl?.trim() || product.vendorUrl?.trim() || ''
+    const trackedCta = `/go/${finalSlug}`
+    const contentMarkdown = rawAffiliateUrl
+      ? article.content.split(rawAffiliateUrl).join(trackedCta)
+      : article.content
 
-    // 12. Create post in Payload (draft)
+    // 12. Convert markdown to Lexical
+    const content = markdownToLexical(contentMarkdown)
+
+    // 13. Create post in Payload (draft)
     const publishTime = getRandomPublishTime()
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -163,6 +173,9 @@ export async function GET(request: NextRequest) {
         excerpt: article.excerpt,
         _status: 'draft',
         publishedDate: publishTime.toISOString(),
+        affiliateUrl: rawAffiliateUrl || undefined,
+        productName: product.name,
+        clickCount: 0,
         ...(featuredImageId ? { meta: { image: featuredImageId } } : {}),
         ...(suggestedTagIds.length > 0 ? { tags: suggestedTagIds } : {}),
       },

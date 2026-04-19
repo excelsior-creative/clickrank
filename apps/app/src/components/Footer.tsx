@@ -58,9 +58,9 @@ export const Footer = async () => {
     { href: "/blog", label: "By category" },
   ];
   const transparency: ResolvedFooterLink[] = [
-    { href: "/about#process", label: "How we test" },
+    { href: "/editorial", label: "Editorial standard" },
+    { href: "/about#process", label: "How we work" },
     { href: "/privacy", label: "Affiliate disclosure" },
-    { href: "/about", label: "Editorial standards" },
     { href: "/contact", label: "Corrections" },
   ];
   const desk: ResolvedFooterLink[] =

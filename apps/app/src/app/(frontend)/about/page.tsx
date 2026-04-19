@@ -10,12 +10,19 @@ const ABOUT_FEATURED = {
   category: "About · The desk",
   title: "How ClickRank earns your trust.",
   take:
-    "Independent editors, hands-on testing, and affiliate relationships that never decide what we cover. Below: the people, the process, and the promise.",
+    "Independent editors, a transparent process, and affiliate relationships that never decide what we cover. Below: the people, the process, and the promise.",
   score: 9.2,
   verdict: "Recommended" as const,
   byline: "ClickRank desk",
   date: "Always current",
-  href: "/blog",
+  href: "/editorial",
+};
+
+export const metadata = {
+  title: "About",
+  description:
+    "ClickRank is an independent review site for ClickBank digital products. We lead with real strengths, name real caveats, and disclose every affiliate relationship.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

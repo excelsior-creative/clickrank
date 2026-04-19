@@ -10,6 +10,7 @@ import { PayloadRedirects } from "@/components/PayloadRedirects";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { generateArticleSchema } from "@/lib/structured-data";
 import { SITE_NAME, SITE_URL } from "@/lib/metadata";
+import { ArrowUpRight } from "lucide-react";
 
 // ISR: revalidate every hour as a safety net. On-demand revalidation from
 // Posts.afterChange handles immediate freshness on publish/edit.
@@ -72,6 +73,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       year: "numeric",
     });
   } catch {}
+
+  const postRecord = post as Post & {
+    affiliateUrl?: string | null;
+    productName?: string | null;
+  };
+  const affiliateUrl = postRecord.affiliateUrl?.trim() || "";
+  const productName = postRecord.productName?.trim() || "";
 
   return (
     <article className="pt-12 pb-24">
@@ -152,6 +160,40 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         >
           <RichText data={post.content} className="max-w-none" />
         </div>
+
+        {affiliateUrl && (
+          <div
+            className="mt-12 rounded-[14px] px-6 py-6"
+            style={{
+              border: "1px solid var(--color-rule)",
+              background: "oklch(15% 0.03 255)",
+            }}
+          >
+            <a
+              href={`/go/${post.slug}`}
+              rel="sponsored nofollow noopener"
+              target="_blank"
+              className="inline-flex items-center gap-2 rounded-full px-7 py-3 text-[15px] font-medium transition-colors"
+              style={{
+                background: "var(--color-mint)",
+                color: "oklch(13% 0.03 255)",
+              }}
+            >
+              Check current pricing{productName ? ` for ${productName}` : ""}
+              <ArrowUpRight className="h-4 w-4" />
+            </a>
+            <p
+              className="mt-3 font-mono"
+              style={{
+                fontSize: 11.5,
+                letterSpacing: "0.04em",
+                color: "var(--color-ink-3)",
+              }}
+            >
+              Affiliate link — we earn a commission on qualifying purchases at no extra cost to you.
+            </p>
+          </div>
+        )}
 
         <div
           className="mt-16 pt-8"

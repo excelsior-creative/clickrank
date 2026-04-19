@@ -9,7 +9,7 @@ type AffiliateDisclosureProps = {
 };
 
 const DISCLOSURE_TEXT =
-  "ClickRank earns commissions when readers buy through our affiliate links. Our reviews are independent — compensation never determines what we cover or how we rate a product.";
+  "ClickRank earns commissions when readers buy through our affiliate links. Our reviews are independent: compensation never determines what we cover or how we rate a product.";
 
 export function AffiliateDisclosure({ variant = "inline", className }: AffiliateDisclosureProps) {
   if (variant === "banner") {
@@ -43,11 +43,11 @@ export function AffiliateDisclosure({ variant = "inline", className }: Affiliate
         </strong>
         {DISCLOSURE_TEXT}{" "}
         <Link
-          href="/about#process"
+          href="/editorial"
           className="underline underline-offset-2 hover:text-[var(--color-mint)] transition-colors"
           style={{ color: "var(--color-ink)" }}
         >
-          How we review.
+          Read our editorial standard.
         </Link>
       </aside>
     );

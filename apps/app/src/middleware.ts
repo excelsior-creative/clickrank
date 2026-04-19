@@ -1,18 +1,18 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
 
-// In-memory rate limiting store
-// NOTE: This is a simple implementation for single-instance deployments.
-// For production at scale with serverless/edge, consider using @upstash/ratelimit with Redis
-// for distributed rate limiting that persists across instances.
 type RateLimitEntry = {
   count: number
   resetTime: number
 }
 
+// In-memory fallback (per-lambda). Used when Upstash is not configured.
+// Per-lambda isolation means a determined attacker can rotate instances; for
+// production scale, configure UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN.
 const rateLimitStore = new Map<string, RateLimitEntry>()
 
-// Clean up expired entries every 5 minutes
 if (typeof setInterval !== 'undefined') {
   setInterval(
     () => {
@@ -23,7 +23,7 @@ if (typeof setInterval !== 'undefined') {
         }
       }
     },
-    5 * 60 * 1000
+    5 * 60 * 1000,
   )
 }
 
@@ -32,21 +32,59 @@ type RateLimitConfig = {
   windowMs: number
 }
 
-function checkRateLimit(
+type RateLimitResult = {
+  allowed: boolean
+  remaining: number
+  resetTime: number
+}
+
+const upstashEnabled = Boolean(
+  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN,
+)
+
+const upstashRedis = upstashEnabled
+  ? new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL!,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    })
+  : null
+
+const upstashLimiterCache = new Map<string, Ratelimit>()
+
+function getUpstashLimiter(config: RateLimitConfig): Ratelimit | null {
+  if (!upstashRedis) return null
+  const key = `${config.requests}:${config.windowMs}`
+  const cached = upstashLimiterCache.get(key)
+  if (cached) return cached
+  const limiter = new Ratelimit({
+    redis: upstashRedis,
+    limiter: Ratelimit.slidingWindow(config.requests, `${config.windowMs} ms`),
+    analytics: false,
+    prefix: 'clickrank_rl',
+  })
+  upstashLimiterCache.set(key, limiter)
+  return limiter
+}
+
+async function checkRateLimit(
   identifier: string,
-  config: RateLimitConfig
-): { allowed: boolean; remaining: number; resetTime: number } {
+  config: RateLimitConfig,
+): Promise<RateLimitResult> {
+  const upstash = getUpstashLimiter(config)
+  if (upstash) {
+    const { success, remaining, reset } = await upstash.limit(identifier)
+    return { allowed: success, remaining, resetTime: reset }
+  }
+
   const now = Date.now()
   const entry = rateLimitStore.get(identifier)
 
-  // No existing entry or expired entry
   if (!entry || entry.resetTime < now) {
     const resetTime = now + config.windowMs
     rateLimitStore.set(identifier, { count: 1, resetTime })
     return { allowed: true, remaining: config.requests - 1, resetTime }
   }
 
-  // Increment counter
   entry.count++
   rateLimitStore.set(identifier, entry)
 
@@ -57,7 +95,6 @@ function checkRateLimit(
 }
 
 function getClientIP(request: NextRequest): string {
-  // Try to get real IP from headers (Vercel, Cloudflare, etc.)
   const forwarded = request.headers.get('x-forwarded-for')
   const realIp = request.headers.get('x-real-ip')
 
@@ -68,11 +105,10 @@ function getClientIP(request: NextRequest): string {
     return realIp
   }
 
-  // Fallback to remote address (may not be available in all environments)
   return 'unknown'
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const clientIP = getClientIP(request)
 
@@ -83,22 +119,20 @@ export function middleware(request: NextRequest) {
   ) {
     return NextResponse.redirect(
       `https://${request.headers.get('host')}${request.nextUrl.pathname}${request.nextUrl.search}`,
-      301
+      301,
     )
   }
 
-  // Define rate limit configs for different endpoints
   const rateLimits: Record<string, RateLimitConfig> = {
-    '/api/users/login': { requests: 5, windowMs: 60 * 1000 }, // 5 per minute
-    '/api/users/forgot-password': { requests: 3, windowMs: 60 * 1000 }, // 3 per minute
-    '/api/users/reset-password': { requests: 5, windowMs: 60 * 1000 }, // 5 per minute
+    '/api/users/login': { requests: 5, windowMs: 60 * 1000 },
+    '/api/users/forgot-password': { requests: 3, windowMs: 60 * 1000 },
+    '/api/users/reset-password': { requests: 5, windowMs: 60 * 1000 },
   }
 
-  // Check for specific endpoint rate limits
   for (const [endpoint, config] of Object.entries(rateLimits)) {
     if (pathname.startsWith(endpoint)) {
       const identifier = `${endpoint}:${clientIP}`
-      const result = checkRateLimit(identifier, config)
+      const result = await checkRateLimit(identifier, config)
 
       if (!result.allowed) {
         return new NextResponse(
@@ -114,11 +148,10 @@ export function middleware(request: NextRequest) {
               'X-RateLimit-Remaining': String(result.remaining),
               'X-RateLimit-Reset': String(result.resetTime),
             },
-          }
+          },
         )
       }
 
-      // Add rate limit headers to successful responses
       const response = NextResponse.next()
       response.headers.set('X-RateLimit-Limit', String(config.requests))
       response.headers.set('X-RateLimit-Remaining', String(result.remaining))
@@ -127,11 +160,10 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // General API rate limit (60 requests per minute)
   if (pathname.startsWith('/api/')) {
     const identifier = `api:${clientIP}`
     const generalConfig = { requests: 60, windowMs: 60 * 1000 }
-    const result = checkRateLimit(identifier, generalConfig)
+    const result = await checkRateLimit(identifier, generalConfig)
 
     if (!result.allowed) {
       return new NextResponse(
@@ -147,7 +179,7 @@ export function middleware(request: NextRequest) {
             'X-RateLimit-Remaining': String(result.remaining),
             'X-RateLimit-Reset': String(result.resetTime),
           },
-        }
+        },
       )
     }
   }
@@ -157,7 +189,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Match all routes for HTTPS redirect, excluding Next.js internals and static assets
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }
