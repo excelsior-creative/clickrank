@@ -24,6 +24,7 @@ import { fileURLToPath } from "url";
 
 import { Categories } from "@/collections/Categories";
 import { Media } from "@/collections/Media";
+import { OutboundClicks } from "@/collections/OutboundClicks";
 import { Pages } from "@/collections/Pages";
 import { Posts } from "@/collections/Posts";
 import { Tags } from "@/collections/Tags";
@@ -102,7 +103,7 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Users, Posts, Pages, Media, Categories, Tags],
+  collections: [Users, Posts, Pages, Media, Categories, Tags, OutboundClicks],
   globals: [
     SiteSettings,
     ContentGenerationSettings, // optional: remove if AI content generation is not needed
