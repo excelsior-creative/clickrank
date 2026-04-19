@@ -33,7 +33,9 @@ Indexed pages that actually rank for something.
 - **KR3.2** Average position ≤30 on target head terms across the
   library.
 - **KR3.3** ≥100 affiliate outbound clicks per week by end of Q2.
-  *(Need click tracking in place — not yet built.)*
+  *(Infrastructure shipped 2026-04-19 as `/go/[slug]` redirect +
+  tracked-link content-generation prompt. Actual measurement still
+  needs Vercel log access.)*
 
 ## Objective 4 — Establish editorial trust signals
 
@@ -42,7 +44,11 @@ What Google (and readers) use to gauge whether to trust us.
 - **KR4.1** All reviews have Article + Review schema markup.
 - **KR4.2** Every page has FTC disclosure rendered.
 - **KR4.3** About, Editorial Standards, and Methodology pages
-  published and linked from footer.
+  published and linked from footer. *(Achieved 2026-04-19:
+  `/editorial` page shipped and linked from footer,
+  AffiliateDisclosure banner, home AboutSection, and revised
+  About page. About page rewritten to match. Standalone
+  Methodology page not separate — merged into `/editorial`.)*
 
 ## Blockers / data we don't have yet
 

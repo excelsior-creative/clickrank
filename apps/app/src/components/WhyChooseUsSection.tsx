@@ -5,28 +5,28 @@ import { CheckCircle2 } from 'lucide-react'
 
 const reasons = [
   {
-    title: 'Unbiased Reviews',
-    description: 'We maintain complete editorial independence and never let compensation influence our ratings.',
+    title: 'Independence, by policy',
+    description: 'Affiliate commissions fund the site, but they do not determine what we cover or how we rate it. Our disclosure runs on every page.',
   },
   {
-    title: 'Expert Analysis',
-    description: 'Our team consists of industry experts with years of experience in digital products and online marketing.',
+    title: 'Analysis, not fabrication',
+    description: 'We never invent features, statistics, or testimonials. When we describe a vendor claim, we say it is a vendor claim.',
   },
   {
-    title: 'Comprehensive Coverage',
-    description: 'From software to courses, we cover all major categories of digital products with in-depth reviews.',
+    title: 'ClickBank focus',
+    description: 'We only cover products available on ClickBank. Deep coverage of one marketplace beats thin coverage of a dozen.',
   },
   {
-    title: 'Regular Updates',
-    description: 'We continuously monitor products and update our reviews to ensure accuracy and relevance.',
+    title: 'Honest caveats',
+    description: 'Every review names at least one real limitation. A review with zero downsides is an advertisement.',
   },
   {
-    title: 'Reader First',
-    description: 'Our readers are our priority. We focus on providing value and helping you make informed decisions.',
+    title: 'FTC disclosure everywhere',
+    description: 'Every page with an affiliate link carries a clear disclosure at the top, in the body, and in the footer.',
   },
   {
-    title: 'Transparent Ratings',
-    description: 'Our rating system is clear and consistent, making it easy to compare products across categories.',
+    title: 'We correct mistakes',
+    description: 'If you spot an inaccuracy, email us. We update or retract rather than defend a stale claim.',
   },
 ]
 
@@ -35,9 +35,9 @@ export const WhyChooseUsSection = () => {
     <section className="py-20 md:py-28 bg-dark">
       <Container>
         <Header
-          badge="Why Choose Us"
-          title="With Experience Comes Trust"
-          subtitle="We&apos;ve built our reputation on providing honest, thorough, and reliable product reviews."
+          badge="Why ClickRank"
+          title="What we stand for"
+          subtitle="The rules we hold ourselves to on every review. If we break one, email us and we&apos;ll correct it."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">

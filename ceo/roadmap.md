@@ -16,20 +16,23 @@
 
 ## Next (next ~2 weeks)
 
-1. **Dedicated `affiliateUrl` field on Posts** (schema migration
-   → PR). Right now there's no structured place to store the
-   ClickBank affiliate hoplink — the CTA has to live in markdown.
-2. **Outbound affiliate click tracking.** Route outbound affiliate
-   clicks through `/go/[slug]` with a logging event before
-   redirect. Needed for KR3.3.
-3. **QA stage in the pipeline.** Automated check for: FTC
-   disclosure present, affiliate link present, word count within
-   range, no obvious hallucinations (e.g., fabricated studies),
-   not a dupe of existing post.
+1. **Dedicated `affiliateUrl` + `ctaText` fields on Posts** (schema
+   migration → PR). The `/go/[slug]` route now handles tracking,
+   but we still want a structured CTA on the post page rather than
+   relying on Gemini to render one inside the markdown.
+2. ~~**Outbound affiliate click tracking.**~~ *Shipped 2026-04-19:
+   `/go/[slug]` route + updated content-generation prompt.
+   Persistence of click events to a Payload collection is the
+   natural next step so the CEO can read counts without log access.*
+3. ~~**QA stage in the pipeline.**~~ *Shipped 2026-04-18. See DR-0002.*
 4. **Category pages that actually render products.** `/category/[slug]`
    with faceted filtering and internal linking.
-5. **Editorial standards public page.** `/editorial` — transparency
-   about how we review. Trust signal.
+5. ~~**Editorial standards public page.**~~ *Shipped 2026-04-19 as
+   `/editorial`. Linked from footer, AffiliateDisclosure banner,
+   home, and about.*
+6. **Teach QA gate that `/go/` paths count as affiliate references.**
+   Small PR; silences a warning introduced by the 2026-04-19
+   content-generation prompt update.
 
 ## Later (this quarter)
 

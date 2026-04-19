@@ -16,12 +16,23 @@ Tagged by area: [pipeline] [content] [seo] [site] [conversion] [ops].
   resolved 2026-04-18 (canonical-token intersection). Structured
   product-history tracking is still a better long-term answer and
   remains in `roadmap.md`.
+- ~~[site] Home hero/about/services components — likely template
+  copy that doesn't match a review site~~ — resolved 2026-04-19.
+  Deleted fabricated TestimonialsSection outright. Rewrote
+  AboutSection, ServicesSection, WhyChooseUsSection, FAQSection,
+  and `/about` page to match the Honest-Favorable standard. No
+  more invented stats, fake testimonials, or claims of hands-on
+  testing.
 - [pipeline] Scraper selectors in `clickbankService.ts` are
   guesses — almost certainly failing silently and falling back.
   Either validate or remove the scraper entirely.
-- [site] Newsletter input has no email validation, no CTA wiring.
-- [site] Home hero/about/services components — likely template
-  copy that doesn't match a review site. Audit on a later night.
+- [site] Hero copy still needs audit — not checked tonight.
+- [pipeline] QA gate's `hasAffiliateOrVendorLink` doesn't match
+  relative `/go/[slug]` tracking paths; article now using tracked
+  links will emit a non-blocking warning. Teach the matcher. (PR.)
+- [ops] `/go/[slug]` click events only hit stdout. Persist to a
+  Payload `outbound-clicks` collection so the CEO can actually
+  read counts without Vercel log access. (Needs collection + PR.)
 
 ## Pipeline ideas
 
@@ -39,9 +50,12 @@ Tagged by area: [pipeline] [content] [seo] [site] [conversion] [ops].
 
 - [seo] Category pages with internal linking.
 - [seo] Evergreen "Best of ClickBank in [category] 2026" roundup posts.
-- [seo] `/go/[slug]` outbound tracking route.
-- [seo] Add `BreadcrumbList` schema to post page.
+- ~~[seo] `/go/[slug]` outbound tracking route.~~ — shipped 2026-04-19.
+- ~~[seo] Add `BreadcrumbList` schema to post page.~~ — already shipped
+  2026-04-17 (combined into the Article JSON-LD graph).
 - [seo] 404 page audit, custom design.
+- [seo] `/category/[slug]` hub pages (carry from roadmap "Next").
+- [seo] Related-posts block on blog post pages for internal linking.
 
 ## Conversion ideas
 

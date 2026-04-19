@@ -4,7 +4,6 @@ import { BlogSection } from "@/components/BlogSection";
 import { AboutSection } from "@/components/AboutSection";
 import { ServicesSection } from "@/components/ServicesSection";
 import { WhyChooseUsSection } from "@/components/WhyChooseUsSection";
-import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { FAQSection } from "@/components/FAQSection";
 import { ContactCTASection } from "@/components/ContactCTASection";
 import nextDynamic from 'next/dynamic'
@@ -23,9 +22,8 @@ export default function Home() {
       <ServicesSection />
       <WhyChooseUsSection />
       <CTASection />
-      <TestimonialsSection />
       <FAQSection />
-      <BlogSection title="Recent Posts" badge="Our Blog" />
+      <BlogSection title="Recent reviews" badge="Latest" />
       <ContactCTASection />
     </div>
   );

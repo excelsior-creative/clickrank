@@ -105,6 +105,11 @@ export const Footer = async () => {
             <h4 className="text-white font-semibold mb-4">Legal</h4>
             <ul className="space-y-3">
               <li>
+                <Link href="/editorial" className="text-sm text-gray-400 hover:text-brand transition-colors">
+                  Editorial Standard
+                </Link>
+              </li>
+              <li>
                 <Link href="/privacy" className="text-sm text-gray-400 hover:text-brand transition-colors">
                   Privacy Policy
                 </Link>
