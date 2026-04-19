@@ -11,7 +11,7 @@
 | Article schema | ✅ **as of 2026-04-17** | Injected on blog post pages |
 | Organization schema | ✅ | Rendered site-wide via layout |
 | WebSite schema | ✅ | Rendered site-wide via layout |
-| BreadcrumbList schema | ⬜ | Not yet |
+| BreadcrumbList schema | ✅ | Injected alongside Article schema on post pages (since 2026-04-17) |
 | Product/Review schema | ⬜ | Blocked on adding fields to Posts collection |
 | Image optimization | ✅ | Next/Image + long cache headers in vercel.json |
 | Mobile-friendly | likely ✅ | Tailwind responsive — hasn't been tested from sandbox |
@@ -40,8 +40,11 @@ Primary head terms we want to rank for eventually:
 
 ## Sitemap health
 
-- Sitemap includes all published posts, 5 static pages, homepage.
+- Sitemap includes all published posts, 6 static pages, homepage.
+  (Added `/editorial` to sitemap 2026-04-19.)
 - Submitted to Google? Don't know yet. Ask Brandon.
+- `robots.ts` disallows `/admin`, `/api`, and now `/go/` (outbound
+  tracking links should not be indexed).
 
 ## Current rankings / traffic
 

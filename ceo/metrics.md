@@ -11,7 +11,7 @@ Update nightly where data is available.
 | Pages indexed in Google | unknown | — | GSC | Need access |
 | Average position | unknown | — | GSC | Need access |
 | Organic clicks (7d) | unknown | — | GSC | Need access |
-| Outbound affiliate clicks (7d) | unknown | — | no tracker yet | |
+| Outbound affiliate clicks (7d) | unknown | 2026-04-19 | `/go/[slug]` logs | Tracking shipped; requires Vercel log access to read counts |
 | Affiliate revenue (30d) | unknown | — | ClickBank | Need feed |
 
 ## Pipeline metrics

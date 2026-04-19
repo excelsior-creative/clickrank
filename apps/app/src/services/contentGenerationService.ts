@@ -14,7 +14,7 @@
 import { GoogleGenAI } from '@google/genai'
 import type { Payload } from 'payload'
 import Replicate from 'replicate'
-import { type ClickBankProduct } from './clickbankService'
+import { type ClickBankProduct, productSlug } from './clickbankService'
 import { humanizeContent } from './humanizationService'
 import { GeneratedArticleSchema } from './schemas'
 
@@ -290,6 +290,8 @@ export async function generateArticleForProduct(
     .filter(Boolean)
     .join('\n')
 
+  const trackingPath = `/go/${productSlug(product)}`
+
   const productContext = `
 Product Name: ${product.name}
 Vendor: ${product.vendor}
@@ -298,6 +300,7 @@ Gravity Score: ${product.gravity} (higher = more affiliates making sales)
 Initial Price: $${product.initialPrice}${product.avgRebill ? ` + $${product.avgRebill}/mo rebill` : ''}
 Description: ${product.description}
 ${product.vendorUrl ? `Product URL: ${product.vendorUrl}` : ''}
+Tracking affiliate path (use this for all CTA links): ${trackingPath}
 `.trim()
 
   const prompt = `${systemContext}
@@ -320,7 +323,7 @@ Return ONLY valid JSON (no markdown fences) with this exact structure:
 The article MUST open with this exact section (verbatim heading, paragraph can rephrase but must include the disclosure):
 
 ## Affiliate disclosure
-ClickRank earns a commission when readers buy through links on this page. Our reviews stay independent — compensation never determines what we cover or how we rate a product.
+ClickRank earns a commission when readers buy ${product.name} through links on this page. Our reviews stay independent: compensation never determines what we cover or how we rate a product.
 
 Then include these sections (in this order, but feel free to rename them if a specific product has a more natural shape):
 ## What ${product.name} actually is
@@ -335,8 +338,9 @@ Rules:
 - For "What's good about it": 3-5 real, specific strengths. No empty superlatives.
 - For "What could be better": 1-2 honest, fair caveats. Constructive tone. NEVER skip this section.
 - Do not fabricate user quotes, testimonials, ratings, or studies. If you don't have a verifiable source, don't assert the claim.
-- End with a clear call-to-action linking to the product page. Use the affiliate link if provided: ${product.affiliateUrl || '(no affiliate URL provided — write the CTA without a hard link)'}
-- Title and headings in sentence case, not Title Case.`
+- End with a clear call-to-action linking to the product page. For every outbound CTA link, use the relative tracking path "${trackingPath}" as the markdown URL (e.g. [Check current pricing on ${product.name}](${trackingPath})). Do not paste raw vendor or ClickBank URLs into the article body.
+- Title and headings in sentence case, not Title Case.
+- No em-dashes anywhere. Use commas, colons, or short sentences instead.`
 
   const rawArticle = await withRetry(async () => {
     const response = await ai.models.generateContent({
