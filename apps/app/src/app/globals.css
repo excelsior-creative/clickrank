@@ -1,183 +1,301 @@
 @import "tailwindcss";
 
+/* =========================================================================
+   ClickRank — Editorial Dark Navy design system
+   Fonts: Source Serif 4 + Instrument Serif + Geist + Geist Mono
+   Loaded via next/font in (frontend)/layout.tsx
+   ========================================================================= */
+
 @theme {
-  /* Editorial Authority Design System — Manrope + Inter */
-  --font-headline: "Manrope", sans-serif;
-  --font-body: "Inter", sans-serif;
-  --font-label: "Inter", sans-serif;
-  --font-sans: "Inter", sans-serif;
-  --font-mono: var(--font-geist-mono);
+  /* Font stacks — exposed as Tailwind font-family utilities */
+  --font-serif: var(--font-source-serif), "Iowan Old Style", Georgia, serif;
+  --font-serif-italic: var(--font-instrument-serif), var(--font-source-serif), Georgia, serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  /* Surface hierarchy — light mode editorial palette */
-  --color-surface: #fbf8ff;
-  --color-surface-bright: #fbf8ff;
-  --color-surface-dim: #d6d8f5;
-  --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f4f2ff;
-  --color-surface-container: #edecff;
-  --color-surface-container-high: #e6e6ff;
-  --color-surface-container-highest: #dfe0fe;
-  --color-surface-variant: #dfe0fe;
-  --color-surface-tint: #006b54;
+  /* Legacy alias so any existing components that use font-headline / font-body
+     don't break. Sans-first, matching the editorial voice. */
+  --font-headline: var(--font-serif);
+  --font-body: var(--font-sans);
+  --font-label: var(--font-sans);
 
-  /* Primary — Teal */
-  --color-primary: #006b54;
-  --color-on-primary: #ffffff;
-  --color-primary-container: #07b08b;
-  --color-on-primary-container: #003b2d;
-  --color-primary-fixed: #74f9d0;
-  --color-primary-fixed-dim: #54ddb5;
-  --color-on-primary-fixed: #002117;
-  --color-on-primary-fixed-variant: #00513e;
-  --color-inverse-primary: #54ddb5;
+  /* ---------- Dark navy editorial palette ---------- */
+  --color-bg:        oklch(17% 0.035 255);
+  --color-bg-2:      oklch(21% 0.040 255);
+  --color-bg-3:      oklch(25% 0.040 255);
+  --color-card:      oklch(22% 0.038 255);
+  --color-card-hi:   oklch(26% 0.042 255);
+  --color-rule:      oklch(32% 0.035 255);
+  --color-rule-soft: oklch(28% 0.035 255);
 
-  /* Secondary — Indigo */
-  --color-secondary: #4a5b97;
-  --color-on-secondary: #ffffff;
-  --color-secondary-container: #aabcfe;
-  --color-on-secondary-container: #384a84;
-  --color-secondary-fixed: #dce1ff;
-  --color-secondary-fixed-dim: #b6c4ff;
-  --color-on-secondary-fixed: #00164e;
-  --color-on-secondary-fixed-variant: #32437e;
+  --color-ink:       oklch(97% 0.008 255);
+  --color-ink-2:     oklch(82% 0.015 255);
+  --color-ink-3:     oklch(62% 0.020 255);
+  --color-ink-4:     oklch(48% 0.025 255);
 
-  /* Tertiary — Slate Blue */
-  --color-tertiary: #555c84;
-  --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #9399c5;
-  --color-on-tertiary-container: #2a3157;
-  --color-tertiary-fixed: #dee0ff;
-  --color-tertiary-fixed-dim: #bec4f2;
-  --color-on-tertiary-fixed: #11183d;
-  --color-on-tertiary-fixed-variant: #3e446b;
+  /* Mint — primary accent, used on CTAs and rating bars */
+  --color-mint:      oklch(82% 0.185 165);
+  --color-mint-2:    oklch(74% 0.175 165);
+  --color-mint-ink:  oklch(22% 0.05 165);
 
-  /* On-surface tokens */
-  --color-on-surface: #171a2f;
-  --color-on-surface-variant: #3c4a44;
-  --color-on-background: #171a2f;
-  --color-background: #fbf8ff;
+  /* Magenta + violet — editorial highlights, used sparingly */
+  --color-mag:       oklch(68% 0.26 330);
+  --color-vio:       oklch(62% 0.23 285);
 
-  /* Inverse */
-  --color-inverse-surface: #2c2f45;
-  --color-inverse-on-surface: #f0efff;
+  /* Warning + error states */
+  --color-warn:      oklch(80% 0.15 75);
+  --color-neg:       oklch(68% 0.18 28);
 
-  /* Outline */
-  --color-outline: #6c7a74;
-  --color-outline-variant: #bbcac2;
+  /* ---------- Compatibility aliases ---------- *
+   * Keep existing Tailwind `bg-dark`, `text-brand`, etc. working so we don't
+   * have to touch every historical component in one pass. They map to the
+   * new palette and degrade gracefully. */
+  --color-surface: var(--color-bg);
+  --color-background: var(--color-bg);
+  --color-on-surface: var(--color-ink);
+  --color-on-background: var(--color-ink);
+  --color-on-surface-variant: var(--color-ink-2);
 
-  /* Error */
-  --color-error: #ba1a1a;
-  --color-on-error: #ffffff;
-  --color-error-container: #ffdad6;
-  --color-on-error-container: #93000a;
+  --color-surface-bright: var(--color-bg-2);
+  --color-surface-dim: var(--color-bg);
+  --color-surface-container-lowest: var(--color-bg);
+  --color-surface-container-low: var(--color-bg-2);
+  --color-surface-container: var(--color-card);
+  --color-surface-container-high: var(--color-card-hi);
+  --color-surface-container-highest: var(--color-bg-3);
+  --color-surface-variant: var(--color-bg-3);
+  --color-surface-tint: var(--color-mint);
 
-  /* Legacy shim — map old dark-theme vars to new palette so any
-     remaining references degrade gracefully */
-  --color-dark: #171a2f;
-  --color-dark-light: #f4f2ff;
-  --color-dark-lighter: #edecff;
-  --color-brand: #07b08b;
-  --color-brand-light: #54ddb5;
-  --color-brand-dark: #006b54;
-  --color-brand-foreground: #ffffff;
+  --color-primary: var(--color-mint);
+  --color-on-primary: var(--color-mint-ink);
+  --color-primary-container: var(--color-mint);
+  --color-on-primary-container: var(--color-mint-ink);
+  --color-primary-fixed: var(--color-mint);
+  --color-primary-fixed-dim: var(--color-mint-2);
+  --color-on-primary-fixed: var(--color-mint-ink);
+  --color-on-primary-fixed-variant: var(--color-mint-ink);
+  --color-inverse-primary: var(--color-mint-2);
+
+  --color-secondary: var(--color-vio);
+  --color-on-secondary: var(--color-ink);
+  --color-tertiary: var(--color-mag);
+  --color-on-tertiary: var(--color-ink);
+
+  --color-inverse-surface: var(--color-ink);
+  --color-inverse-on-surface: var(--color-bg);
+
+  --color-outline: var(--color-rule);
+  --color-outline-variant: var(--color-rule-soft);
+
+  --color-error: var(--color-neg);
+  --color-on-error: var(--color-ink);
+  --color-error-container: oklch(30% 0.12 28);
+  --color-on-error-container: oklch(95% 0.04 28);
+
+  /* Historical `bg-dark` / `text-brand` aliases used throughout the app */
+  --color-dark: var(--color-bg);
+  --color-dark-light: var(--color-bg-2);
+  --color-dark-lighter: var(--color-card);
+  --color-brand: var(--color-mint);
+  --color-brand-light: var(--color-mint-2);
+  --color-brand-dark: var(--color-mint);
+  --color-brand-foreground: var(--color-mint-ink);
 
   /* Radius scale */
   --radius-none: 0;
-  --radius-sm: 0.125rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-  --radius-2xl: 1rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.125rem;
   --radius-3xl: 1.5rem;
   --radius-full: 9999px;
 
-  /* Shadcn-compatible CSS vars (kept for ui/ components) */
-  --color-card: #ffffff;
-  --color-card-foreground: #171a2f;
-  --color-popover: #ffffff;
-  --color-popover-foreground: #171a2f;
-  --color-muted: #f4f2ff;
-  --color-muted-foreground: #3c4a44;
-  --color-accent: #edecff;
-  --color-accent-foreground: #171a2f;
-  --color-destructive: #ba1a1a;
-  --color-destructive-foreground: #ffffff;
-  --color-border: rgba(187, 202, 194, 0.3);
-  --color-input: #f4f2ff;
-  --color-ring: #006b54;
-  --color-foreground: #171a2f;
+  /* shadcn-compatible vars for ui/ components */
+  --color-card-foreground: var(--color-ink);
+  --color-popover: var(--color-card);
+  --color-popover-foreground: var(--color-ink);
+  --color-muted: var(--color-bg-2);
+  --color-muted-foreground: var(--color-ink-3);
+  --color-accent: var(--color-card-hi);
+  --color-accent-foreground: var(--color-ink);
+  --color-destructive: var(--color-neg);
+  --color-destructive-foreground: var(--color-ink);
+  --color-border: var(--color-rule);
+  --color-input: var(--color-bg-2);
+  --color-ring: var(--color-mint);
+  --color-foreground: var(--color-ink);
 }
 
-/* ── Base Layer ── */
+/* =========================================================================
+   Base layer
+   ========================================================================= */
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
 
   html {
-    color-scheme: light;
+    color-scheme: dark;
+    background: var(--color-bg);
   }
 
+  html, body { margin: 0; padding: 0; }
+
   body {
-    background-color: var(--color-surface);
-    color: var(--color-on-surface);
-    font-family: var(--font-body);
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-headline);
+    font-family: var(--font-serif);
+    font-weight: 420;
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
   }
 
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+
   [data-theme="frontend"] {
-    background-color: var(--color-surface);
-    color: var(--color-on-surface);
+    background-color: var(--color-bg);
+    color: var(--color-ink);
   }
 }
 
-/* ── Utilities ── */
+/* =========================================================================
+   Utilities
+   ========================================================================= */
 @layer utilities {
-  /* Gradient CTAs */
+  .font-serif-italic {
+    font-family: var(--font-serif-italic);
+    font-style: italic;
+  }
+
+  /* Mint gradient used on the hero word and brand accents */
+  .text-gradient-mint {
+    background: linear-gradient(100deg, var(--color-mint) 0%, oklch(78% 0.2 180) 60%, oklch(72% 0.22 200) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Glow used on mint CTAs and the brand dot */
+  .mint-glow {
+    box-shadow: 0 0 22px oklch(82% 0.19 165 / 0.35);
+  }
+  .mint-glow-sm {
+    box-shadow: 0 0 10px oklch(82% 0.19 165 / 0.35);
+  }
+
+  /* Legacy CTA utility preserved for forms / older components */
   .btn-primary-gradient {
-    background: linear-gradient(135deg, #006b54 0%, #07b08b 100%);
-    color: #ffffff;
+    background: var(--color-mint);
+    color: var(--color-mint-ink);
+    transition: box-shadow .2s, transform .15s, background .15s;
   }
   .btn-primary-gradient:hover {
-    background: linear-gradient(135deg, #007a61 0%, #09c49c 100%);
+    background: var(--color-mint-2);
+    box-shadow: 0 0 22px oklch(82% 0.19 165 / 0.35);
+    transform: translateY(-1px);
   }
 
-  /* Glassmorphism nav */
+  /* Glass nav — now a navy tint with saturation lift */
   .glass-nav {
-    background: rgba(251, 248, 255, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: color-mix(in oklch, var(--color-bg) 82%, transparent);
+    -webkit-backdrop-filter: saturate(140%) blur(10px);
+    backdrop-filter: saturate(140%) blur(10px);
   }
 
-  /* "Ghost Border" — only for accessibility-required inputs */
   .ghost-border-focus:focus {
-    outline: 2px solid rgba(0, 107, 84, 0.4);
+    outline: 2px solid oklch(82% 0.19 165 / 0.45);
     outline-offset: 0;
   }
 
-  /* No-scrollbar utility */
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-  /* Dot pattern (kept for compatibility) */
+  /* Mint rating bar used on featured + review cards */
+  .rating-bars {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 3px;
+    height: 10px;
+  }
+  .rating-bars > span {
+    background: var(--color-bg-3);
+    border-radius: 1px;
+  }
+  .rating-bars > span.on {
+    background: var(--color-mint);
+    box-shadow: 0 0 4px oklch(82% 0.19 165 / 0.35);
+  }
+
+  /* Entrance */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.in { opacity: 1; transform: none; }
+
   .bg-dot-pattern {
-    background-image: radial-gradient(circle, rgba(187,202,194,0.4) 1px, transparent 1px);
-    background-size: 20px 20px;
+    background-image: radial-gradient(circle, oklch(62% 0.02 255 / 0.18) 1px, transparent 1px);
+    background-size: 22px 22px;
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 8px; }
+/* =========================================================================
+   Animations
+   ========================================================================= */
+@keyframes drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-30px, 20px) scale(1.08); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.3); }
+}
+
+/* =========================================================================
+   Rich text prose overrides (blog posts)
+   ========================================================================= */
+.prose, .prose-invert {
+  --tw-prose-body: var(--color-ink-2);
+  --tw-prose-headings: var(--color-ink);
+  --tw-prose-lead: var(--color-ink-2);
+  --tw-prose-links: var(--color-mint);
+  --tw-prose-bold: var(--color-ink);
+  --tw-prose-counters: var(--color-ink-3);
+  --tw-prose-bullets: var(--color-ink-3);
+  --tw-prose-hr: var(--color-rule);
+  --tw-prose-quotes: var(--color-ink);
+  --tw-prose-quote-borders: var(--color-mint);
+  --tw-prose-captions: var(--color-ink-3);
+  --tw-prose-code: var(--color-ink);
+  --tw-prose-pre-code: var(--color-ink);
+  --tw-prose-pre-bg: var(--color-bg-2);
+  --tw-prose-th-borders: var(--color-rule);
+  --tw-prose-td-borders: var(--color-rule-soft);
+}
+
+/* =========================================================================
+   Custom scrollbar
+   ========================================================================= */
+::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(60, 74, 68, 0.2);
+  background: oklch(32% 0.035 255 / 0.8);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(60, 74, 68, 0.3);
+  background: oklch(40% 0.035 255 / 0.9);
 }

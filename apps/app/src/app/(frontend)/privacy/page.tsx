@@ -1,12 +1,11 @@
 import React from "react";
 import { getPayload } from "payload";
 import config from "@/payload.config";
-import { Container } from "@/components/Container";
 import { RichText } from "@/components/RichText";
 import { draftMode } from "next/headers";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export default async function PrivacyPage() {
   const { isEnabled: draft } = await draftMode();
@@ -20,19 +19,54 @@ export default async function PrivacyPage() {
   return (
     <div className="py-20">
       {draft && <LivePreviewListener />}
-      <Container>
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-4xl font-bold mb-8">Privacy Policy</h1>
-          {!siteSettings.privacyPolicy ? (
-            <p className="text-muted-foreground italic">
-              Privacy policy content has not been populated in the CMS yet.
-            </p>
-          ) : (
-            <RichText data={siteSettings.privacyPolicy} className="max-w-none" />
-          )}
+      <div className="max-w-[760px] mx-auto px-5 md:px-10">
+        <div
+          className="mb-7 font-mono"
+          style={{
+            fontSize: 11.5,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color: "var(--color-mint)",
+          }}
+        >
+          Transparency · Privacy
         </div>
-      </Container>
+        <h1
+          className="m-0 mb-10"
+          style={{
+            fontFamily: "var(--font-serif)",
+            fontWeight: 380,
+            fontSize: "clamp(36px, 5vw, 64px)",
+            letterSpacing: "-0.022em",
+            lineHeight: 1.03,
+            color: "var(--color-ink)",
+          }}
+        >
+          Privacy policy
+        </h1>
+        {!siteSettings.privacyPolicy ? (
+          <p
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontStyle: "italic",
+              color: "var(--color-ink-3)",
+            }}
+          >
+            Privacy policy content has not been populated in the CMS yet.
+          </p>
+        ) : (
+          <div
+            className="prose prose-invert prose-lg max-w-none"
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: 18,
+              lineHeight: 1.7,
+            }}
+          >
+            <RichText data={siteSettings.privacyPolicy} className="max-w-none" />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
-
