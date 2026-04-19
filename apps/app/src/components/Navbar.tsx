@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { Logo } from "./Logo";
 import { cn } from "@/lib/utils";
-import { Menu, X, ChevronDown, Search } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { useSearch } from "./SearchProvider";
 
 type NavItem = {
@@ -27,14 +27,14 @@ type NavItem = {
 };
 
 const defaultNavbarItems: NavItem[] = [
-  { link: { label: "Home", type: "custom", url: "/" } },
   { link: { label: "Reviews", type: "custom", url: "/blog" } },
+  { link: { label: "Rankings", type: "custom", url: "/blog" } },
   { link: { label: "Categories", type: "custom", url: "/blog" } },
-  { link: { label: "Compare", type: "custom", url: "/blog" } },
+  { link: { label: "How we test", type: "custom", url: "/about#process" } },
   { link: { label: "About", type: "custom", url: "/about" } },
 ];
 
-type ResolvedNavItem = { href: string; label: string; newTab?: boolean; children?: ResolvedNavItem[] };
+type ResolvedNavItem = { href: string; label: string; newTab?: boolean };
 
 const resolveHref = (item: NavItem) => {
   const link = item.link;
@@ -53,7 +53,6 @@ const resolveHref = (item: NavItem) => {
 export const Navbar = ({ navItems = [] as NavItem[] }) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
   const { openSearch } = useSearch();
 
   const resolvedItems: ResolvedNavItem[] = [];
@@ -61,15 +60,7 @@ export const Navbar = ({ navItems = [] as NavItem[] }) => {
     const href = resolveHref(item);
     const label = item.link?.label;
     if (href && label) {
-      const children = item.children
-        ?.map((child) => {
-          const childHref = resolveHref(child);
-          const childLabel = child.link?.label;
-          if (childHref && childLabel) return { href: childHref, label: childLabel };
-          return null;
-        })
-        .filter(Boolean) as ResolvedNavItem[];
-      resolvedItems.push({ href, label, newTab: item.link?.newTab, children: children?.length ? children : undefined });
+      resolvedItems.push({ href, label, newTab: item.link?.newTab });
     }
   });
 
@@ -79,179 +70,151 @@ export const Navbar = ({ navItems = [] as NavItem[] }) => {
       : defaultNavbarItems.map((item) => ({
           href: item.link?.url || "/",
           label: item.link?.label || "",
-          children: item.children?.map((child) => ({
-            href: child.link?.url || "/",
-            label: child.link?.label || "",
-          })),
         }));
 
   return (
-    <>
-      {/* Glassmorphism fixed nav */}
-      <header
-        className="fixed top-0 left-0 right-0 z-50 shadow-sm"
-        style={{
-          background: "rgba(251, 248, 255, 0.85)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-        }}
-      >
-        <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-          {/* Logo */}
-          <Logo />
+    <header
+      className="sticky top-0 z-40 border-b glass-nav"
+      style={{ borderColor: "var(--color-rule)" }}
+    >
+      <div className="max-w-[1280px] mx-auto px-5 md:px-10 flex items-center gap-7 h-[72px]">
+        <Logo />
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
-            {navigationItems.map((item) => (
-              <div
+        {/* Desktop nav */}
+        <nav className="hidden lg:flex gap-[26px] ml-3.5 text-[14px] text-[var(--color-ink-2)]">
+          {navigationItems.map((item) => {
+            const active = pathname === item.href;
+            return (
+              <Link
                 key={item.href + item.label}
-                className="relative"
-                onMouseEnter={() => item.children && setDropdownOpen(item.label)}
-                onMouseLeave={() => setDropdownOpen(null)}
-              >
-                <Link
-                  href={item.href}
-                  target={item.newTab ? "_blank" : undefined}
-                  rel={item.newTab ? "noreferrer noopener" : undefined}
-                  className={cn(
-                    "flex items-center gap-1 font-headline font-bold tracking-tight text-sm transition-colors duration-200",
-                    pathname === item.href
-                      ? "text-primary-container border-b-2 pb-0.5"
-                      : "text-on-surface-variant hover:text-primary-container"
-                  )}
-                  style={
-                    pathname === item.href
-                      ? { borderColor: "var(--color-primary-container)" }
-                      : undefined
-                  }
-                >
-                  {item.label}
-                  {item.children && <ChevronDown className="w-3.5 h-3.5" />}
-                </Link>
-
-                {item.children && dropdownOpen === item.label && (
-                  <AnimatePresence>
-                    <m.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      className="absolute top-full left-0 mt-2 py-2 w-52 rounded-2xl shadow-xl z-50"
-                      style={{
-                        background: "rgba(251, 248, 255, 0.95)",
-                        backdropFilter: "blur(16px)",
-                        WebkitBackdropFilter: "blur(16px)",
-                      }}
-                    >
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.href}
-                          href={child.href}
-                          className="block px-4 py-2 text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </m.div>
-                  </AnimatePresence>
+                href={item.href}
+                target={item.newTab ? "_blank" : undefined}
+                rel={item.newTab ? "noreferrer noopener" : undefined}
+                className={cn(
+                  "relative py-2 transition-colors hover:text-[var(--color-ink)]",
+                  active && "text-[var(--color-ink)]"
                 )}
-              </div>
-            ))}
-          </nav>
+              >
+                {item.label}
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute left-0 right-0 bottom-0 h-px origin-left transition-transform",
+                    active ? "scale-x-100" : "scale-x-0"
+                  )}
+                  style={{ background: "var(--color-mint)" }}
+                />
+              </Link>
+            );
+          })}
+        </nav>
 
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-4">
-            <button
-              onClick={openSearch}
-              className="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer rounded-full hover:bg-surface-container-low"
-              aria-label="Search"
-            >
-              <Search className="h-5 w-5" />
-            </button>
+        {/* Search pill (desktop) */}
+        <button
+          type="button"
+          onClick={openSearch}
+          className="hidden md:flex ml-auto items-center gap-2.5 px-3.5 py-2.5 rounded-full transition-colors min-w-[260px] text-left"
+          style={{
+            background: "var(--color-card)",
+            border: "1px solid var(--color-rule)",
+          }}
+          aria-label="Search reviews"
+        >
+          <Search className="w-[14px] h-[14px] opacity-60 shrink-0" />
+          <span className="text-[13.5px] flex-1 text-[var(--color-ink-3)]">
+            Search 500+ product reviews…
+          </span>
+          <kbd
+            className="hidden lg:inline-block font-mono text-[11px] px-[6px] py-[2px] rounded"
+            style={{
+              color: "var(--color-ink-3)",
+              border: "1px solid var(--color-rule)",
+              background: "var(--color-bg-2)",
+            }}
+          >
+            ⌘K
+          </kbd>
+        </button>
 
-            <Link
-              href="/blog"
-              className="btn-primary-gradient px-6 py-2.5 rounded-xl font-headline font-bold tracking-tight text-sm text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
-            >
-              Get Started
-            </Link>
-          </div>
+        {/* CTA */}
+        <Link
+          href="/contact"
+          className="hidden md:inline-flex items-center px-[18px] py-2.5 rounded-full font-medium text-[13.5px] transition-all hover:-translate-y-px hover:mint-glow"
+          style={{
+            background: "var(--color-mint)",
+            color: "var(--color-mint-ink)",
+          }}
+        >
+          Subscribe
+        </Link>
 
-          {/* Mobile toggle */}
-          <div className="md:hidden flex items-center gap-2">
-            <button
-              onClick={openSearch}
-              className="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full"
-              aria-label="Search"
-            >
-              <Search className="h-5 w-5" />
-            </button>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-on-surface"
-            >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
+        {/* Mobile */}
+        <div className="md:hidden ml-auto flex items-center gap-2">
+          <button
+            type="button"
+            onClick={openSearch}
+            className="p-2 rounded-full text-[var(--color-ink-2)] hover:text-[var(--color-ink)]"
+            aria-label="Search"
+          >
+            <Search className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsOpen((s) => !s)}
+            className="p-2 text-[var(--color-ink)]"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
-      </header>
+      </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {isOpen && (
           <m.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="fixed top-[73px] left-0 right-0 z-40 overflow-hidden md:hidden shadow-lg"
-            style={{ background: "rgba(251, 248, 255, 0.97)", backdropFilter: "blur(20px)" }}
+            className="md:hidden overflow-hidden border-t"
+            style={{
+              borderColor: "var(--color-rule)",
+              background: "var(--color-bg-2)",
+            }}
           >
-            <div className="flex flex-col p-6 gap-4">
+            <nav className="flex flex-col px-5 py-6 gap-2">
               {navigationItems.map((item) => (
-                <div key={item.href + item.label}>
-                  <Link
-                    href={item.href}
-                    target={item.newTab ? "_blank" : undefined}
-                    rel={item.newTab ? "noreferrer noopener" : undefined}
-                    onClick={() => setIsOpen(false)}
-                    className={cn(
-                      "text-lg font-headline font-bold block py-2",
-                      pathname === item.href ? "text-primary" : "text-on-surface"
-                    )}
-                  >
-                    {item.label}
-                  </Link>
-                  {item.children && (
-                    <div className="pl-4 mt-1 space-y-1 border-l-2" style={{ borderColor: "var(--color-surface-container-high)" }}>
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.href}
-                          href={child.href}
-                          onClick={() => setIsOpen(false)}
-                          className="block text-sm text-on-surface-variant hover:text-primary py-1 transition-colors"
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-              <div className="pt-2">
                 <Link
-                  href="/blog"
+                  key={item.href + item.label}
+                  href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className="btn-primary-gradient block text-center px-6 py-3 rounded-xl font-headline font-bold text-white"
+                  target={item.newTab ? "_blank" : undefined}
+                  rel={item.newTab ? "noreferrer noopener" : undefined}
+                  className={cn(
+                    "py-2 font-serif text-lg",
+                    pathname === item.href
+                      ? "text-[var(--color-mint)]"
+                      : "text-[var(--color-ink)]"
+                  )}
                 >
-                  Get Started
+                  {item.label}
                 </Link>
-              </div>
-            </div>
+              ))}
+              <Link
+                href="/contact"
+                onClick={() => setIsOpen(false)}
+                className="mt-4 text-center py-3 rounded-full font-medium"
+                style={{
+                  background: "var(--color-mint)",
+                  color: "var(--color-mint-ink)",
+                }}
+              >
+                Subscribe
+              </Link>
+            </nav>
           </m.div>
         )}
       </AnimatePresence>
-
-      {/* Spacer so content sits below fixed nav */}
-      <div className="h-[73px]" />
-    </>
+    </header>
   );
 };

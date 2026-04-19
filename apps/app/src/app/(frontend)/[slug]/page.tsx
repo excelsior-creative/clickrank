@@ -8,7 +8,7 @@ import { PayloadRedirects } from "@/components/PayloadRedirects";
 import { RenderBlocks } from "@/blocks/RenderBlocks";
 import { RenderHero } from "@/heros/RenderHero";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 type Args = {
   params: Promise<{

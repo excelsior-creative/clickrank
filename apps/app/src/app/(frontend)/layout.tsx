@@ -1,10 +1,11 @@
 import React from "react";
-import { Manrope, Inter } from "next/font/google";
+import { Source_Serif_4, Instrument_Serif, Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { generateGlobalSchema } from "@/lib/structured-data";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { DisclosureStrip } from "@/components/DisclosureStrip";
 import { Providers } from "@/components/Providers";
 import { SearchProvider } from "@/components/SearchProvider";
 import { AdminBar } from "@/components/AdminBar";
@@ -12,57 +13,57 @@ import { draftMode } from "next/headers";
 import { getPayload } from "payload";
 import config from "@payload-config";
 
-const manrope = Manrope({
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-manrope",
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-source-serif",
   display: "swap",
 });
 
-const inter = Inter({
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
+  weight: ["400"],
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
+  display: "swap",
+});
+
+const geist = Geist({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-geist",
+  display: "swap",
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-geist-mono",
   display: "swap",
 });
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode();
   const payload = await getPayload({ config });
-  const header = await payload.findGlobal({
-    slug: "header",
-  });
+  const header = await payload.findGlobal({ slug: "header" });
   const globalSchema = generateGlobalSchema();
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* Material Symbols for icons used in the design system */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
-        />
-      </head>
       <body
-        className={`${manrope.variable} ${inter.variable}`}
-        style={{ fontFamily: "var(--font-inter, Inter, sans-serif)" }}
+        className={`${sourceSerif.variable} ${instrumentSerif.variable} ${geist.variable} ${geistMono.variable}`}
       >
         <div
           className="flex min-h-screen flex-col"
           data-theme="frontend"
-          style={{ backgroundColor: "var(--color-surface)", color: "var(--color-on-surface)" }}
         >
           <Providers>
             <SearchProvider>
-              <AdminBar
-                adminBarProps={{
-                  preview: isEnabled,
-                }}
-              />
+              <AdminBar adminBarProps={{ preview: isEnabled }} />
+              <DisclosureStrip />
               <Navbar navItems={(header.navItems as any[]) || []} />
-              <main className="flex-grow">
-                {children}
-              </main>
+              <main className="flex-grow">{children}</main>
               <Footer />
             </SearchProvider>
           </Providers>

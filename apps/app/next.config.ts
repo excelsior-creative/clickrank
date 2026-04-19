@@ -5,6 +5,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
+  // puppeteer is an optional peer dep used by the ClickBank scraper. Marking
+  // it as a server-external package prevents Turbopack/Webpack from bundling
+  // it so the build succeeds whether or not puppeteer is installed.
+  serverExternalPackages: ["puppeteer"],
   experimental: {
     optimizePackageImports: [
       "framer-motion",
@@ -14,7 +18,10 @@ const nextConfig: NextConfig = {
   },
   webpack: (config, { isServer }) => {
     if (isServer) {
-      config.ignoreWarnings = [{ module: /payload\/dist\/queues/ }];
+      config.ignoreWarnings = [
+        { module: /payload\/dist\/queues/ },
+        { module: /puppeteer/ },
+      ];
     }
     return config;
   },
@@ -27,6 +34,14 @@ const nextConfig: NextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
+      },
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.vercel-storage.com",
       },
     ],
     // Optimize image quality for better performance
