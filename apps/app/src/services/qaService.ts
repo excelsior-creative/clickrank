@@ -150,6 +150,10 @@ function hasDisclosureSection(markdown: string): boolean {
 function hasAffiliateOrVendorLink(markdown: string, product: ClickBankProduct): boolean {
   if (product.affiliateUrl && markdown.includes(product.affiliateUrl)) return true
   if (product.vendorUrl && markdown.includes(product.vendorUrl)) return true
+  // Relative click-tracking path — the generation prompt instructs the model
+  // to emit /go/[productSlug] for every CTA, and the cron post-processor
+  // rewrites any leaked raw hoplinks to /go/[postSlug]. Either form counts.
+  if (/\]\(\/go\/[a-z0-9][a-z0-9-]*\)/i.test(markdown)) return true
   // fallback: any external-looking link at all
   return /\]\(https?:\/\/[^)]+\)/.test(markdown)
 }

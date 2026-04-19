@@ -27,12 +27,15 @@ Tagged by area: [pipeline] [content] [seo] [site] [conversion] [ops].
   guesses — almost certainly failing silently and falling back.
   Either validate or remove the scraper entirely.
 - [site] Hero copy still needs audit — not checked tonight.
-- [pipeline] QA gate's `hasAffiliateOrVendorLink` doesn't match
-  relative `/go/[slug]` tracking paths; article now using tracked
-  links will emit a non-blocking warning. Teach the matcher. (PR.)
-- [ops] `/go/[slug]` click events only hit stdout. Persist to a
-  Payload `outbound-clicks` collection so the CEO can actually
-  read counts without Vercel log access. (Needs collection + PR.)
+- ~~[pipeline] QA gate's `hasAffiliateOrVendorLink` doesn't match
+  relative `/go/[slug]` tracking paths~~ — resolved 2026-04-19.
+  Matcher now recognizes `](/go/<slug>)` markdown link targets in
+  addition to `product.affiliateUrl` and `product.vendorUrl`.
+- ~~[ops] `/go/[slug]` click events only hit stdout~~ — resolved
+  2026-04-19. Added `outbound-clicks` Payload collection +
+  migration; `/go/[slug]` writes one row per successful redirect
+  (fire-and-forget, admin-only read). Rolled-up counts still live
+  on `Posts.clickCount`.
 
 ## Pipeline ideas
 
