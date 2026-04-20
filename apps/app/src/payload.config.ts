@@ -53,6 +53,31 @@ if (process.env.NODE_ENV === "production" && !process.env.DATABASE_URL) {
   console.warn("WARNING: No remote database URL set in production.");
 }
 
+/**
+ * pg-connection-string v3 / pg v9 will change the semantics of
+ * sslmode=prefer|require|verify-ca — today they alias to verify-full, and in
+ * the next major they'll adopt libpq semantics (weaker verification). We opt
+ * in to the libpq-compatible behavior explicitly so the deprecation warning
+ * goes away and the connection string's meaning is stable across upgrades.
+ */
+function normalizeDatabaseUrl(url: string): string {
+  if (!url) return url;
+  try {
+    const u = new URL(url);
+    const sslmode = u.searchParams.get("sslmode");
+    if (
+      sslmode &&
+      ["prefer", "require", "verify-ca"].includes(sslmode) &&
+      !u.searchParams.has("uselibpqcompat")
+    ) {
+      u.searchParams.set("uselibpqcompat", "true");
+    }
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
 export default buildConfig({
   admin: {
     components: {
@@ -125,7 +150,7 @@ export default buildConfig({
   ],
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URL || "",
+      connectionString: normalizeDatabaseUrl(process.env.DATABASE_URL || ""),
     },
   }),
   email: resendAdapter({
