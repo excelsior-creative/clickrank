@@ -8,6 +8,7 @@ import { RichText } from "@/components/RichText";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 import { PayloadRedirects } from "@/components/PayloadRedirects";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
+import { RelatedPosts } from "@/components/RelatedPosts";
 import { generateArticleSchema } from "@/lib/structured-data";
 import { SITE_NAME, SITE_URL } from "@/lib/metadata";
 import { ArrowUpRight } from "lucide-react";
@@ -194,6 +195,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </p>
           </div>
         )}
+
+        <RelatedPosts currentPost={post} />
 
         <div
           className="mt-16 pt-8"
