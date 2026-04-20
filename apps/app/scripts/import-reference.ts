@@ -172,12 +172,10 @@ const extractTextEditorContent = (block: string): string => {
   );
   const parts: string[] = [];
   for (const w of widgets) {
-    const chunk = w[1];
-    const container = chunk.match(
+    const container = w[1].match(
       /<div class="elementor-widget-container">([\s\S]*?)<\/div>/,
     );
-    if (container) parts.push(container[1]);
-    else parts.push(chunk);
+    parts.push(container ? container[1] : w[1]);
   }
   return parts.join("\n");
 };
@@ -363,13 +361,23 @@ const parseReview = (folderName: string, html: string): ParsedReview | null => {
   const block = extractPostContentBlock(html);
   if (!block) return null;
 
-  const contentHtml = extractTextEditorContent(block);
-  if (!stripTags(contentHtml)) return null;
+  let contentHtml = extractTextEditorContent(block);
 
   const ogTitle = extractMeta(html, "og:title");
   const ogDescription = extractMeta(html, "og:description");
   const ogImage = extractMeta(html, "og:image");
   const publishedTime = extractMeta(html, "article:published_time");
+
+  // Stub posts in the corpus (~3 of them) keep their body in a
+  // theme-post-excerpt widget that lives above the content block. Fall back
+  // to the og:description in that case so we still land a post.
+  if (!stripTags(contentHtml)) {
+    if (ogDescription && ogDescription.trim()) {
+      contentHtml = `<p>${ogDescription.trim()}</p>`;
+    } else {
+      return null;
+    }
+  }
 
   const jsonLd = extractJsonLd(html);
   const graph: any[] = jsonLd?.["@graph"] ?? [];
