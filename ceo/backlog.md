@@ -58,7 +58,10 @@ Tagged by area: [pipeline] [content] [seo] [site] [conversion] [ops].
   2026-04-17 (combined into the Article JSON-LD graph).
 - [seo] 404 page audit, custom design.
 - [seo] `/category/[slug]` hub pages (carry from roadmap "Next").
-- [seo] Related-posts block on blog post pages for internal linking.
+- ~~[seo] Related-posts block on blog post pages for internal linking~~
+  — resolved 2026-04-20. `/blog/[slug]` now renders up to 3 cards
+  chosen by category/tag overlap with the current post, topped up
+  with the latest published posts when overlap is short.
 
 ## Conversion ideas
 
