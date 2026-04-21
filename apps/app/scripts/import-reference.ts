@@ -9,6 +9,7 @@
  *   pnpm --filter app import:reference -- --dry-run
  *   pnpm --filter app import:reference -- --limit 5
  *   pnpm --filter app import:reference -- --overwrite
+ *   pnpm --filter app import:reference -- --skip-images
  */
 
 import { getPayload } from "payload";
@@ -24,6 +25,7 @@ type CliArgs = {
   limit?: number;
   dryRun: boolean;
   overwrite: boolean;
+  skipImages: boolean;
   help: boolean;
 };
 
@@ -42,11 +44,17 @@ type ParsedReview = {
 };
 
 const parseArgs = (argv: string[]): CliArgs => {
-  const args: CliArgs = { dryRun: false, overwrite: false, help: false };
+  const args: CliArgs = {
+    dryRun: false,
+    overwrite: false,
+    skipImages: false,
+    help: false,
+  };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
     if (a === "--dry-run") args.dryRun = true;
     else if (a === "--overwrite") args.overwrite = true;
+    else if (a === "--skip-images") args.skipImages = true;
     else if (a === "--help" || a === "-h") args.help = true;
     else if (a === "--limit") args.limit = Number(argv[++i]);
     else if (a.startsWith("--limit=")) args.limit = Number(a.slice(8));
@@ -58,10 +66,11 @@ const usage = `
 Import legacy reviews from ./reference into Payload.
 
 Flags:
-  --dry-run     Parse everything but don't write to the DB
-  --overwrite   Replace posts whose slug already exists (default: skip)
-  --limit <n>   Only import the first n posts (useful for testing)
-  --help        Show this message
+  --dry-run       Parse everything but don't write to the DB
+  --overwrite     Replace posts whose slug already exists (default: skip)
+  --limit <n>     Only import the first n posts (useful for testing)
+  --skip-images   Skip resolving + uploading cover images
+  --help          Show this message
 `.trim();
 
 // ---------------------------------------------------------------------------
@@ -354,6 +363,59 @@ const htmlToLexical = (html: string): any => {
 };
 
 // ---------------------------------------------------------------------------
+// Cover image resolution. Old clickrank.net URLs are dead, but the reference
+// folder has ~477 real PNGs on disk under reference/wp-content/uploads/. wget
+// also saved ~1152 `*.png.html` stubs at the same paths — we reject those.
+// ---------------------------------------------------------------------------
+
+const MIN_IMAGE_BYTES = 2048;
+
+const mimeForExt = (ext: string): string | null => {
+  switch (ext.toLowerCase()) {
+    case ".png":
+      return "image/png";
+    case ".jpg":
+    case ".jpeg":
+      return "image/jpeg";
+    case ".webp":
+      return "image/webp";
+    case ".gif":
+      return "image/gif";
+    default:
+      return null;
+  }
+};
+
+const resolveLocalImagePath = (
+  url: string | undefined,
+  referenceDir: string,
+): string | null => {
+  if (!url) return null;
+  // Anything ending in .html is a wget-saved stub, not a real image.
+  if (/\.html?$/i.test(url)) return null;
+
+  let pathname: string;
+  try {
+    pathname = new URL(url).pathname;
+  } catch {
+    // Relative URL — treat as already a pathname.
+    pathname = url.startsWith("/") ? url : `/${url}`;
+  }
+
+  const cleaned = pathname.replace(/^\/+/, "");
+  if (!cleaned.startsWith("wp-content/")) return null;
+
+  const abs = path.join(referenceDir, cleaned);
+  if (!fs.existsSync(abs)) return null;
+
+  const stat = fs.statSync(abs);
+  if (!stat.isFile() || stat.size < MIN_IMAGE_BYTES) return null;
+  if (!mimeForExt(path.extname(abs))) return null;
+
+  return abs;
+};
+
+// ---------------------------------------------------------------------------
 // Per-folder extraction
 // ---------------------------------------------------------------------------
 
@@ -559,10 +621,56 @@ const main = async () => {
     return created.id;
   };
 
+  // Per-run cache so two posts sharing the same basename don't double-upload.
+  const mediaCache = new Map<string, number | string>();
+
+  const uploadMedia = async (
+    absPath: string,
+    alt: string,
+  ): Promise<{ id: number | string; reused: boolean } | null> => {
+    const basename = path.basename(absPath);
+    const cached = mediaCache.get(basename);
+    if (cached) return { id: cached, reused: true };
+
+    // Idempotency across runs: Payload stores the original filename in the
+    // `filename` field on media uploads.
+    const existing = await payload.find({
+      collection: "media",
+      where: { filename: { equals: basename } },
+      limit: 1,
+      overrideAccess: true,
+    });
+    if (existing.docs[0]) {
+      mediaCache.set(basename, existing.docs[0].id);
+      return { id: existing.docs[0].id, reused: true };
+    }
+
+    const mimetype = mimeForExt(path.extname(absPath));
+    if (!mimetype) return null;
+    const buffer = fs.readFileSync(absPath);
+
+    const created = await payload.create({
+      collection: "media",
+      overrideAccess: true,
+      data: { alt },
+      file: {
+        data: buffer,
+        mimetype,
+        name: basename,
+        size: buffer.length,
+      },
+    });
+    mediaCache.set(basename, created.id);
+    return { id: created.id, reused: false };
+  };
+
   let created = 0;
   let updated = 0;
   let skipped = 0;
   let failed = 0;
+  let mediaCreated = 0;
+  let mediaReused = 0;
+  let mediaMissing = 0;
 
   for (const r of parsed) {
     try {
@@ -584,6 +692,24 @@ const main = async () => {
         await Promise.all(r.tags.map((t) => upsertTag(t)))
       ).filter(Boolean);
 
+      let mediaId: number | string | undefined;
+      if (!args.skipImages) {
+        const abs = resolveLocalImagePath(r.thumbnailUrl, referenceDir);
+        if (abs) {
+          const media = await uploadMedia(abs, r.title);
+          if (media) {
+            mediaId = media.id;
+            if (media.reused) mediaReused += 1;
+            else mediaCreated += 1;
+          }
+        } else if (r.thumbnailUrl) {
+          mediaMissing += 1;
+          console.warn(
+            `  - ${r.slug}: cover not found locally (${r.thumbnailUrl})`,
+          );
+        }
+      }
+
       const data: any = {
         title: r.title,
         slug: r.slug,
@@ -597,7 +723,9 @@ const main = async () => {
         meta: {
           title: r.title,
           description: r.excerpt,
+          image: mediaId,
         },
+        featuredImage: mediaId,
         affiliateUrl: r.affiliateUrl,
         productName: r.productName,
       };
@@ -626,7 +754,8 @@ const main = async () => {
   }
 
   console.log(
-    `\nDone. created=${created} updated=${updated} skipped=${skipped} failed=${failed}`,
+    `\nDone. posts: created=${created} updated=${updated} skipped=${skipped} failed=${failed}` +
+      `\nmedia: created=${mediaCreated} reused=${mediaReused} missing=${mediaMissing}`,
   );
   process.exit(0);
 };
