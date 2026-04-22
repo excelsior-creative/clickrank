@@ -5,6 +5,17 @@ is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
 
 ## 🟡 Needs decision
 
+### Audit the 93 legacy-imported reviews?
+
+- 93 posts were imported to production as published on 2026-04-20/21
+  via `scripts/import-reference.ts` and bypassed the QA gate. Their
+  editorial voice, fabrication tells, and forbidden-claim status are
+  all unvetted. I can write an audit script that runs `qaService`
+  against every published post and emits a report of failures —
+  but I need DB access (or a Vercel-side trigger and log dump) to
+  run it. Want me to prepare the script now and hand off execution?
+  Alternatively, have the next engineer run it with prod creds.
+
 ### Data access
 
 - Google Search Console access (read-only API credential or nightly
@@ -71,7 +82,16 @@ dependency. Next session's first PR if you're OK with the approach.
   `outbound-clicks` Payload collection shipped in PR #7 — admin
   can read per-click rows, and rolled-up counts live on
   `Posts.clickCount`.
-- 2026-04-24 PR #12 is a **draft**. If you can review it in the
-  morning, the sooner it merges the sooner the homepage stops
-  showing fabricated stats and hash-of-slug scores. No schema
-  changes; low-risk.
+- **93 legacy reviews are live on prod** as of 2026-04-20/21,
+  imported from the `reference/` corpus by
+  `scripts/import-reference.ts`. Quality of those 93 hasn't been
+  editorially audited — see the "Needs decision" item above.
+- **Body-link outbound tracking** is now live as of 2026-04-22
+  via a render-time Lexical rewriter at
+  `apps/app/src/lib/affiliateLinks.ts`. Every inline
+  `hop.clickbank.net` link whose vendor matches the post's
+  `affiliateUrl` is redirected through `/go/[slug]`. You should
+  see `Posts.clickCount` and the `outbound-clicks` collection
+  start ticking up meaningfully once the next deploy rolls out.
+  If click counts stay flat after the deploy, something is
+  wrong — ping me.

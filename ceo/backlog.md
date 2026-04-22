@@ -51,6 +51,27 @@ Tagged by area: [pipeline] [content] [seo] [site] [conversion] [ops].
   migration; `/go/[slug]` writes one row per successful redirect
   (fire-and-forget, admin-only read). Rolled-up counts still live
   on `Posts.clickCount`.
+- ~~[ops] Inline body hoplinks on imported posts bypass `/go/[slug]`
+  tracking~~ — resolved 2026-04-22. `lib/affiliateLinks.ts`
+  `rewriteAffiliateLinks` transforms the post's Lexical tree at
+  render time, rewriting any `hop.clickbank.net` link whose
+  `vendor=` matches the post's canonical `affiliateUrl` to
+  `/go/[postSlug]`. Inputs never mutated; safe no-op when no
+  match. Wired into `app/(frontend)/blog/[slug]/page.tsx`.
+- [content] **93 legacy-imported posts never ran through the QA
+  gate.** Fabrication tells, forbidden claims, em-dash residue,
+  voice-guide mismatches all unvetted. Needs an audit script
+  (`pnpm --filter app audit:published` or similar) that pulls
+  every published post and runs `qaService` against its Lexical
+  body. Blocked on DB access from the sandbox.
+- [pipeline] Update `scripts/import-reference.ts` to rewrite
+  hoplinks at write time (defense-in-depth on top of the
+  render-time rewriter shipped 2026-04-22). Low priority —
+  runtime transform already covers the current 93; only matters
+  if we re-import or consume the same corpus elsewhere.
+- [ops] No test runner configured in `apps/app`. Worth wiring
+  Vitest once so that pure helpers (`affiliateLinks`,
+  `qaService`, `productSlug`) can be tested. Small project.
 
 ## Pipeline ideas
 

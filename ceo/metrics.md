@@ -6,12 +6,12 @@ Update nightly where data is available.
 
 | Metric | Latest | As of | Source | Notes |
 |--------|--------|-------|--------|-------|
-| Published posts | unknown | 2026-04-17 | Payload DB | Sandbox has no DB access; audit next run |
-| Total posts (incl. drafts) | unknown | 2026-04-17 | Payload DB | Same |
+| Published posts | **93** | 2026-04-21 | import-reference.ts log | Legacy import 2026-04-20→21. Quality unaudited. |
+| Total posts (incl. drafts) | ≥93 | 2026-04-21 | Payload DB | Sandbox still no read access; 93 is the published floor. |
 | Pages indexed in Google | unknown | — | GSC | Need access |
 | Average position | unknown | — | GSC | Need access |
 | Organic clicks (7d) | unknown | — | GSC | Need access |
-| Outbound affiliate clicks (7d) | unknown | 2026-04-19 | `/go/[slug]` logs | Tracking shipped; requires Vercel log access to read counts |
+| Outbound affiliate clicks (7d) | unknown | 2026-04-22 | `/go/[slug]` + `outbound-clicks` coll. | Full surface now instrumented (sticky CTA + inline body hoplinks). Reading counts still requires admin or log access. |
 | Affiliate revenue (30d) | unknown | — | ClickBank | Need feed |
 
 ## Pipeline metrics
