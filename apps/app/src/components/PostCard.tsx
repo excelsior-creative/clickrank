@@ -59,15 +59,21 @@ const formatDate = (post: Post) => {
   }
 };
 
-const categoryLabel = (post: Post): string => {
+const primaryCategory = (
+  post: Post,
+): { label: string; slug?: string } => {
   const categories = post.categories;
   if (Array.isArray(categories) && categories.length > 0) {
     const first = categories[0];
     if (first && typeof first === "object" && "name" in first) {
-      return String((first as { name?: string }).name || "").toUpperCase();
+      const f = first as { name?: string; slug?: string };
+      return {
+        label: String(f.name || "").toUpperCase(),
+        slug: f.slug ? String(f.slug) : undefined,
+      };
     }
   }
-  return "REVIEW";
+  return { label: "REVIEW" };
 };
 
 /**
@@ -79,32 +85,46 @@ export const PostCard = ({ post }: PostCardProps) => {
   const score = readRating(post);
   const verdict = verdictFromScore(score);
   const dek = post.excerpt || "";
-  const category = categoryLabel(post);
+  const category = primaryCategory(post);
   // `featuredImage` is intentionally read but not rendered — kept for future
   // hero variants. Reference it so the import stays honest.
   void (post.featuredImage as Media | undefined);
 
   return (
-    <Link
-      href={`/blog/${post.slug}`}
-      className="review-card group flex flex-col gap-4 p-7 rounded-[14px] transition-all hover:-translate-y-0.5"
+    <div
+      className="review-card group relative flex flex-col gap-4 p-7 rounded-[14px] transition-all hover:-translate-y-0.5"
       style={{
         background: "var(--color-card)",
         border: "1px solid var(--color-rule)",
       }}
     >
       <div className="flex justify-between items-start gap-3">
-        <span
-          className="font-mono"
-          style={{
-            fontSize: 10.5,
-            letterSpacing: "0.14em",
-            color: "var(--color-ink-3)",
-            textTransform: "uppercase",
-          }}
-        >
-          {category}
-        </span>
+        {category.slug ? (
+          <Link
+            href={`/category/${category.slug}`}
+            className="font-mono relative z-10 transition-colors hover:text-[var(--color-mint)]"
+            style={{
+              fontSize: 10.5,
+              letterSpacing: "0.14em",
+              color: "var(--color-ink-3)",
+              textTransform: "uppercase",
+            }}
+          >
+            {category.label}
+          </Link>
+        ) : (
+          <span
+            className="font-mono"
+            style={{
+              fontSize: 10.5,
+              letterSpacing: "0.14em",
+              color: "var(--color-ink-3)",
+              textTransform: "uppercase",
+            }}
+          >
+            {category.label}
+          </span>
+        )}
         <span
           aria-hidden
           className="w-[22px] h-[22px] flex items-center justify-center transition-all group-hover:text-[var(--color-mint)] group-hover:translate-x-1 group-hover:-translate-y-1"
@@ -181,6 +201,13 @@ export const PostCard = ({ post }: PostCardProps) => {
         <span style={{ color: "var(--color-ink-2)" }}>ClickRank editorial</span>
         <span>{formatDate(post)}</span>
       </div>
-    </Link>
+      {/* Stretched link covers the whole card. Kept last + on z-0 so the
+          category chip (z-10) remains independently clickable. */}
+      <Link
+        href={`/blog/${post.slug}`}
+        aria-label={post.title}
+        className="absolute inset-0 rounded-[14px] z-0"
+      />
+    </div>
   );
 };
