@@ -122,7 +122,7 @@ export const Navbar = ({ navItems = [] as NavItem[] }) => {
         >
           <Search className="w-[14px] h-[14px] opacity-60 shrink-0" />
           <span className="text-[13.5px] flex-1 text-[var(--color-ink-3)]">
-            Search 500+ product reviews…
+            Search reviews…
           </span>
           <kbd
             className="hidden lg:inline-block font-mono text-[11px] px-[6px] py-[2px] rounded"
@@ -145,7 +145,7 @@ export const Navbar = ({ navItems = [] as NavItem[] }) => {
             color: "var(--color-mint-ink)",
           }}
         >
-          Subscribe
+          Contact
         </Link>
 
         {/* Mobile */}

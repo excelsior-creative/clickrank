@@ -1,15 +1,17 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
+import Link from "next/link";
 
 /**
- * Editorial newsletter / CTA banner — magenta-violet gradient with a mint
- * bloom, displayed just before the footer on long pages.
+ * Editorial CTA banner — magenta-violet gradient with a mint bloom,
+ * displayed just before the footer on long pages.
+ *
+ * Earlier versions included a "newsletter subscribe" form that flipped to
+ * a "Subscribed ✓" state without actually subscribing anywhere. That was
+ * deceptive UI and has been removed — the banner now links to the review
+ * index and editorial standard instead. When we ship a real newsletter
+ * with a real provider, the form can come back.
  */
 export const CTABanner = () => {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
   return (
     <section
       id="newsletter"
@@ -48,9 +50,9 @@ export const CTABanner = () => {
                 color: "var(--color-ink)",
               }}
             >
-              Get the week's{" "}
-              <em className="font-serif-italic text-[var(--color-mint)]">verdicts</em>{" "}
-              before you hit "buy."
+              Read the{" "}
+              <em className="font-serif-italic text-[var(--color-mint)]">honest</em>{" "}
+              take before you hit "buy."
             </h3>
             <p
               className="m-0 max-w-[48ch]"
@@ -61,55 +63,43 @@ export const CTABanner = () => {
                 color: "var(--color-ink-2)",
               }}
             >
-              One email each Thursday. New reviews, skip lists, and the one product
-              we're arguing about this week. No sponsored picks, ever.
+              ClickRank reviews lead with real strengths, name real caveats,
+              and disclose every affiliate relationship. Browse recent work,
+              or read exactly how we decide what to publish.
             </p>
           </div>
 
-          <div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (!email) return;
-                setSubmitted(true);
-              }}
-              className="flex gap-2.5 items-center rounded-full p-1.5"
+          <div className="flex flex-col gap-3">
+            <Link
+              href="/blog"
+              className="inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-full text-[14px] font-medium transition-all hover:mint-glow hover:-translate-y-px"
               style={{
-                background: "oklch(15% 0.03 255 / 0.6)",
-                border: "1px solid var(--color-rule)",
+                background: "var(--color-mint)",
+                color: "var(--color-mint-ink)",
               }}
             >
-              <input
-                type="email"
-                required
-                placeholder="you@inbox.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={submitted}
-                className="flex-1 border-0 outline-none bg-transparent px-3.5 py-2.5 text-[14px]"
-                style={{ color: "var(--color-ink)" }}
-              />
-              <button
-                type="submit"
-                disabled={submitted}
-                className="px-5 py-2.5 rounded-full font-medium text-[14px] cursor-pointer transition-all hover:mint-glow hover:-translate-y-px disabled:opacity-80 disabled:cursor-default"
-                style={{
-                  border: 0,
-                  background: "var(--color-mint)",
-                  color: "var(--color-mint-ink)",
-                }}
-              >
-                {submitted ? "Subscribed ✓" : "Subscribe"}
-              </button>
-            </form>
+              Browse recent reviews
+              <span aria-hidden>→</span>
+            </Link>
+            <Link
+              href="/editorial"
+              className="inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-full text-[14px] font-medium transition-all"
+              style={{
+                border: "1px solid color-mix(in oklch, var(--color-ink) 18%, transparent)",
+                color: "var(--color-ink)",
+                background: "oklch(15% 0.03 255 / 0.4)",
+              }}
+            >
+              Read the editorial standard
+            </Link>
             <p
-              className="mt-3 font-mono text-[11px]"
+              className="mt-1 font-mono text-[11px] text-center"
               style={{
                 color: "var(--color-ink-3)",
                 letterSpacing: "0.08em",
               }}
             >
-              Free · unsubscribe in one click
+              No sponsored picks · FTC-disclosed
             </p>
           </div>
         </div>

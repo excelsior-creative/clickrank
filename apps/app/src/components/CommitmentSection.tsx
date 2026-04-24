@@ -42,10 +42,10 @@ export const CommitmentSection = () => {
                 color: "var(--color-ink-2)",
               }}
             >
-              Navigating the world of ClickBank digital products is overwhelming on
-              purpose. Countdown timers, layered upsells, anonymous testimonials, and
-              sales pages that tell you everything and nothing — it's a system
-              designed to make "wait, let me think" feel expensive.
+              ClickBank sales pages are designed to make "wait, let me think"
+              feel expensive. Countdown timers, stacked upsells, anonymous
+              testimonials, claims you can't verify without buying first. The
+              whole funnel rewards not reading carefully.
             </p>
             <p
               className="m-0 mb-5"
@@ -57,12 +57,14 @@ export const CommitmentSection = () => {
                 color: "var(--color-ink-2)",
               }}
             >
-              ClickRank exists to slow that down. A small team of editors, each with
-              a real name and a real beat, spends an average of 14 hours on every
-              product before we publish. We've recommended products we'd buy again
-              and we've told readers to skip plenty. The scores live on the page,
-              the dates live on the page, and the affiliate disclosure lives
-              everywhere it should.
+              ClickRank is an independent, analysis-driven review site. We
+              don't run hands-on product testing and we don't claim to. What
+              we do: read each sales page carefully, research vendor claims,
+              and publish an honest-favorable review that leads with real
+              strengths and names real caveats. Every review ships with a
+              plain FTC disclosure and links to the product through a
+              tracked redirect so you always see where you're going before
+              you leave.
             </p>
             <p
               className="m-0"
@@ -74,8 +76,11 @@ export const CommitmentSection = () => {
                 color: "var(--color-ink-2)",
               }}
             >
-              Our only job is to be the second opinion you wished you had before the
-              last one.
+              We use AI assistance to draft long-form copy at scale, then
+              gate every draft through an automated editorial check that
+              rejects fabrication tells, missing disclosures, and claims we
+              can't support. When we get something wrong, we correct the
+              page rather than quietly rewrite it. That's the deal.
             </p>
 
             <div
@@ -96,7 +101,7 @@ export const CommitmentSection = () => {
                   className="block font-medium"
                   style={{ color: "var(--color-ink)" }}
                 >
-                  The ClickRank desk
+                  ClickRank editorial
                 </strong>
                 <span
                   className="font-mono"
@@ -107,7 +112,7 @@ export const CommitmentSection = () => {
                     textTransform: "uppercase",
                   }}
                 >
-                  Editors · Since 2023
+                  Independent · Affiliate-disclosed
                 </span>
               </div>
             </div>
