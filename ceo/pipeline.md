@@ -105,3 +105,21 @@ Append nightly. Format:
   (the gate's link matcher doesn't yet understand relative tracking
   paths). Warnings are non-blocking; queued as a QA-gate PR to
   teach the matcher.
+- `2026-04-20 → 2026-04-23` — pipeline-adjacent PRs merged: #7 (QA
+  `/go/` link matcher + `outbound-clicks` Payload collection —
+  matcher recognizes `](/go/<slug>)` patterns, and each redirect
+  writes one row to the new collection fire-and-forget), #8
+  (pg SSL deprecation fix, mint gradient repair, imported 93
+  legacy reviews from the reference corpus), #9 (related-posts
+  block on `/blog/[slug]` using category/tag overlap topped up
+  with latest). No direct pipeline run logs captured; prod cron
+  status still opaque from the sandbox.
+- `2026-04-24` — no CEO-triggered pipeline run. Tonight focused on
+  killing the site-chrome fabrications reintroduced by the
+  design-redesign PR (#4) — fake homepage stats, hash-of-slug
+  scores on every post card, fabricated process copy. Fixed in
+  PR #12 (draft). Pipeline itself untouched. Flagged the
+  cross-cutting pattern as a process gap: design PRs that replace
+  components can ship fabricated copy without the pipeline QA
+  gate ever touching them. Proposed DR-0004 (editorial-copy CI
+  lint) as the fix.

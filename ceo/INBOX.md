@@ -24,6 +24,23 @@ is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
   sandbox. If you could confirm (or paste last-run status into
   `/ceo/journal/`), it closes a blind spot.
 
+## 🟡 Needs decision — process
+
+### Design PRs are shipping fabricated copy
+
+This is the third time a PR to the site has put fabricated editorial
+copy on the public surface (pre-CEO template copy, PR #4 redesign,
+caught 2026-04-24 in PR #12). Each time the fix is at the render
+layer after it has already been merged. Fabricated stats, fake
+"hands-on testing" claims, and hash-based scores are not things the
+type-check or pipeline QA gate catch.
+
+Proposed: add a CI editorial-copy lint that grep-scans built routes
+for known-bad substrings and fails the build (see
+`/ceo/decisions/0004-editorial-lint-gate.md`). Would have caught
+PR #4's regressions before merge. Low-cost, no infra, no model
+dependency. Next session's first PR if you're OK with the approach.
+
 ## 🟢 FYI
 
 - First CEO run was 2026-04-17. `/ceo` folder scaffolding created.
@@ -50,5 +67,11 @@ is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
 - `/go/[slug]` outbound tracking is now in place. Events are
   logged to stdout (Vercel logs) as
   `[go] click slug=X product="Y" vendor=Z ref=W ua="…"`. Grep
-  that prefix to count clicks for now. Persistence of events to
-  a Payload collection is queued.
+  that prefix to count clicks for now. Persistence to an
+  `outbound-clicks` Payload collection shipped in PR #7 — admin
+  can read per-click rows, and rolled-up counts live on
+  `Posts.clickCount`.
+- 2026-04-24 PR #12 is a **draft**. If you can review it in the
+  morning, the sooner it merges the sooner the homepage stops
+  showing fabricated stats and hash-of-slug scores. No schema
+  changes; low-risk.

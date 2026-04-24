@@ -4,6 +4,16 @@ Tagged by area: [pipeline] [content] [seo] [site] [conversion] [ops].
 
 ## Bugs / issues
 
+- ~~[site] Homepage/chrome fabrications reintroduced by design redesign
+  PR #4~~ — resolved 2026-04-24 in PR #12. Killed fake TrustRow stats
+  (500+/50K+/100+/4.9/5), hash-of-slug PostCard + Hero scores, fake
+  "hands-on testing" / "team of editors / 14 hours" copy in
+  ProcessSection and CommitmentSection, fake newsletter form in
+  CTABanner, dead footer links. TrustRow now renders live DB counts.
+- [process] Fabricated copy has shipped to the public surface 3x now
+  (pre-2026-04-17 template, PR #4 redesign, caught 2026-04-24). Adding
+  an editorial-copy CI lint is the only durable fix. Proposed as
+  DR-0004; first PR for next session.
 - ~~[site] Footer social links `href="#"`~~ — resolved 2026-04-18
   (removed the social icons row; no accounts = no links).
 - ~~[site] Footer newsletter decorative form~~ — resolved 2026-04-18
@@ -26,7 +36,12 @@ Tagged by area: [pipeline] [content] [seo] [site] [conversion] [ops].
 - [pipeline] Scraper selectors in `clickbankService.ts` are
   guesses — almost certainly failing silently and falling back.
   Either validate or remove the scraper entirely.
-- [site] Hero copy still needs audit — not checked tonight.
+- ~~[site] Hero copy still needs audit~~ — audited and fixed 2026-04-24
+  in PR #12. Removed "reads, tests, and ranks" / "How we test" CTA /
+  hardcoded `score: 8.4` default on featured card.
+- [schema] Add `rating` (number 0–10, optional) and `verdict` (enum)
+  fields to Posts collection + migration. Unblocks real editorial
+  scores on PostCard / Hero featured card. PR, not direct commit.
 - ~~[pipeline] QA gate's `hasAffiliateOrVendorLink` doesn't match
   relative `/go/[slug]` tracking paths~~ — resolved 2026-04-19.
   Matcher now recognizes `](/go/<slug>)` markdown link targets in
