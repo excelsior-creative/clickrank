@@ -63,6 +63,12 @@ GET /api/cron/generate-article   (requires Bearer CRON_SECRET)
 - ⚠️ **FTC disclosure was not being rendered.** Fixed
   structurally in the post template 2026-04-17 — no post can
   render without it.
+- ⚠️ **93 legacy-imported posts never ran through QA.** The
+  `import-reference.ts` script writes straight to
+  `_status: "published"` and bypasses `qaService.ts`. Body-link
+  tracking is now covered via runtime rewrite (2026-04-22), but
+  editorial content itself hasn't been audited. Blocker: DB
+  access from the sandbox.
 
 ## Next upgrades (priority order)
 
@@ -105,21 +111,44 @@ Append nightly. Format:
   (the gate's link matcher doesn't yet understand relative tracking
   paths). Warnings are non-blocking; queued as a QA-gate PR to
   teach the matcher.
-- `2026-04-20 → 2026-04-23` — pipeline-adjacent PRs merged: #7 (QA
-  `/go/` link matcher + `outbound-clicks` Payload collection —
-  matcher recognizes `](/go/<slug>)` patterns, and each redirect
-  writes one row to the new collection fire-and-forget), #8
-  (pg SSL deprecation fix, mint gradient repair, imported 93
-  legacy reviews from the reference corpus), #9 (related-posts
-  block on `/blog/[slug]` using category/tag overlap topped up
-  with latest). No direct pipeline run logs captured; prod cron
-  status still opaque from the sandbox.
+- `2026-04-20` *(reconstructed — no journal was written that
+  night)* — two adjacent shipments landed:
+  1. `scripts/import-reference.ts` built and run against the
+     `reference/` corpus. 90 reviews imported to Payload as
+     `_status: "published"` with categories/tags upserted. Posts
+     carry `affiliateUrl` and `productName` extracted from the
+     first `hop.clickbank.net` link in their body. **These posts
+     did not pass through the pipeline QA gate.**
+  2. QA gate `hasAffiliateOrVendorLink` taught to count
+     `/go/[slug]` matches as valid affiliate references, silencing
+     the warning introduced 04-19. `outbound-clicks` Payload
+     collection added; `/go/[slug]` writes a row per redirect
+     (fire-and-forget) so counts are queryable in admin.
+- `2026-04-21` *(reconstructed — no journal)* — import-script
+  follow-up: three posts whose bodies live in a
+  `theme-post-excerpt` widget (instead of `theme-post-content`)
+  now fall back to `og:description` so they also land. Published
+  total went from 90 to 93. RelatedPosts block shipped on
+  `/blog/[slug]`. First real internal-link edges on the review
+  library.
+- `2026-04-22` — no CEO-triggered pipeline run. Tonight's
+  pipeline-adjacent shipment is `lib/affiliateLinks.ts`
+  `rewriteAffiliateLinks()`, wired into the blog post page.
+  Inline body hoplinks on the 93 legacy-imported posts now
+  route through `/go/[slug]` at render time, so every outbound
+  click (not just the sticky CTA) increments
+  `Posts.clickCount` and writes to `outbound-clicks`. KR3.3's
+  measurement now covers the full click surface rather than
+  only the bottom CTA. Runtime-only transform, no data
+  mutation. Paired update of the import script to rewrite at
+  write time is queued — runtime rewrite is sufficient for
+  today's corpus.
 - `2026-04-24` — no CEO-triggered pipeline run. Tonight focused on
   killing the site-chrome fabrications reintroduced by the
   design-redesign PR (#4) — fake homepage stats, hash-of-slug
   scores on every post card, fabricated process copy. Fixed in
-  PR #12 (draft). Pipeline itself untouched. Flagged the
-  cross-cutting pattern as a process gap: design PRs that replace
-  components can ship fabricated copy without the pipeline QA
-  gate ever touching them. Proposed DR-0004 (editorial-copy CI
-  lint) as the fix.
+  PR #12. Pipeline itself untouched. Flagged the cross-cutting
+  pattern as a process gap: design PRs that replace components
+  can ship fabricated copy without the pipeline QA gate ever
+  touching them. Proposed DR-0004 (editorial-copy CI lint) as
+  the fix.

@@ -11,6 +11,7 @@ import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { RelatedPosts } from "@/components/RelatedPosts";
 import { generateArticleSchema } from "@/lib/structured-data";
 import { SITE_NAME, SITE_URL } from "@/lib/metadata";
+import { rewriteAffiliateLinks } from "@/lib/affiliateLinks";
 import { ArrowUpRight } from "lucide-react";
 
 // ISR: revalidate every hour as a safety net. On-demand revalidation from
@@ -81,6 +82,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   };
   const affiliateUrl = postRecord.affiliateUrl?.trim() || "";
   const productName = postRecord.productName?.trim() || "";
+
+  // Route inline body hoplinks through /go/[slug] so every outbound click is
+  // counted, not just the sticky CTA. See lib/affiliateLinks.ts for policy.
+  const trackedContent = rewriteAffiliateLinks(post.content, {
+    postSlug: post.slug ?? decodedSlug,
+    affiliateUrl,
+  });
 
   return (
     <article className="pt-12 pb-24">
@@ -159,7 +167,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             lineHeight: 1.7,
           }}
         >
-          <RichText data={post.content} className="max-w-none" />
+          <RichText data={trackedContent} className="max-w-none" />
         </div>
 
         {affiliateUrl && (

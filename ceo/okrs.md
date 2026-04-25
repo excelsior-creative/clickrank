@@ -20,6 +20,11 @@ Depth across the strongest categories so internal linking starts
 compounding.
 
 - **KR2.1** 60+ published reviews by end of Q2 2026.
+  *(Numeric target met as of 2026-04-20/21: 93 legacy reviews
+  imported from the `reference/` corpus. NOT claiming KR
+  closed — the imports bypassed `qaService` and the "unique
+  angle / honest-favorable" standard is unverified across
+  them. Treat KR as "volume shipped, editorial audit pending".)*
 - **KR2.2** Every review has a unique angle/hook — no boilerplate
   structure repeat across same-category reviews.
 - **KR2.3** Every review has working affiliate link + clear CTA.

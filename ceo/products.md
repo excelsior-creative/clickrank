@@ -18,8 +18,29 @@ Until we build structured tracking, this is the manual ledger.
 
 ## Covered (published)
 
-*(None tracked yet as of 2026-04-17 — first CEO session.
-Retroactively audit existing published posts next night.)*
+As of **2026-04-20/21**, 93 legacy reviews were imported from the
+`reference/` WordPress corpus into Payload as published posts via
+`apps/app/scripts/import-reference.ts`. Each post carries its own
+`affiliateUrl` (first `hop.clickbank.net` link in the body) and a
+`productName` derived from the hoplink's `vendor=` parameter.
+
+Sample vendors observed in the corpus (non-exhaustive — full list
+lives in the Payload `posts` collection):
+
+HYPINTER, HOOKAHBAR, RVDRIVESMA, HPREC, HTLWF, VEGANPS, BONUSBAG,
+TWRKS, FITCOOKING, IEHARAMIS, MACOAFF, plus many without a
+clean vendor-code (numeric IDs, stripped hoplinks, or stub posts
+that fell back to `og:description`).
+
+**Editorial status of the imported 93: unaudited.** They bypassed
+`qaService.ts` at write time. Queued audit script is blocked on DB
+access.
+
+**Monetization status of the imported 93: body hoplinks are now
+tracked as of 2026-04-22** via the render-time
+`rewriteAffiliateLinks` transform in
+`apps/app/src/lib/affiliateLinks.ts`. Previously only the sticky
+CTA at post-bottom emitted a tracked click.
 
 ## Skipped (with reason)
 
