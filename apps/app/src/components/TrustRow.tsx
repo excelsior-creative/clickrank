@@ -1,20 +1,70 @@
 import React from "react";
+import { getPayload } from "payload";
+import config from "@payload-config";
 
 type Stat = { num: string; suffix?: string; label: string };
 
-const DEFAULT_STATS: Stat[] = [
-  { num: "500", suffix: "+", label: "Products reviewed" },
-  { num: "50K", suffix: "+", label: "Monthly readers" },
-  { num: "100", suffix: "+", label: "Categories covered" },
-  { num: "4.9", suffix: "/5", label: "Reader trust score" },
-];
+const formatCount = (n: number) => {
+  if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}K`;
+  return String(n);
+};
 
 /**
- * Horizontal trust/stats row — sits directly under the hero. Numbers are set
- * in the editorial serif; labels are monospace caps separated by hair-line
- * dividers.
+ * Honest trust row. Pulls real counts from the DB at request time: how many
+ * reviews we've actually published, how many categories are covered, and the
+ * date of the most recent review. The fourth cell is a static transparency
+ * badge (FTC-disclosed on every page) rather than a fabricated rating.
+ *
+ * Prior versions rendered invented numbers ("500+ products", "50K+ readers",
+ * "4.9/5 trust score"). Those violated the Honest-Favorable editorial
+ * standard and are gone.
  */
-export const TrustRow = ({ stats = DEFAULT_STATS }: { stats?: Stat[] }) => {
+export const TrustRow = async ({ stats }: { stats?: Stat[] } = {}) => {
+  let resolved: Stat[];
+
+  if (stats) {
+    resolved = stats;
+  } else {
+    const payload = await getPayload({ config });
+    const [postsRes, catsRes, latestRes] = await Promise.all([
+      payload.count({
+        collection: "posts",
+        where: { _status: { equals: "published" } },
+      }),
+      payload.count({ collection: "categories" }),
+      payload.find({
+        collection: "posts",
+        limit: 1,
+        sort: "-publishedDate",
+        where: { _status: { equals: "published" } },
+        depth: 0,
+      }),
+    ]);
+
+    const postCount = postsRes.totalDocs || 0;
+    const catCount = catsRes.totalDocs || 0;
+    const latest = latestRes.docs?.[0];
+    const latestDate = latest?.publishedDate
+      ? new Date(latest.publishedDate)
+      : null;
+    const updatedLabel = latestDate
+      ? latestDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })
+      : "—";
+
+    resolved = [
+      {
+        num: formatCount(postCount),
+        label: postCount === 1 ? "Review published" : "Reviews published",
+      },
+      {
+        num: formatCount(catCount),
+        label: catCount === 1 ? "Category covered" : "Categories covered",
+      },
+      { num: updatedLabel, label: "Last review added" },
+      { num: "FTC", suffix: "✓", label: "Disclosed on every page" },
+    ];
+  }
+
   return (
     <section
       className="trust-row border-b"
@@ -26,7 +76,7 @@ export const TrustRow = ({ stats = DEFAULT_STATS }: { stats?: Stat[] }) => {
     >
       <div className="max-w-[1280px] mx-auto px-5 md:px-10">
         <div className="trust-row__grid">
-          {stats.map((stat) => (
+          {resolved.map((stat) => (
             <div key={stat.label} className="trust-row__cell">
               <span className="trust-row__num">
                 {stat.num}

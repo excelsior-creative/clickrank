@@ -7,13 +7,11 @@ import { CTABanner } from "@/components/CTABanner";
 export const revalidate = 3600;
 
 const ABOUT_FEATURED = {
-  category: "About · The desk",
+  category: "About ClickRank",
   title: "How ClickRank earns your trust.",
   take:
-    "Independent editors, a transparent process, and affiliate relationships that never decide what we cover. Below: the people, the process, and the promise.",
-  score: 9.2,
-  verdict: "Recommended" as const,
-  byline: "ClickRank desk",
+    "Independent, analysis-driven reviews. A transparent editorial process. Affiliate relationships that never decide what we cover. Below: what we actually do, what we never do, and where to tell us we got it wrong.",
+  byline: "ClickRank editorial",
   date: "Always current",
   href: "/editorial",
 };

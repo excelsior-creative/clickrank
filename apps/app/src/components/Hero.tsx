@@ -5,7 +5,12 @@ type FeaturedPick = {
   category?: string;
   title: string;
   take: string;
-  score: number;
+  /**
+   * Editorial score, 0–10. Only render a score/verdict when a real human
+   * rating is available on the underlying Post. Fabricated scores (e.g.,
+   * hashed from the slug) are NOT acceptable and must not be passed here.
+   */
+  score?: number;
   verdict?: "Recommended" | "With caveats" | "Skip" | string;
   byline?: string;
   date?: string;
@@ -19,13 +24,11 @@ type HeroProps = {
 };
 
 const DEFAULT_FEATURED: FeaturedPick = {
-  category: "Editor's Pick",
+  category: "Latest review",
   title: "Read the latest review from the desk",
   take:
-    "We're reviewing the products selling on ClickBank right now — the ones that work, the ones that don't, and the ones buried under three upsells.",
-  score: 8.4,
-  verdict: "Recommended",
-  byline: "The ClickRank desk",
+    "We cover the products selling on ClickBank right now, lead with real strengths, and name honest limitations so you can decide before you spend.",
+  byline: "ClickRank editorial",
   date: "This week",
   href: "/blog",
   wordCount: undefined,
@@ -154,9 +157,9 @@ export const Hero = ({ issue, featured = DEFAULT_FEATURED }: HeroProps) => {
                 color: "var(--color-ink-2)",
               }}
             >
-              ClickRank reads, tests, and ranks the courses, guides, and software
-              sold across the ClickBank marketplace — so you don't have to guess
-              whether the sales page is telling the truth.
+              ClickRank reads and analyzes the courses, guides, and software
+              sold across the ClickBank marketplace, then publishes an
+              honest take that leads with real strengths and names real caveats.
             </p>
 
             <div className="flex gap-3.5 items-center flex-wrap">
@@ -168,18 +171,18 @@ export const Hero = ({ issue, featured = DEFAULT_FEATURED }: HeroProps) => {
                   color: "var(--color-mint-ink)",
                 }}
               >
-                Browse this week's reviews
+                Browse recent reviews
                 <span aria-hidden>→</span>
               </Link>
               <Link
-                href="/about#process"
+                href="/editorial"
                 className="inline-flex items-center gap-2.5 px-[22px] py-3.5 rounded-full text-[14px] font-medium transition-all"
                 style={{
                   border: "1px solid var(--color-rule)",
                   color: "var(--color-ink)",
                 }}
               >
-                How we test
+                Our editorial standard
               </Link>
             </div>
 
@@ -202,7 +205,7 @@ export const Hero = ({ issue, featured = DEFAULT_FEATURED }: HeroProps) => {
                     animation: "pulse-dot 2.4s ease-in-out infinite",
                   }}
                 />
-                Updated weekly · New reviews every Thursday
+                Independent · Affiliate-disclosed on every page
               </span>
             </div>
           </div>
@@ -307,50 +310,73 @@ const FeaturedPickCard = ({ featured }: { featured: FeaturedPick }) => {
         {featured.take}
       </p>
 
-      {/* Rating mark */}
-      <div
-        className="flex items-center gap-4 py-4"
-        style={{
-          borderTop: "1px solid var(--color-rule)",
-          borderBottom: "1px solid var(--color-rule)",
-        }}
-      >
-        <span
+      {/* Rating mark — only rendered when a real editorial rating exists. */}
+      {typeof featured.score === "number" && (
+        <div
+          className="flex items-center gap-4 py-4"
           style={{
-            fontFamily: "var(--font-serif)",
-            fontWeight: 380,
-            fontSize: 44,
-            lineHeight: 1,
-            letterSpacing: "-0.03em",
-            fontFeatureSettings: '"tnum" 1, "lnum" 1',
+            borderTop: "1px solid var(--color-rule)",
+            borderBottom: "1px solid var(--color-rule)",
           }}
         >
-          {featured.score.toFixed(1)}
-          <sup
-            className="ml-0.5"
-            style={{ fontSize: 16, color: "var(--color-ink-3)", fontWeight: 400 }}
+          <span
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontWeight: 380,
+              fontSize: 44,
+              lineHeight: 1,
+              letterSpacing: "-0.03em",
+              fontFeatureSettings: '"tnum" 1, "lnum" 1',
+            }}
           >
-            /10
-          </sup>
-        </span>
-        <div className="rating-bars flex-1" aria-hidden>
-          {barSegments(featured.score)}
+            {featured.score.toFixed(1)}
+            <sup
+              className="ml-0.5"
+              style={{ fontSize: 16, color: "var(--color-ink-3)", fontWeight: 400 }}
+            >
+              /10
+            </sup>
+          </span>
+          <div className="rating-bars flex-1" aria-hidden>
+            {barSegments(featured.score)}
+          </div>
+          <span
+            className="font-mono"
+            style={{
+              fontSize: 10.5,
+              letterSpacing: "0.14em",
+              color: "var(--color-ink-3)",
+              textTransform: "uppercase",
+            }}
+          >
+            Our&nbsp;score
+          </span>
         </div>
-        <span
-          className="font-mono"
-          style={{
-            fontSize: 10.5,
-            letterSpacing: "0.14em",
-            color: "var(--color-ink-3)",
-            textTransform: "uppercase",
-          }}
-        >
-          Our&nbsp;score
-        </span>
-      </div>
+      )}
 
-      <div className="flex justify-between items-center mt-4 gap-3 flex-wrap">
-        <span className={verdictClass(featured.verdict)}>{featured.verdict}</span>
+      <div
+        className="flex justify-between items-center mt-4 gap-3 flex-wrap"
+        style={
+          typeof featured.score === "number"
+            ? undefined
+            : { borderTop: "1px solid var(--color-rule)", paddingTop: 16 }
+        }
+      >
+        {featured.verdict ? (
+          <span className={verdictClass(featured.verdict)}>{featured.verdict}</span>
+        ) : (
+          <span
+            className="font-mono"
+            style={{
+              fontSize: 10.5,
+              letterSpacing: "0.14em",
+              color: "var(--color-ink-3)",
+              textTransform: "uppercase",
+            }}
+          >
+            Read the review
+          </span>
+        )}
         <span
           className="font-mono text-[11px]"
           style={{ color: "var(--color-ink-3)", letterSpacing: "0.08em" }}

@@ -50,27 +50,28 @@ export const Footer = async () => {
   });
 
   // Static editorial columns. If a CMS-configured footer has links, surface
-  // them in a fifth "Navigation" column; otherwise fall back to defaults.
+  // them in place of the default "About" column; otherwise fall back to
+  // defaults. Every default link points to a route that actually exists —
+  // no decorative "Top-rated" / "Skip list" / "Newsletter" stubs.
   const reviews: ResolvedFooterLink[] = [
-    { href: "/blog", label: "Recent reviews" },
-    { href: "/blog", label: "Top-rated" },
-    { href: "/blog", label: "Skip list" },
-    { href: "/blog", label: "By category" },
+    { href: "/blog", label: "All reviews" },
+    { href: "/about", label: "How ClickRank works" },
+    { href: "/editorial", label: "Editorial standard" },
   ];
   const transparency: ResolvedFooterLink[] = [
     { href: "/editorial", label: "Editorial standard" },
     { href: "/about#process", label: "How we work" },
     { href: "/privacy", label: "Affiliate disclosure" },
-    { href: "/contact", label: "Corrections" },
+    { href: "/contact", label: "Corrections and tips" },
   ];
   const desk: ResolvedFooterLink[] =
     cmsLinks.length > 0
       ? cmsLinks
       : [
-          { href: "/about", label: "About us" },
-          { href: "/about", label: "Editors" },
-          { href: "/contact", label: "Newsletter" },
+          { href: "/about", label: "About" },
+          { href: "/editorial", label: "Editorial" },
           { href: "/contact", label: "Contact" },
+          { href: "/privacy", label: "Privacy" },
         ];
 
   return (
@@ -98,8 +99,8 @@ export const Footer = async () => {
                 color: "var(--color-ink-2)",
               }}
             >
-              Independent reviews of the digital products sold on ClickBank.
-              Reader-supported. Edited by people with names.
+              Independent, analysis-driven reviews of the digital products
+              sold on ClickBank. Reader-supported, FTC-disclosed on every page.
             </p>
           </div>
 
@@ -134,11 +135,11 @@ export const Footer = async () => {
             }}
           >
             ClickRank is a reader-supported publication. Some links on this site are
-            affiliate links — if you click through and purchase, we may earn a
-            commission at no additional cost to you. Our editorial is independent of
-            those relationships: we review products we believe in, and we flag
-            products we don't, regardless of commission. Scores and verdicts are
-            decided before the affiliate check is negotiated.
+            affiliate links. If you click through and purchase, we may earn a
+            commission at no additional cost to you. Our editorial is independent
+            of those relationships: we lead with real strengths, name real caveats,
+            and skip products we'd be embarrassed to promote, regardless of
+            commission. Corrections are welcomed at our contact page.
           </p>
         </div>
 

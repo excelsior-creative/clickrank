@@ -37,15 +37,15 @@ export const ReviewsSection = async () => {
   return (
     <section id="reviews" className="max-w-[1280px] mx-auto px-5 md:px-10">
       <SectionHead
-        eyebrow="The Review Desk · Recent work"
+        eyebrow="Recent reviews"
         title={
           <>
             The products we{" "}
             <em className="font-serif-italic text-[var(--color-mint)]">looked at</em>{" "}
-            this month.
+            lately.
           </>
         }
-        description="Every review below was tested by a named editor, dated, and includes a disclosure. Filter by category to narrow down — or read the rankings if you want our top picks."
+        description="Every review below is analysis-driven, FTC-disclosed, and dated so you can see when it was last updated. Filter by category to narrow down."
         linkHref="/blog"
         linkLabel="View all reviews"
       />

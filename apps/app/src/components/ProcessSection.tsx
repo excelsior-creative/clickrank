@@ -1,6 +1,6 @@
 import React from "react";
 import { SectionHead } from "./SectionHead";
-import { Search, FileCheck, BarChart3, Shield, Zap, Users } from "lucide-react";
+import { Search, FileText, ShieldCheck, BadgeCheck, Link2, RotateCcw } from "lucide-react";
 
 type Step = {
   num: string;
@@ -9,53 +9,60 @@ type Step = {
   Icon: React.ComponentType<{ className?: string }>;
 };
 
+/**
+ * The six steps below are what we actually do — not a stock "how we test"
+ * page copied from a template. ClickRank is an analysis-driven review
+ * site. We do not buy every product, we do not run hands-on tests, and
+ * we do not employ a roster of named editors. Claims we can't back up
+ * stay off the page.
+ */
 const STEPS: Step[] = [
   {
     num: "Step 01",
-    title: "In-depth research",
+    title: "Source from ClickBank",
     body:
-      "We track what's actually selling on ClickBank, what's climbing search, and what readers are asking about — not what affiliate networks want us to push.",
+      "We pull from ClickBank's current marketplace — the offers readers are actually being sold. Category demand and vendor signals guide which products are worth covering at all.",
     Icon: Search,
   },
   {
     num: "Step 02",
-    title: "Hands-on testing",
+    title: "Research the offer",
     body:
-      "We buy the product, work through it the way a reader would, and document every upsell, broken link, and \"bonus\" that turned out to be filler.",
-    Icon: FileCheck,
+      "We read the sales page end to end, log the claims, identify the target reader, and pull vendor-stated details: pricing, upsells, refund policy, support channels.",
+    Icon: FileText,
   },
   {
     num: "Step 03",
-    title: "Data analysis",
+    title: "Draft the review",
     body:
-      "We cross-reference refund rates, gravity scores, independent user reports, and BBB complaints before we settle on a score we're willing to defend.",
-    Icon: BarChart3,
+      "We write an honest-favorable review: lead with real strengths, name one or two fair caveats, present vendor claims as vendor claims. No fabricated first-person experience, no invented stats or testimonials.",
+    Icon: BadgeCheck,
   },
   {
     num: "Step 04",
-    title: "Quality assurance",
+    title: "Editorial QA gate",
     body:
-      "A second editor reads the draft with the product open alongside. If they can't reproduce a claim in the review, the claim comes out.",
-    Icon: Shield,
+      "Every draft runs through an automated QA stage before it can be saved. It checks FTC disclosure, required structure, affiliate links, fabrication tells, forbidden claims, and schema completeness. Failures block publish.",
+    Icon: ShieldCheck,
   },
   {
     num: "Step 05",
-    title: "Fast updates",
+    title: "Disclose and link",
     body:
-      "Digital products change — prices, modules, names. Every review is revisited on a 90-day cycle and updated, not quietly replaced.",
-    Icon: Zap,
+      "Every review renders a clear FTC affiliate disclosure at the top, inline, and in the footer. Outbound affiliate links are tracked via our /go/ redirect so readers always see where they're going before they leave.",
+    Icon: Link2,
   },
   {
     num: "Step 06",
-    title: "Community feedback",
+    title: "Revisit and correct",
     body:
-      "Thousands of readers tell us when they bought, what they thought, and whether we got it right. Their notes feed the next update.",
-    Icon: Users,
+      "Pricing, upsells, and vendor terms change. When we catch a material change — or a reader tells us we got something wrong — we update the page and log the correction rather than quietly swapping the copy.",
+    Icon: RotateCcw,
   },
 ];
 
 /**
- * "How we test" — six equal cards on a dark band with a subtle radar-style
+ * "How we work" — six equal cards on a dark band with a subtle radar-style
  * motif bleeding off the right edge.
  */
 export const ProcessSection = () => {
@@ -90,13 +97,13 @@ export const ProcessSection = () => {
 
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 relative z-[1]">
         <SectionHead
-          eyebrow="The Process · How we test"
+          eyebrow="The Process · How we work"
           title={
             <>
               Every review, the <em className="font-serif-italic text-[var(--color-mint)]">same</em> six steps.
             </>
           }
-          description="We don't score products from a sales page. Each item is bought, opened, and worked through before we publish a word — then updated as it changes."
+          description="ClickRank is analysis-driven, not hands-on. We don't buy every offer and we don't pretend to. What we do: read the sales page carefully, write an honest-favorable review, gate it through an editorial QA stage, and disclose the affiliate relationship everywhere it appears."
           className="!pt-0"
         />
 

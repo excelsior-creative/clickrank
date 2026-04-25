@@ -9,21 +9,20 @@ interface PostCardProps {
 
 type Verdict = "Recommended" | "With caveats" | "Skip";
 
-const computeScore = (post: Post): number | null => {
-  // Author-defined scores win when present. Fall back to a slug-deterministic
-  // value between 3.5 and 9.2 so the grid looks populated even for legacy
-  // posts that don't have a rating field yet.
+/**
+ * Read a real, human-assigned rating off the post if (and only if) the
+ * `rating` field exists on the record. Never fabricate. Returns null when
+ * no rating is set — and the score/verdict row won't render.
+ *
+ * The `rating` field is not yet part of the Posts schema; this guard is
+ * deliberately forward-compatible for when the schema migration lands.
+ */
+const readRating = (post: Post): number | null => {
   const maybe = (post as unknown as { rating?: number | null }).rating;
   if (typeof maybe === "number" && !Number.isNaN(maybe)) {
     return Math.max(0, Math.min(10, maybe));
   }
-  if (!post.slug) return null;
-  let hash = 0;
-  for (let i = 0; i < post.slug.length; i++) {
-    hash = (hash * 31 + post.slug.charCodeAt(i)) >>> 0;
-  }
-  const frac = (hash % 1000) / 1000;
-  return Math.round((3.5 + frac * 5.7) * 10) / 10;
+  return null;
 };
 
 const verdictFromScore = (score: number | null): Verdict | null => {
@@ -77,7 +76,7 @@ const categoryLabel = (post: Post): string => {
  * a verdict pill, and a byline/date meta row.
  */
 export const PostCard = ({ post }: PostCardProps) => {
-  const score = computeScore(post);
+  const score = readRating(post);
   const verdict = verdictFromScore(score);
   const dek = post.excerpt || "";
   const category = categoryLabel(post);
@@ -179,7 +178,7 @@ export const PostCard = ({ post }: PostCardProps) => {
           borderTop: "1px solid var(--color-rule-soft)",
         }}
       >
-        <span style={{ color: "var(--color-ink-2)" }}>By the ClickRank desk</span>
+        <span style={{ color: "var(--color-ink-2)" }}>ClickRank editorial</span>
         <span>{formatDate(post)}</span>
       </div>
     </Link>
