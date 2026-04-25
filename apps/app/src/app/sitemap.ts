@@ -74,5 +74,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...postPages];
+  // Category hub pages
+  const { docs: categories } = await payload.find({
+    collection: "categories",
+    limit: 1000,
+    select: {
+      slug: true,
+      updatedAt: true,
+    },
+  });
+
+  const categoryPages: MetadataRoute.Sitemap = categories
+    .filter((c) => c.slug)
+    .map((c) => ({
+      url: `${SITE_URL}/category/${c.slug}`,
+      lastModified: new Date(c.updatedAt),
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
+    }));
+
+  return [...staticPages, ...postPages, ...categoryPages];
 }
