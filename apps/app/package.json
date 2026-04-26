@@ -17,7 +17,8 @@
     "seed": "cross-env PAYLOAD_SEED=true next dev",
     "seed:minimal": "cross-env NODE_ENV=production PAYLOAD_SEED=true SEED_MODE=minimal tsx ./src/seed/index.ts",
     "reset:password": "tsx ./scripts/reset-password.ts",
-    "import:reference": "tsx ./scripts/import-reference.ts"
+    "import:reference": "tsx ./scripts/import-reference.ts",
+    "editorial-lint": "tsx ./scripts/editorial-lint.ts"
   },
   "dependencies": {
     "@google/genai": "^1.47.0",

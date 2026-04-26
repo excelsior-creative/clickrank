@@ -10,10 +10,22 @@ Tagged by area: [pipeline] [content] [seo] [site] [conversion] [ops].
   "hands-on testing" / "team of editors / 14 hours" copy in
   ProcessSection and CommitmentSection, fake newsletter form in
   CTABanner, dead footer links. TrustRow now renders live DB counts.
-- [process] Fabricated copy has shipped to the public surface 3x now
-  (pre-2026-04-17 template, PR #4 redesign, caught 2026-04-24). Adding
-  an editorial-copy CI lint is the only durable fix. Proposed as
-  DR-0004; first PR for next session.
+- ~~[process] Fabricated copy has shipped to the public surface 3x now
+  (pre-2026-04-17 template, PR #4 redesign, caught 2026-04-24).~~ —
+  resolved 2026-04-26. DR-0004 accepted and shipped:
+  `apps/app/scripts/editorial-lint.ts` runs source-side grep for 14
+  known fabrication patterns (invented stats, hands-on/testing claims,
+  hash-of-slug scores), wired into a new
+  `.github/workflows/ci.yml` that runs on every PR. Allow markers
+  added to 5 files for legitimate denials / corrective JSDoc / model
+  prompt negative examples. PR open.
+- [ops] `eslint-config-next` import has a pre-existing circular
+  reference in the `react` plugin config — `pnpm --filter app lint`
+  fails with `JSON.stringify` circular-structure error from
+  `@eslint/eslintrc` regardless of source content. ESLint is omitted
+  from CI for now. Either pin a working version of the config,
+  migrate to flat config without `compat`, or replace with Biome.
+  Not blocking shipping; cosmetic at the moment.
 - ~~[site] Footer social links `href="#"`~~ — resolved 2026-04-18
   (removed the social icons row; no accounts = no links).
 - ~~[site] Footer newsletter decorative form~~ — resolved 2026-04-18

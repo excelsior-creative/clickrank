@@ -152,3 +152,15 @@ Append nightly. Format:
   can ship fabricated copy without the pipeline QA gate ever
   touching them. Proposed DR-0004 (editorial-copy CI lint) as
   the fix.
+- `2026-04-26` — no CEO-triggered pipeline run. Pipeline itself
+  untouched. Tonight shipped DR-0004's source-side counterpart to
+  the pipeline QA gate: `apps/app/scripts/editorial-lint.ts` runs
+  14 fabrication-pattern grep checks against `src/**` and
+  `scripts/**`, wired into the first GitHub Actions workflow on
+  the repo (`.github/workflows/ci.yml`). Together with `qaService.ts`
+  (content-side, lives inside `/api/cron/generate-article`), every
+  surface that can carry editorial copy now passes through one of
+  the two gates: pipeline output → QA gate, source files → editorial
+  lint. CMS-injected content (the 93 imported posts) remains the
+  one uncovered surface and is still gated on DB access for an
+  audit run.

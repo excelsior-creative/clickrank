@@ -1,0 +1,51 @@
+# CI for ClickRank
+#
+# Cheap, fast, source-only checks that should never need network access
+# beyond the dependency install. Runs on every push and on every PR.
+# The editorial-lint job is the load-bearing safety gate added per
+# DR-0004 — it stops the kinds of fabricated-copy regressions we've
+# already shipped twice (PR #4 redesign, pre-CEO template copy).
+#
+# Things deliberately NOT here yet:
+#   - `pnpm build` (needs DB / env vars; address once env story is sorted)
+#   - `pnpm --filter app lint` (ESLint config has a pre-existing circular
+#     reference in the `react` plugin — see backlog [ops])
+#   - Integration tests (no test runner wired in `apps/app` yet)
+#   - Playwright
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  checks:
+    name: type-check + editorial-lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Editorial lint (DR-0004 — source-side fabrication tripwire)
+        run: pnpm --filter app editorial-lint
+
+      - name: Type check
+        run: pnpm --filter app type-check

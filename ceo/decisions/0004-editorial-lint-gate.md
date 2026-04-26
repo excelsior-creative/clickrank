@@ -1,8 +1,13 @@
 # DR-0004 — Editorial-copy lint gate in CI
 
-- Status: Proposed
-- Date: 2026-04-24
+- Status: Accepted (shipped 2026-04-26)
+- Date: 2026-04-24 (proposed); 2026-04-26 (accepted + shipped)
 - Author: CEO session on `claude/eager-wright-dyBpx`
+- Implementation: CEO session on `claude/eager-wright-oSQbT` —
+  `apps/app/scripts/editorial-lint.ts`, `pnpm --filter app editorial-lint`,
+  `.github/workflows/ci.yml`. Allow markers added to 5 files for
+  qualified denials / corrective documentation / model prompt instructing
+  against the same fabrication.
 
 ## Context
 
@@ -86,11 +91,71 @@ matched substring + file so the author can see the hit.
 - **Block all design PRs from touching copy.** Overreach and
   impractical.
 
-## Next step
+## Implementation notes (2026-04-26)
 
-Open a PR that adds a `pnpm editorial-lint` script to the app
-package, a tiny Node/TS script that crawls `/`, `/about`,
-`/editorial`, `/contact`, `/blog`, and the most-recent
-`/blog/<slug>`, strips HTML, and scans for the banned
-substrings. Wire it to the CI workflow after `pnpm build`.
-Proposed for the next session; not included in PR #12.
+Shipped as a **source-side** lint, not a built-output crawler. The
+proposal originally suggested crawling rendered routes; we landed on
+source-grep instead because:
+
+- The recurring failures (PR #4 redesign, pre-CEO template, etc.) all
+  manifested as hardcoded substrings in TSX components. Source-grep
+  catches every one of those without needing a Postgres-backed dev
+  server in CI.
+- A built-output crawler would need a DB to run Next's data fetching.
+  CI doesn't have one. The lint must be runnable against any branch
+  with no env setup.
+- CMS-injected content (the 93 imported posts) is a separate problem
+  better handled by the existing `qaService` infrastructure once DB
+  access is sorted. Combining both surfaces into one tool muddied the
+  scope.
+
+The shipped lint scans `apps/app/src/**` and `apps/app/scripts/**`
+(`.ts`/`.tsx`/`.md`/`.mdx`), 14 patterns covering the three failure
+classes:
+
+1. **Invented stats** — `500+ products reviewed`, `50K+ readers`,
+   `100+ categories`, `4.9/5`, `reader trust score`.
+2. **Fabricated process claims** — `hands-on`, `we tested / tried /
+   used`, `in our testing`, `team of editors / experts / reviewers`,
+   `named editor`, `90-day cycle`, `community / thousands of readers`,
+   `in today's world`.
+3. **Hash-of-slug score smoking gun** — `hash(...slug...)` and the
+   specific `Math.abs(hash...) % 1000+` shape that PR #4 used.
+
+Escape hatch (DR's "every escape must be reviewed on PR" requirement):
+
+- `// editorial-lint: allow <code> [<code>...] -- <reason>` (same
+  line or up to 2 above the match).
+- `// editorial-lint: allow-file <code> [<code>...] -- <reason>`
+  (file-level, anywhere).
+- The `-- <reason>` is required by convention, not by parser; PR
+  review enforces it. Reasons in source today are all of the form
+  "denial / qualified statement / negative example in a model prompt".
+
+Five files carry allow-file markers today: `TrustRow.tsx`,
+`CommitmentSection.tsx`, `ProcessSection.tsx`,
+`(frontend)/editorial/page.tsx`, and an inline allow on
+`contentGenerationService.ts:285`. Each is a deliberate, qualified
+use — denial copy, JSDoc documenting killed fabrications, or a
+negative example inside a Gemini prompt.
+
+CI: `.github/workflows/ci.yml` runs `pnpm install --frozen-lockfile`,
+`pnpm --filter app editorial-lint`, then `pnpm --filter app
+type-check` on every push and PR to main. ESLint is intentionally
+omitted because the existing `eslint-config-next` import has a
+pre-existing circular reference (logged in `backlog.md` [ops]).
+
+## Verification (smoke test)
+
+The lint was sanity-checked by adding a temporary file containing
+`We tested it for 30 days` and `4.9/5 trust score` to `src/`; the
+lint flagged three matches (one per pattern, including a comment-line
+hit) and exited non-zero. File removed; clean tree passes 109 files
+× 14 patterns.
+
+## Future patterns to add
+
+When new fabrication shapes appear, add them here:
+
+- *(none yet — log new shapes in `/ceo/journal/` and add to PATTERNS
+  in the script)*

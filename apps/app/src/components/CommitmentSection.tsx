@@ -4,6 +4,10 @@ import React from "react";
  * Editorial "commitment / about" band. Sticky left-side display quote, right
  * column reads like a short letter-from-the-editor with a drop-cap first
  * paragraph and a signature line.
+ *
+ * editorial-lint: allow-file fab.handsOn -- the body copy explicitly denies
+ * hands-on testing ("we don't run hands-on product testing and we don't
+ * claim to"); the substring is part of a corrective denial, not a claim.
  */
 export const CommitmentSection = () => {
   return (
