@@ -3,18 +3,73 @@
 The pipeline's source list lives in `apps/app/src/services/clickbankService.ts`.
 Until we build structured tracking, this is the manual ledger.
 
-## Queued (fallback list — perennial top offers)
+## Queued (fallback list — 25 perennial top offers)
 
+*Updated 2026-04-26 — PR #14 expanded from 8 → 25 products and fixed all hop links.*
+
+### Health & Fitness (8)
 | # | Product | Vendor | Category | Gravity |
 |---|---------|--------|----------|--------:|
 | 1 | Custom Keto Diet | customketodiet | Health & Fitness | 180 |
 | 2 | Smoothie Diet | smoothiediet | Health & Fitness | 160 |
-| 3 | Forex Trendy | forextrendy | E-business & E-marketing | 120 |
-| 4 | Brain Training For Dogs | adrianemoore | Pets & Animals | 95 |
-| 5 | Ted's Woodworking | tedsplans | Home & Garden | 85 |
-| 6 | Super Affiliate System | jcfilippo | E-business & E-marketing | 110 |
-| 7 | Dentitox Pro | dentitox | Health & Fitness | 140 |
-| 8 | Manifestation Magic | mmanifest | Self-Help | 100 |
+| 3 | Dentitox Pro | dentitox | Health & Fitness | 140 |
+| 4 | Ikaria Lean Belly Juice | ikarialean | Health & Fitness | 200 |
+| 5 | Java Burn | javaburn | Health & Fitness | 175 |
+| 6 | Prodentim | prodentim | Health & Fitness | 155 |
+| 7 | Glucotrust | glucotrust | Health & Fitness | 145 |
+| 8 | Yoga Burn | yogaburn | Health & Fitness | 90 |
+
+### E-business & E-marketing (4)
+| # | Product | Vendor | Category | Gravity |
+|---|---------|--------|----------|--------:|
+| 9 | Forex Trendy | forextrendy | E-business & E-marketing | 120 |
+| 10 | Super Affiliate System | jcfilippo | E-business & E-marketing | 110 |
+| 11 | Commission Hero | commhero | E-business & E-marketing | 95 |
+| 12 | Perpetual Income 365 | pi365 | E-business & E-marketing | 85 |
+
+### Self-Help (3)
+| # | Product | Vendor | Category | Gravity |
+|---|---------|--------|----------|--------:|
+| 13 | Manifestation Magic | mmanifest | Self-Help | 100 |
+| 14 | Billionaire Brain Wave | billionairebrainwave | Self-Help | 130 |
+| 15 | His Secret Obsession | hissecret | Self-Help / Relationships | 115 |
+
+### Pets (2)
+| # | Product | Vendor | Category | Gravity |
+|---|---------|--------|----------|--------:|
+| 16 | Brain Training For Dogs | adrianemoore | Pets & Animals | 95 |
+| 17 | Cat Spraying No More | catnospray | Pets & Animals | 70 |
+
+### Home & Garden / Survival (2)
+| # | Product | Vendor | Category | Gravity |
+|---|---------|--------|----------|--------:|
+| 18 | Ted's Woodworking | tedsplans | Home & Garden | 85 |
+| 19 | Power Efficiency Guide | powereffic | Home & Garden | 75 |
+
+### Spirituality / New Age (1)
+| # | Product | Vendor | Category | Gravity |
+|---|---------|--------|----------|--------:|
+| 20 | Numerologist | numerolog | Spirituality | 80 |
+
+### Languages (1)
+| # | Product | Vendor | Category | Gravity |
+|---|---------|--------|----------|--------:|
+| 21 | Rocket Languages | rocketlang | Languages | 65 |
+
+### Cooking / Health (1)
+| # | Product | Vendor | Category | Gravity |
+|---|---------|--------|----------|--------:|
+| 22 | Metabolic Cooking | metabcook | Health & Fitness | 60 |
+
+### Sports (1)
+| # | Product | Vendor | Category | Gravity |
+|---|---------|--------|----------|--------:|
+| 23 | Vert Shock | vertshock | Sports | 85 |
+
+### Software (1)
+| # | Product | Vendor | Category | Gravity |
+|---|---------|--------|----------|--------:|
+| 24 | VideoProc Converter | videoproc | Software & Services | 55 |
 
 ## Covered (published)
 

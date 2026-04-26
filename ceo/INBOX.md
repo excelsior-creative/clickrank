@@ -3,6 +3,40 @@
 Outstanding items the autonomous CEO needs from Brandon. Each ask
 is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
 
+## 🔴 URGENT — The Next.js app has never been deployed. clickrank.net is still WordPress.
+
+**Discovered: 2026-04-26**
+
+Running `vercel list` against the excelsior-creative team shows **no ClickRank project exists.** The entire Next.js app — all pipeline code, editorial fixes, schema markup, 93-post database, category pages, FTC disclosures — has never been deployed anywhere. clickrank.net is serving the old WordPress site ("over ten years in the business," fake NLP/Prediction Systems copy).
+
+**This is a complete business blocker. Nothing the pipeline builds matters until this is resolved.**
+
+What needs to happen (you need to be in the Vercel dashboard):
+
+1. Go to vercel.com → Add New → Project
+2. Import repo: `excelsior-creative/clickrank`
+3. Root directory: `apps/app`
+4. Framework: Next.js (auto-detected)
+5. Install command: `cd ../.. && pnpm install --frozen-lockfile`
+6. Configure all env vars per `LAUNCH_CHECKLIST.md` Phase 2 — minimum required:
+   - `PAYLOAD_SECRET` (generate: `openssl rand -hex 32`)
+   - `DATABASE_URL` (Postgres — Neon/Vercel Postgres/Supabase)
+   - `NEXT_PUBLIC_SITE_URL` = `https://clickrank.net`
+   - `NEXT_PUBLIC_SERVER_URL` = `https://clickrank.net`
+   - `BLOB_READ_WRITE_TOKEN` (Vercel Blob)
+   - `REVALIDATION_SECRET` and `CRON_SECRET` (generate: `openssl rand -hex 16`)
+   - `GOOGLE_GENAI_API_KEY` (for the nightly pipeline)
+   - Contact form vars: `RESEND_API_KEY`, `FROM_EMAIL`, `CONTACT_EMAIL`, `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`, `RECAPTCHA_SECRET_KEY`
+7. Run first deploy (expect it may fail first try before env vars are set)
+8. Point `clickrank.net` DNS to Vercel (A record → 76.76.21.21, www CNAME → cname.vercel-dns.com)
+9. Take down / redirect old WordPress
+
+The full checklist is in `LAUNCH_CHECKLIST.md` at the repo root. It covers every step including DB init, admin user creation, cron verification, sitemap submission, and smoke testing.
+
+**Recommendation:** Do this before end of weekend. Every day the old WordPress runs is a day search engines are indexing the wrong content and readers are bouncing off "NLP Prediction Systems" copy.
+
+---
+
 ## 🟡 Needs decision
 
 ### Audit the 93 legacy-imported reviews?
@@ -16,6 +50,14 @@ is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
   run it. Want me to prepare the script now and hand off execution?
   Alternatively, have the next engineer run it with prod creds.
 
+### PR #13 — editorial-copy lint gate (ready to review)
+
+- Draft PR opened 2026-04-26. Adds a GHA CI workflow that scans all
+  source files for known-bad fabrication substrings before merge.
+  This is the DR-0004 fix that prevents future design PRs from
+  re-shipping fabricated copy. Low-risk, no infra changes.
+- When you have a moment, review and mark ready for review so it can merge.
+
 ### Data access
 
 - Google Search Console access (read-only API credential or nightly
@@ -28,29 +70,13 @@ is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
 - Read-only Postgres (Neon) connection string so I can run audit
   queries each night (`SELECT count(*), max(publishedDate) FROM posts…`).
 
-### Cron status
+### Cron status (now moot until Vercel deploy happens)
 
-- Is the `/api/cron/generate-article` cron currently firing
-  successfully in production? I can't see Vercel logs from the
-  sandbox. If you could confirm (or paste last-run status into
-  `/ceo/journal/`), it closes a blind spot.
+- Once deployed: confirm `/api/cron/generate-article` is firing in
+  Vercel Cron Jobs tab. I'll need a confirmation (or paste of cron
+  run log) to close the blind spot.
 
-## 🟡 Needs decision — process
-
-### Design PRs are shipping fabricated copy
-
-This is the third time a PR to the site has put fabricated editorial
-copy on the public surface (pre-CEO template copy, PR #4 redesign,
-caught 2026-04-24 in PR #12). Each time the fix is at the render
-layer after it has already been merged. Fabricated stats, fake
-"hands-on testing" claims, and hash-based scores are not things the
-type-check or pipeline QA gate catch.
-
-Proposed: add a CI editorial-copy lint that grep-scans built routes
-for known-bad substrings and fails the build (see
-`/ceo/decisions/0004-editorial-lint-gate.md`). Would have caught
-PR #4's regressions before merge. Low-cost, no infra, no model
-dependency. Next session's first PR if you're OK with the approach.
+---
 
 ## 🟢 FYI
 
@@ -58,40 +84,21 @@ dependency. Next session's first PR if you're OK with the approach.
 - FTC disclosure was not being rendered on blog post pages before
   2026-04-17. That's now fixed structurally. Any posts that were
   published before tonight were non-compliant — worth a legal
-  scan of anything already indexed. (I don't have visibility
-  into what's published.)
+  scan of anything already indexed. (WordPress site may have indexed
+  non-compliant pages; see above.)
 - The ClickBank marketplace scraper in `clickbankService.ts` has
   guessed selectors and is very likely silently failing back to
-  the 8-product curated list. Not urgent, but worth knowing.
+  the product list. Not urgent, but worth knowing.
 - **Site-level fabrications existed before 2026-04-19**: the home
-  page rendered three invented testimonials (Sarah Johnson,
-  Michael Chen, Emily Rodriguez), invented stats (500+ products,
-  50K+ readers, 4.9/5 trust score), and copy claiming "hands-on
-  testing" and a "community of readers". All fixed structurally
-  tonight (rewrites + TestimonialsSection deleted). If any of
-  those claims were repeated anywhere off-site (social posts,
-  newsletter, press), they should be corrected.
-- `/editorial` public page is now live and linked from the footer.
-  If you want to edit the standard itself, `ceo/editorial.md` is
-  the source of truth; the public page is a reader-facing
-  distillation.
-- `/go/[slug]` outbound tracking is now in place. Events are
-  logged to stdout (Vercel logs) as
-  `[go] click slug=X product="Y" vendor=Z ref=W ua="…"`. Grep
-  that prefix to count clicks for now. Persistence to an
-  `outbound-clicks` Payload collection shipped in PR #7 — admin
-  can read per-click rows, and rolled-up counts live on
-  `Posts.clickCount`.
-- **93 legacy reviews are live on prod** as of 2026-04-20/21,
-  imported from the `reference/` corpus by
-  `scripts/import-reference.ts`. Quality of those 93 hasn't been
-  editorially audited — see the "Needs decision" item above.
-- **Body-link outbound tracking** is now live as of 2026-04-22
-  via a render-time Lexical rewriter at
-  `apps/app/src/lib/affiliateLinks.ts`. Every inline
-  `hop.clickbank.net` link whose vendor matches the post's
-  `affiliateUrl` is redirected through `/go/[slug]`. You should
-  see `Posts.clickCount` and the `outbound-clicks` collection
-  start ticking up meaningfully once the next deploy rolls out.
-  If click counts stay flat after the deploy, something is
-  wrong — ping me.
+  page rendered three invented testimonials, invented stats (500+
+  products, 50K+ readers, 4.9/5 trust score), and copy claiming
+  "hands-on testing" and a "community of readers". All fixed
+  structurally on the Next.js app (which still isn't live).
+- `/editorial` public page is now live in the code. Once deployed,
+  it will be linked from the footer.
+- `/go/[slug]` outbound tracking is in place in code.
+- **93 legacy reviews in Payload** (imported 2026-04-20/21) — quality
+  unaudited; body-link tracking is in but FTC compliance of the
+  original content is unknown.
+- **PR #14 merged 2026-04-26**: affiliate hop links fixed + product
+  list expanded to 25. The pipeline is ready to run.

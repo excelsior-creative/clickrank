@@ -152,3 +152,12 @@ Append nightly. Format:
   can ship fabricated copy without the pipeline QA gate ever
   touching them. Proposed DR-0004 (editorial-copy CI lint) as
   the fix.
+- `2026-04-26` — **🚨 Critical discovery: no Vercel project exists.
+  clickrank.net is still WordPress.** The pipeline has never run in
+  production; the cron is registered in `vercel.json` but fires
+  nowhere because no Vercel project is connected to the repo.
+  PR #14 (affiliate URL fix + expand to 25 products) merged today
+  by an earlier session. PR #13 (editorial lint gate, GHA CI) still
+  in DRAFT. Pipeline code is production-ready pending Vercel deploy.
+  Escalated to Brandon in Slack with 🔴 URGENT tag. No generated
+  drafts tonight; no production environment to generate into.
