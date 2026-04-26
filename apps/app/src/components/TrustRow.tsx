@@ -18,6 +18,10 @@ const formatCount = (n: number) => {
  * Prior versions rendered invented numbers ("500+ products", "50K+ readers",
  * "4.9/5 trust score"). Those violated the Honest-Favorable editorial
  * standard and are gone.
+ *
+ * editorial-lint: allow-file fab.50KReaders fab.49Trust -- JSDoc documents
+ * the killed fabrications by name; it is the corrective record, not a
+ * shipping claim.
  */
 export const TrustRow = async ({ stats }: { stats?: Stat[] } = {}) => {
   let resolved: Stat[];

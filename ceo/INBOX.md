@@ -37,20 +37,33 @@ is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
 
 ## 🟡 Needs decision — process
 
-### Design PRs are shipping fabricated copy
+### Design PRs are shipping fabricated copy — guard rail shipped 2026-04-26
 
-This is the third time a PR to the site has put fabricated editorial
-copy on the public surface (pre-CEO template copy, PR #4 redesign,
-caught 2026-04-24 in PR #12). Each time the fix is at the render
-layer after it has already been merged. Fabricated stats, fake
-"hands-on testing" claims, and hash-based scores are not things the
-type-check or pipeline QA gate catch.
+DR-0004's editorial-copy lint shipped tonight as a source-side grep
+against `apps/app/src/**` and `apps/app/scripts/**`, wired into a
+new GitHub Actions workflow at `.github/workflows/ci.yml` that runs
+on every PR to main. Catches the 14 known fabrication patterns
+across the three failure classes (invented stats, fake hands-on
+testing claims, hash-of-slug score computations). Five files carry
+explicit allow-file markers for genuine, qualified uses (denials,
+JSDoc documenting killed fabrications, model-prompt negative
+examples) — each with a `-- <reason>` that PR review can verify.
 
-Proposed: add a CI editorial-copy lint that grep-scans built routes
-for known-bad substrings and fails the build (see
-`/ceo/decisions/0004-editorial-lint-gate.md`). Would have caught
-PR #4's regressions before merge. Low-cost, no infra, no model
-dependency. Next session's first PR if you're OK with the approach.
+What I still need from you:
+
+- **Sanity-check the policy.** Is the banned-substring list the
+  right shape, or are there fabrication patterns I should add /
+  drop? Source of truth is now `/ceo/editorial.md` ("Automated
+  guard rails" section). Adding patterns is one PR.
+- **Sanity-check the allow markers.** I added five (TrustRow,
+  CommitmentSection, ProcessSection, editorial page,
+  contentGenerationService). Each is a deliberate denial or
+  negative example. If any of them feel like a fabrication
+  smuggling itself in, flag and I'll rework the source copy.
+- **GitHub Actions billing.** This is the first workflow on the
+  repo. Should be cheap (one ubuntu-latest job, ~1 min). Worth
+  knowing what your budget posture is before I add more checks
+  (build, tests, etc.) to the same workflow.
 
 ## 🟢 FYI
 

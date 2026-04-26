@@ -15,6 +15,10 @@ type Step = {
  * site. We do not buy every product, we do not run hands-on tests, and
  * we do not employ a roster of named editors. Claims we can't back up
  * stay off the page.
+ *
+ * editorial-lint: allow-file fab.handsOn fab.namedEditor -- the JSDoc and
+ * one step description explicitly deny hands-on testing and a named-editor
+ * roster; substrings appear inside denials, not claims.
  */
 const STEPS: Step[] = [
   {

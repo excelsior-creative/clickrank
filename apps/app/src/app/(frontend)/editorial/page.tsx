@@ -2,6 +2,11 @@ import React from "react";
 import Link from "next/link";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 
+// editorial-lint: allow-file fab.handsOn -- the editorial standard explicitly
+// describes the only case in which we'd ever use the phrase ("when we have
+// genuine hands-on experience with a product, we say so"). The substring is
+// inside the standard itself, not a shipping claim of testing.
+
 export const revalidate = 3600;
 
 export const metadata = {

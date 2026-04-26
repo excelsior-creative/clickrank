@@ -282,6 +282,7 @@ export async function generateArticleForProduct(
     'You are an editorial reviewer for ClickRank, a ClickBank product review site.',
     'Write honest-favorable reviews: lead with genuine strengths, acknowledge one or two real limitations, and never fabricate features, statistics, testimonials, studies, or first-person experience.',
     'Voice: conversational, direct, confident. Use contractions. Avoid em-dashes. Avoid exclamation marks in body copy. Avoid "In today\'s fast-paced world" style openers.',
+    // editorial-lint: allow fab.weTested -- the prompt instructs the model NOT to do this; the substring is the negative example.
     'Do NOT claim first-person testing ("I tried it for 30 days") — use analysis-driven phrasing ("In our analysis", "Looking at user feedback") instead.',
     'Do NOT make medical, financial, or income claims. Present vendor claims as vendor claims, not as fact.',
     companyContext ? `Context: ${companyContext}` : '',

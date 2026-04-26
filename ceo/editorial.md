@@ -91,3 +91,58 @@ Future (when `affiliateUrl` and rating fields land):
 - Title tag ≤60 chars. Meta description ≤160 chars.
 - One H1 (the title). H2s for major sections. H3s for subsections
   within those.
+
+## Automated guard rails
+
+Two layers of automated enforcement now sit between fabricated copy
+and production. Both are load-bearing safety gates; changes go through
+PR per the CEO autonomy rules.
+
+### 1. Pipeline QA gate (content-side)
+
+`apps/app/src/services/qaService.ts` runs against every Gemini-generated
+draft inside `/api/cron/generate-article`. Errors block persistence
+(422 from the cron); warnings log without blocking. Covers: required
+fields, FTC disclosure presence, affiliate-link presence, length and
+heading bounds, fabrication regex (first-person testing, weight-loss
+claims, oddly specific reviewer counts and percentages), forbidden
+claims (FDA-approved, miracle cures, guaranteed income), and em-dash
+residue.
+
+### 2. Editorial-copy CI lint (source-side)
+
+`apps/app/scripts/editorial-lint.ts` + `pnpm --filter app editorial-lint`,
+wired into `.github/workflows/ci.yml`. Scans `src/**` and `scripts/**`
+for known-bad copy substrings that have shipped before. Source-side
+counterpart to the QA gate — catches hardcoded fabrications in
+components, pages, and scripts that the pipeline gate never sees.
+
+Banned substrings (pattern code → claim):
+
+- `fab.500plusReviews` — "500+ products reviewed" / "500+ reviews"
+- `fab.50KReaders` — "50K+ readers" / "50,000+ readers"
+- `fab.100Categories` — "100+ categories"
+- `fab.49Trust` — "4.9/5" trust score
+- `fab.trustScore` — "reader trust score"
+- `fab.handsOn` — "hands-on" (we are analysis-driven, not hands-on)
+- `fab.weTested` — "we/I tested/tried/used it"
+- `fab.inOurTesting` — "in our testing"
+- `fab.teamOf` — "team of editors / experts / reviewers"
+- `fab.namedEditor` — "named editor" / "second editor"
+- `fab.90DayCycle` — "90-day cycle" reviewing claim
+- `fab.communityOfReaders` — "community / thousands of readers"
+- `fab.todaysWorld` — "in today's world" cliché intro
+- `fab.hashScore` — `hash(...slug...)` or `Math.abs(hash...) % 1000+`
+  score computation (the PR #4 smoking gun)
+
+Escape hatches for deliberate, qualified uses (e.g. denials,
+corrective JSDoc, model-prompt negative examples):
+
+```
+// editorial-lint: allow <code> [<code>...] -- <reason>      (same line or up to 2 above)
+// editorial-lint: allow-file <code> [<code>...] -- <reason> (anywhere in file)
+```
+
+Every escape must include a reason after `--` so PR review can
+verify it. When a new fabrication shape ships, add a pattern to
+`PATTERNS` in the script and enumerate it here. See DR-0004.
