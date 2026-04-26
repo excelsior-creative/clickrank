@@ -24,7 +24,15 @@ export type ClickBankProduct = {
 // ─── Static fallback products ─────────────────────────────────────────────────
 // Used when scraping fails or credentials are not configured.
 // These represent perennially top-selling ClickBank niches.
+// ClickBank affiliate nickname — used to construct hop links.
+const AFFILIATE_NICK = process.env.CLICKBANK_AFFILIATE_NICK || 'clickrankn'
+
+function hopLink(vendor: string): string {
+  return `https://hop.clickbank.net/?affiliate=${AFFILIATE_NICK}&vendor=${vendor}`
+}
+
 const FALLBACK_PRODUCTS: ClickBankProduct[] = [
+  // ── Health & Fitness ────────────────────────────────────────────────────────
   {
     name: 'Custom Keto Diet',
     vendor: 'customketodiet',
@@ -35,7 +43,7 @@ const FALLBACK_PRODUCTS: ClickBankProduct[] = [
     description:
       'Personalized keto meal plan with 8-week custom diet program based on food preferences and body type.',
     vendorUrl: 'https://customketodiet.com',
-    affiliateUrl: 'https://www.clickbank.com/marketplace/health-fitness',
+    affiliateUrl: hopLink('customketodiet'),
   },
   {
     name: 'Smoothie Diet',
@@ -45,57 +53,9 @@ const FALLBACK_PRODUCTS: ClickBankProduct[] = [
     initialPrice: 47,
     avgRebill: 0,
     description:
-      '21-day rapid weight loss program using smoothies. Proven system for fast fat loss.',
+      '21-day rapid weight loss program using smoothie recipes designed for fast, healthy fat loss.',
     vendorUrl: 'https://thesmoothiediet.com',
-    affiliateUrl: 'https://www.clickbank.com/marketplace/health-fitness',
-  },
-  {
-    name: 'Forex Trendy',
-    vendor: 'forextrendy',
-    category: 'E-business & E-marketing',
-    gravity: 120,
-    initialPrice: 37,
-    avgRebill: 37,
-    description:
-      'Real-time forex scanner to find the best trending currency pairs and time frames.',
-    vendorUrl: 'https://www.forextrendy.com',
-    affiliateUrl: 'https://www.clickbank.com/marketplace/e-business-e-marketing',
-  },
-  {
-    name: 'Brain Training For Dogs',
-    vendor: 'adrianemoore',
-    category: 'Pets & Animals',
-    gravity: 95,
-    initialPrice: 47,
-    avgRebill: 0,
-    description:
-      'Step-by-step force-free dog training program with brain games that unlock dogs natural intelligence.',
-    vendorUrl: 'https://braintraining4dogs.com',
-    affiliateUrl: 'https://www.clickbank.com/marketplace/pets-animals',
-  },
-  {
-    name: 'Ted\'s Woodworking',
-    vendor: 'tedsplans',
-    category: 'Home & Garden',
-    gravity: 85,
-    initialPrice: 67,
-    avgRebill: 0,
-    description:
-      '16,000 woodworking plans with step-by-step instructions, materials lists, and diagrams.',
-    vendorUrl: 'https://www.tedswoodworking.com',
-    affiliateUrl: 'https://www.clickbank.com/marketplace/home-garden',
-  },
-  {
-    name: 'Super Affiliate System',
-    vendor: 'jcfilippo',
-    category: 'E-business & E-marketing',
-    gravity: 110,
-    initialPrice: 997,
-    avgRebill: 0,
-    description:
-      'Step-by-step affiliate marketing training system with paid traffic strategies and done-for-you campaigns.',
-    vendorUrl: 'https://www.superaffiliatesystem.com',
-    affiliateUrl: 'https://www.clickbank.com/marketplace/e-business-e-marketing',
+    affiliateUrl: hopLink('smoothiediet'),
   },
   {
     name: 'Dentitox Pro',
@@ -107,8 +67,118 @@ const FALLBACK_PRODUCTS: ClickBankProduct[] = [
     description:
       'Natural dental health drops formula for supporting healthy teeth and gums.',
     vendorUrl: 'https://dentitox.com',
-    affiliateUrl: 'https://www.clickbank.com/marketplace/health-fitness',
+    affiliateUrl: hopLink('dentitox'),
   },
+  {
+    name: 'Ikaria Lean Belly Juice',
+    vendor: 'ikarialean',
+    category: 'Health & Fitness',
+    gravity: 170,
+    initialPrice: 69,
+    avgRebill: 0,
+    description:
+      'Powdered supplement designed to support healthy weight loss by targeting ceramides and metabolism.',
+    vendorUrl: 'https://ikarialean.com',
+    affiliateUrl: hopLink('ikarialean'),
+  },
+  {
+    name: 'Java Burn',
+    vendor: 'javaburn',
+    category: 'Health & Fitness',
+    gravity: 200,
+    initialPrice: 69,
+    avgRebill: 0,
+    description:
+      'Tasteless powder packet added to morning coffee to support metabolism and energy levels.',
+    vendorUrl: 'https://javaburn.com',
+    affiliateUrl: hopLink('javaburn'),
+  },
+  {
+    name: 'Prodentim',
+    vendor: 'prodentim',
+    category: 'Health & Fitness',
+    gravity: 190,
+    initialPrice: 69,
+    avgRebill: 0,
+    description:
+      'Probiotic supplement designed to support oral health with beneficial bacteria strains for teeth and gums.',
+    vendorUrl: 'https://prodentim.com',
+    affiliateUrl: hopLink('prodentim'),
+  },
+  {
+    name: 'Glucotrust',
+    vendor: 'glucotrust',
+    category: 'Health & Fitness',
+    gravity: 150,
+    initialPrice: 69,
+    avgRebill: 0,
+    description:
+      'Dietary supplement with a blend of natural ingredients designed to support healthy blood sugar levels.',
+    vendorUrl: 'https://glucotrust.com',
+    affiliateUrl: hopLink('glucotrust'),
+  },
+  {
+    name: 'Yoga Burn',
+    vendor: 'yogaburn',
+    category: 'Health & Fitness',
+    gravity: 120,
+    initialPrice: 47,
+    avgRebill: 0,
+    description:
+      'Dynamic sequencing yoga program for women that adapts and increases in challenge as fitness improves.',
+    vendorUrl: 'https://yoga-burn.net',
+    affiliateUrl: hopLink('yogaburn'),
+  },
+  // ── E-business & E-marketing ────────────────────────────────────────────────
+  {
+    name: 'Forex Trendy',
+    vendor: 'forextrendy',
+    category: 'E-business & E-marketing',
+    gravity: 120,
+    initialPrice: 37,
+    avgRebill: 37,
+    description:
+      'Real-time forex scanner to find the best trending currency pairs and time frames.',
+    vendorUrl: 'https://www.forextrendy.com',
+    affiliateUrl: hopLink('forextrendy'),
+  },
+  {
+    name: 'Super Affiliate System',
+    vendor: 'jcfilippo',
+    category: 'E-business & E-marketing',
+    gravity: 110,
+    initialPrice: 997,
+    avgRebill: 0,
+    description:
+      'Step-by-step affiliate marketing training system with paid traffic strategies and done-for-you campaigns.',
+    vendorUrl: 'https://www.superaffiliatesystem.com',
+    affiliateUrl: hopLink('jcfilippo'),
+  },
+  {
+    name: 'Commission Hero',
+    vendor: 'commhero',
+    category: 'E-business & E-marketing',
+    gravity: 95,
+    initialPrice: 997,
+    avgRebill: 0,
+    description:
+      'High-ticket affiliate marketing course teaching Facebook ad strategies for ClickBank product promotion.',
+    vendorUrl: 'https://commissionhero.com',
+    affiliateUrl: hopLink('commhero'),
+  },
+  {
+    name: 'Perpetual Income 365',
+    vendor: 'pi365',
+    category: 'E-business & E-marketing',
+    gravity: 130,
+    initialPrice: 47,
+    avgRebill: 47,
+    description:
+      'Affiliate marketing system built around a plug-and-play email funnel for generating recurring commissions.',
+    vendorUrl: 'https://perpetualincome365.com',
+    affiliateUrl: hopLink('pi365'),
+  },
+  // ── Self-Help ───────────────────────────────────────────────────────────────
   {
     name: 'Manifestation Magic',
     vendor: 'mmanifest',
@@ -117,9 +187,148 @@ const FALLBACK_PRODUCTS: ClickBankProduct[] = [
     initialPrice: 37,
     avgRebill: 27,
     description:
-      'Energy orbiting audio tracks based on NLP and hypnosis to shift subconscious blocks and manifest wealth.',
+      'Audio tracks combining NLP techniques and brainwave entrainment designed for personal development and mindset shifts.',
     vendorUrl: 'https://manifestationmagic.co',
-    affiliateUrl: 'https://www.clickbank.com/marketplace/self-help',
+    affiliateUrl: hopLink('mmanifest'),
+  },
+  {
+    name: 'Billionaire Brain Wave',
+    vendor: 'billbrainwave',
+    category: 'Self-Help',
+    gravity: 160,
+    initialPrice: 39,
+    avgRebill: 0,
+    description:
+      'Audio program claiming to activate theta brain waves associated with creativity and intuition for personal success.',
+    vendorUrl: 'https://billionairebrainwave.com',
+    affiliateUrl: hopLink('billbrainwave'),
+  },
+  {
+    name: 'His Secret Obsession',
+    vendor: 'hissecretobs',
+    category: 'Self-Help',
+    gravity: 130,
+    initialPrice: 47,
+    avgRebill: 0,
+    description:
+      'Relationship guide for women focusing on understanding male psychology and building deeper emotional connections.',
+    vendorUrl: 'https://hissecretobsession.com',
+    affiliateUrl: hopLink('hissecretobs'),
+  },
+  // ── Pets & Animals ──────────────────────────────────────────────────────────
+  {
+    name: 'Brain Training For Dogs',
+    vendor: 'adrianemoore',
+    category: 'Pets & Animals',
+    gravity: 95,
+    initialPrice: 47,
+    avgRebill: 0,
+    description:
+      'Step-by-step force-free dog training program with brain games that unlock dogs natural intelligence.',
+    vendorUrl: 'https://braintraining4dogs.com',
+    affiliateUrl: hopLink('adrianemoore'),
+  },
+  {
+    name: 'Cat Spraying No More',
+    vendor: 'catspraying',
+    category: 'Pets & Animals',
+    gravity: 50,
+    initialPrice: 37,
+    avgRebill: 0,
+    description:
+      'Guide to understanding and stopping cat spraying behavior using veterinarian-informed techniques.',
+    vendorUrl: 'https://catsprayingnomore.com',
+    affiliateUrl: hopLink('catspraying'),
+  },
+  // ── Home & Garden ───────────────────────────────────────────────────────────
+  {
+    name: 'Ted\'s Woodworking',
+    vendor: 'tedsplans',
+    category: 'Home & Garden',
+    gravity: 85,
+    initialPrice: 67,
+    avgRebill: 0,
+    description:
+      '16,000 woodworking plans with step-by-step instructions, materials lists, and diagrams.',
+    vendorUrl: 'https://www.tedswoodworking.com',
+    affiliateUrl: hopLink('tedsplans'),
+  },
+  {
+    name: 'Power Efficiency Guide',
+    vendor: 'pefficguide',
+    category: 'Home & Garden',
+    gravity: 60,
+    initialPrice: 49,
+    avgRebill: 0,
+    description:
+      'DIY guide to building a home power generation device to reduce electricity bills.',
+    vendorUrl: 'https://powerefficiencyguide.com',
+    affiliateUrl: hopLink('pefficguide'),
+  },
+  // ── Spirituality, New Age & Alternative Beliefs ─────────────────────────────
+  {
+    name: 'Numerologist',
+    vendor: 'numerolgst',
+    category: 'Spirituality, New Age & Alternative Beliefs',
+    gravity: 90,
+    initialPrice: 37,
+    avgRebill: 19,
+    description:
+      'Personalized numerology readings and reports based on birth date and name analysis.',
+    vendorUrl: 'https://numerologist.com',
+    affiliateUrl: hopLink('numerolgst'),
+  },
+  // ── Education & Languages ───────────────────────────────────────────────────
+  {
+    name: 'Rocket Languages',
+    vendor: 'rocketlang',
+    category: 'Languages',
+    gravity: 70,
+    initialPrice: 99,
+    avgRebill: 0,
+    description:
+      'Interactive language learning software covering 14 languages with speech recognition and cultural lessons.',
+    vendorUrl: 'https://www.rocketlanguages.com',
+    affiliateUrl: hopLink('rocketlang'),
+  },
+  // ── Cooking, Food & Wine ────────────────────────────────────────────────────
+  {
+    name: 'Metabolic Cooking',
+    vendor: 'metacooking',
+    category: 'Cooking, Food & Wine',
+    gravity: 55,
+    initialPrice: 29,
+    avgRebill: 0,
+    description:
+      'Collection of fat-burning recipes designed around the metabolic thermo-charge of specific food combinations.',
+    vendorUrl: 'https://metaboliccooking.com',
+    affiliateUrl: hopLink('metacooking'),
+  },
+  // ── Sports ──────────────────────────────────────────────────────────────────
+  {
+    name: 'Vert Shock',
+    vendor: 'vertshock',
+    category: 'Sports',
+    gravity: 65,
+    initialPrice: 67,
+    avgRebill: 0,
+    description:
+      'Vertical jump training program using plyometrics to increase jumping height for basketball players.',
+    vendorUrl: 'https://vertshock.com',
+    affiliateUrl: hopLink('vertshock'),
+  },
+  // ── Software & Services ─────────────────────────────────────────────────────
+  {
+    name: 'VideoProc Converter',
+    vendor: 'videoproc',
+    category: 'Software & Services',
+    gravity: 45,
+    initialPrice: 45,
+    avgRebill: 0,
+    description:
+      'GPU-accelerated video processing software for converting, editing, and downloading videos.',
+    vendorUrl: 'https://www.videoproc.com',
+    affiliateUrl: hopLink('videoproc'),
   },
 ]
 
