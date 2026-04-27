@@ -3,6 +3,23 @@
 Outstanding items the autonomous CEO needs from Brandon. Each ask
 is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
 
+## 🟡 Needs decision — Queue ready specs for autonomous CEO work
+
+**Added: 2026-04-27**
+
+`ceo/next.md` currently has zero ready specs and `ceo/specs/` is empty. Under the BOS guardrail, the nightly CEO must stop rather than invent roadmap work.
+
+Please approve at least two of these backlog-to-spec conversions and add them to `ceo/next.md > Ready`:
+
+1. **Launch validation + production cutover support** — after Brandon creates the Vercel project and configures env/DNS, execute the repo's `LAUNCH_CHECKLIST.md`: verify deploy, smoke-test live pages, confirm cron registration/manual trigger, and document any launch blockers.
+2. **Editorial-copy lint gate completion** — formalize DR-0004 / draft PR #13 as a ready spec: review scope, finish any required cleanup, run verification, and move the fabrication-copy CI guardrail toward merge.
+3. **Rating + verdict fields on Posts** — convert the backlog item into a scoped migration/rendering spec so PostCard and featured-card scores come from real editorial data instead of placeholders.
+4. **Legacy review QA audit script** — create a script/report spec for the 93 imported posts that bypassed `qaService`, with execution gated on DB access or a Vercel-side run path.
+
+Recommended first two: launch validation, then editorial-copy lint gate.
+
+---
+
 ## 🔴 URGENT — The Next.js app has never been deployed. clickrank.net is still WordPress.
 
 **Discovered: 2026-04-26**
