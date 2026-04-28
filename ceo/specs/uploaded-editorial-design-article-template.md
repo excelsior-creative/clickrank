@@ -13,7 +13,11 @@ Implement the uploaded ClickRank editorial design direction in the Next.js app, 
 
 ## Scope
 
-- Keep the existing truthful homepage implementation; it already matches the uploaded dark-navy editorial system while removing fabricated stats/testimonials/testing claims.
+- Keep the homepage truthful while extending it toward the uploaded design system; do not reintroduce fabricated stats/testimonials/testing claims from the static mockup.
+- Add uploaded-design homepage support sections:
+  - three-card review/category/editorial shortcut band
+  - FAQ section with truthful affiliate/editorial answers
+  - responsive footer/nav polish
 - Update the post detail template to better match the uploaded review-page design:
   - full-width atmospheric review header
   - category/date/disclosure metadata row
@@ -26,4 +30,6 @@ Implement the uploaded ClickRank editorial design direction in the Next.js app, 
 ## Acceptance checks
 
 - `pnpm --filter app type-check` passes.
-- `pnpm --filter app build` compiles; any build failure must be documented if caused by missing deployment-only environment/data prerequisites rather than the design code.
+- `pnpm --filter app build` passes against a local Postgres verification database.
+- Browser QA passes for `/` and a representative `/blog/[slug]` review page with realistic post metadata/affiliate CTA state.
+- `pnpm --filter app lint` remains blocked only by the existing repo ESLint 9 circular-config issue, before file-level linting runs.

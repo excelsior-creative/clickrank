@@ -23,7 +23,11 @@ const resolveHref = (item: FooterNavItem) => {
   const link = item.link;
   if (!link) return null;
   if (link.type === "custom" && link.url) return link.url;
-  if (link.type === "reference" && link.reference && typeof link.reference === "object") {
+  if (
+    link.type === "reference" &&
+    link.reference &&
+    typeof link.reference === "object"
+  ) {
     const relationTo = link.reference.relationTo;
     const value = link.reference.value;
     if (typeof value === "object" && value?.slug) {
@@ -46,7 +50,8 @@ export const Footer = async () => {
   ((footer.navItems || []) as FooterNavItem[]).forEach((item) => {
     const href = resolveHref(item);
     const label = item.link?.label;
-    if (href && label) cmsLinks.push({ href, label, newTab: item.link?.newTab });
+    if (href && label)
+      cmsLinks.push({ href, label, newTab: item.link?.newTab });
   });
 
   // Static editorial columns. If a CMS-configured footer has links, surface
@@ -84,13 +89,12 @@ export const Footer = async () => {
     >
       <div className="max-w-[1280px] mx-auto px-5 md:px-10">
         <div
-          className="grid gap-8 pb-14 border-b"
+          className="grid gap-8 pb-14 border-b grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]"
           style={{
             borderColor: "var(--color-rule)",
-            gridTemplateColumns: "1.4fr 1fr 1fr 1fr",
           }}
         >
-          <div className="col-span-2 md:col-span-1">
+          <div className="sm:col-span-2 lg:col-span-1">
             <Logo />
             <p
               className="mt-4 max-w-[34ch] leading-relaxed text-[16px] font-light"
@@ -99,8 +103,8 @@ export const Footer = async () => {
                 color: "var(--color-ink-2)",
               }}
             >
-              Independent, analysis-driven reviews of the digital products
-              sold on ClickBank. Reader-supported, FTC-disclosed on every page.
+              Independent, analysis-driven reviews of the digital products sold
+              on ClickBank. Reader-supported, FTC-disclosed on every page.
             </p>
           </div>
 
@@ -134,12 +138,13 @@ export const Footer = async () => {
               color: "var(--color-ink-2)",
             }}
           >
-            ClickRank is a reader-supported publication. Some links on this site are
-            affiliate links. If you click through and purchase, we may earn a
-            commission at no additional cost to you. Our editorial is independent
-            of those relationships: we lead with real strengths, name real caveats,
-            and skip products we'd be embarrassed to promote, regardless of
-            commission. Corrections are welcomed at our contact page.
+            ClickRank is a reader-supported publication. Some links on this site
+            are affiliate links. If you click through and purchase, we may earn
+            a commission at no additional cost to you. Our editorial is
+            independent of those relationships: we lead with real strengths,
+            name real caveats, and skip products we'd be embarrassed to promote,
+            regardless of commission. Corrections are welcomed at our contact
+            page.
           </p>
         </div>
 

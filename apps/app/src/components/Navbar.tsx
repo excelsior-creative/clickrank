@@ -28,10 +28,10 @@ type NavItem = {
 
 const defaultNavbarItems: NavItem[] = [
   { link: { label: "Reviews", type: "custom", url: "/blog" } },
-  { link: { label: "Rankings", type: "custom", url: "/blog" } },
   { link: { label: "Categories", type: "custom", url: "/blog" } },
-  { link: { label: "How we test", type: "custom", url: "/about#process" } },
-  { link: { label: "About", type: "custom", url: "/about" } },
+  { link: { label: "Editorial", type: "custom", url: "/editorial" } },
+  { link: { label: "How we work", type: "custom", url: "/about#process" } },
+  { link: { label: "FAQs", type: "custom", url: "/#faqs" } },
 ];
 
 type ResolvedNavItem = { href: string; label: string; newTab?: boolean };
@@ -40,7 +40,11 @@ const resolveHref = (item: NavItem) => {
   const link = item.link;
   if (!link) return null;
   if (link.type === "custom" && link.url) return link.url;
-  if (link.type === "reference" && link.reference && typeof link.reference === "object") {
+  if (
+    link.type === "reference" &&
+    link.reference &&
+    typeof link.reference === "object"
+  ) {
     const relationTo = link.reference.relationTo;
     const value = link.reference.value;
     if (typeof value === "object" && value?.slug) {
@@ -92,7 +96,7 @@ export const Navbar = ({ navItems = [] as NavItem[] }) => {
                 rel={item.newTab ? "noreferrer noopener" : undefined}
                 className={cn(
                   "relative py-2 transition-colors hover:text-[var(--color-ink)]",
-                  active && "text-[var(--color-ink)]"
+                  active && "text-[var(--color-ink)]",
                 )}
               >
                 {item.label}
@@ -100,7 +104,7 @@ export const Navbar = ({ navItems = [] as NavItem[] }) => {
                   aria-hidden
                   className={cn(
                     "absolute left-0 right-0 bottom-0 h-px origin-left transition-transform",
-                    active ? "scale-x-100" : "scale-x-0"
+                    active ? "scale-x-100" : "scale-x-0",
                   )}
                   style={{ background: "var(--color-mint)" }}
                 />
@@ -194,7 +198,7 @@ export const Navbar = ({ navItems = [] as NavItem[] }) => {
                     "py-2 font-serif text-lg",
                     pathname === item.href
                       ? "text-[var(--color-mint)]"
-                      : "text-[var(--color-ink)]"
+                      : "text-[var(--color-ink)]",
                   )}
                 >
                   {item.label}
@@ -209,7 +213,7 @@ export const Navbar = ({ navItems = [] as NavItem[] }) => {
                   color: "var(--color-mint-ink)",
                 }}
               >
-                Subscribe
+                Contact
               </Link>
             </nav>
           </m.div>
