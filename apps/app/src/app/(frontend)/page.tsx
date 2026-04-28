@@ -1,9 +1,11 @@
 import React from "react";
 import { Hero } from "@/components/Hero";
+import { FeatureCardsSection } from "@/components/FeatureCardsSection";
 import { TrustRow } from "@/components/TrustRow";
 import { ReviewsSection } from "@/components/ReviewsSection";
 import { ProcessSection } from "@/components/ProcessSection";
 import { CommitmentSection } from "@/components/CommitmentSection";
+import { FAQSection } from "@/components/FAQSection";
 import { CTABanner } from "@/components/CTABanner";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -65,10 +67,12 @@ export default async function Home() {
   return (
     <>
       <Hero featured={featured} />
+      <FeatureCardsSection />
       <TrustRow />
       <ReviewsSection />
       <ProcessSection />
       <CommitmentSection />
+      <FAQSection />
       <CTABanner />
     </>
   );
