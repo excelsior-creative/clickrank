@@ -142,9 +142,9 @@ export const Footer = async () => {
             are affiliate links. If you click through and purchase, we may earn
             a commission at no additional cost to you. Our editorial is
             independent of those relationships: we lead with real strengths,
-            name real caveats, and skip products we'd be embarrassed to promote,
-            regardless of commission. Corrections are welcomed at our contact
-            page.
+            name real caveats, and skip products we&apos;d be embarrassed to
+            promote, regardless of commission. Corrections are welcomed at our
+            contact page.
           </p>
         </div>
 

@@ -51,8 +51,10 @@ export const CTABanner = () => {
               }}
             >
               Read the{" "}
-              <em className="font-serif-italic text-[var(--color-mint)]">honest</em>{" "}
-              take before you hit "buy."
+              <em className="font-serif-italic text-[var(--color-mint)]">
+                honest
+              </em>{" "}
+              take before you hit &ldquo;buy.&rdquo;
             </h3>
             <p
               className="m-0 max-w-[48ch]"
@@ -63,9 +65,9 @@ export const CTABanner = () => {
                 color: "var(--color-ink-2)",
               }}
             >
-              ClickRank reviews lead with real strengths, name real caveats,
-              and disclose every affiliate relationship. Browse recent work,
-              or read exactly how we decide what to publish.
+              ClickRank reviews lead with real strengths, name real caveats, and
+              disclose every affiliate relationship. Browse recent work, or read
+              exactly how we decide what to publish.
             </p>
           </div>
 
@@ -85,7 +87,8 @@ export const CTABanner = () => {
               href="/editorial"
               className="inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-full text-[14px] font-medium transition-all"
               style={{
-                border: "1px solid color-mix(in oklch, var(--color-ink) 18%, transparent)",
+                border:
+                  "1px solid color-mix(in oklch, var(--color-ink) 18%, transparent)",
                 color: "var(--color-ink)",
                 background: "oklch(15% 0.03 255 / 0.4)",
               }}
