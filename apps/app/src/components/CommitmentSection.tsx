@@ -27,7 +27,9 @@ export const CommitmentSection = () => {
             }}
           >
             Passion and dedication lead&nbsp;to{" "}
-            <em className="font-serif-italic text-[var(--color-mint)]">accurate</em>{" "}
+            <em className="font-serif-italic text-[var(--color-mint)]">
+              accurate
+            </em>{" "}
             reviews.
           </h2>
 
@@ -42,10 +44,10 @@ export const CommitmentSection = () => {
                 color: "var(--color-ink-2)",
               }}
             >
-              ClickBank sales pages are designed to make "wait, let me think"
-              feel expensive. Countdown timers, stacked upsells, anonymous
-              testimonials, claims you can't verify without buying first. The
-              whole funnel rewards not reading carefully.
+              ClickBank sales pages are designed to make &ldquo;wait, let me
+              think&rdquo; feel expensive. Countdown timers, stacked upsells,
+              anonymous testimonials, claims you can&apos;t verify without
+              buying first. The whole funnel rewards not reading carefully.
             </p>
             <p
               className="m-0 mb-5"
@@ -58,13 +60,13 @@ export const CommitmentSection = () => {
               }}
             >
               ClickRank is an independent, analysis-driven review site. We
-              don't run hands-on product testing and we don't claim to. What
-              we do: read each sales page carefully, research vendor claims,
-              and publish an honest-favorable review that leads with real
-              strengths and names real caveats. Every review ships with a
-              plain FTC disclosure and links to the product through a
-              tracked redirect so you always see where you're going before
-              you leave.
+              don&apos;t run hands-on product testing and we don&apos;t claim
+              to. What we do: read each sales page carefully, research vendor
+              claims, and publish an honest-favorable review that leads with
+              real strengths and names real caveats. Every review ships with a
+              plain FTC disclosure and links to the product through a tracked
+              redirect so you always see where you&apos;re going before you
+              leave.
             </p>
             <p
               className="m-0"
@@ -76,11 +78,11 @@ export const CommitmentSection = () => {
                 color: "var(--color-ink-2)",
               }}
             >
-              We use AI assistance to draft long-form copy at scale, then
-              gate every draft through an automated editorial check that
-              rejects fabrication tells, missing disclosures, and claims we
-              can't support. When we get something wrong, we correct the
-              page rather than quietly rewrite it. That's the deal.
+              We use AI assistance to draft long-form copy at scale, then gate
+              every draft through an automated editorial check that rejects
+              fabrication tells, missing disclosures, and claims we can&apos;t
+              support. When we get something wrong, we correct the page rather
+              than quietly rewrite it. That&apos;s the deal.
             </p>
 
             <div

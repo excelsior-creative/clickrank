@@ -31,8 +31,11 @@ export default async function BlogPage() {
         eyebrow="The Review Desk · All reviews"
         title={
           <>
-            Every review we've{" "}
-            <em className="font-serif-italic text-[var(--color-mint)]">filed</em>.
+            Every review we&apos;ve{" "}
+            <em className="font-serif-italic text-[var(--color-mint)]">
+              filed
+            </em>
+            .
           </>
         }
         description="Honest, independent reviews of digital products from the ClickBank marketplace. Leading with real strengths, naming real caveats, and keeping affiliate relationships transparent."
