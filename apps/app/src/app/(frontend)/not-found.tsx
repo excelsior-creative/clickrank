@@ -62,8 +62,9 @@ export default function NotFound() {
             textWrap: "balance",
           }}
         >
-          That review isn't{" "}
-          <em className="font-serif-italic text-[var(--color-mint)]">on</em> the desk.
+          That review isn&apos;t{" "}
+          <em className="font-serif-italic text-[var(--color-mint)]">on</em> the
+          desk.
         </h1>
         <p
           className="mx-auto m-0 mb-10 max-w-[54ch]"
@@ -74,8 +75,8 @@ export default function NotFound() {
             color: "var(--color-ink-2)",
           }}
         >
-          We couldn't find what you were looking for. It might have moved, been
-          retitled after a correction, or never existed in the first place.
+          We couldn&apos;t find what you were looking for. It might have moved,
+          been retitled after a correction, or never existed in the first place.
         </p>
         <div className="flex gap-3 justify-center flex-wrap">
           <Link

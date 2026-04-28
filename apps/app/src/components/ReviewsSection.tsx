@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { PostCard } from "./PostCard";
@@ -41,7 +42,9 @@ export const ReviewsSection = async () => {
         title={
           <>
             The products we{" "}
-            <em className="font-serif-italic text-[var(--color-mint)]">looked at</em>{" "}
+            <em className="font-serif-italic text-[var(--color-mint)]">
+              looked at
+            </em>{" "}
             lately.
           </>
         }
@@ -51,14 +54,21 @@ export const ReviewsSection = async () => {
       />
 
       {categories.length > 0 && (
-        <nav className="flex gap-2 flex-wrap pb-10" aria-label="Filter reviews by category">
-          <a href="/blog" className="cat-chip active">
+        <nav
+          className="flex gap-2 flex-wrap pb-10"
+          aria-label="Filter reviews by category"
+        >
+          <Link href="/blog" className="cat-chip active">
             All <span className="count">{posts.length}</span>
-          </a>
+          </Link>
           {(categories as Category[]).slice(0, 9).map((cat) => (
-            <a key={cat.id} href={`/blog?category=${cat.slug}`} className="cat-chip">
+            <Link
+              key={cat.id}
+              href={`/blog?category=${cat.slug}`}
+              className="cat-chip"
+            >
               {cat.name}
-            </a>
+            </Link>
           ))}
         </nav>
       )}
