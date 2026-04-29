@@ -9,8 +9,9 @@ Vercel Cron (nightly, 10:00 UTC)
 GET /api/cron/generate-article   (requires Bearer CRON_SECRET)
   │
   ├─ pickTrendingProduct()        → clickbankService.ts
-  │    ├─ scrape marketplace (Puppeteer, optional, brittle)
-  │    └─ fallback: FALLBACK_PRODUCTS (8 perennial offers)
+  │    ├─ desired: marketplace-intelligence ledger (Decision 0005)
+  │    ├─ current: scrape marketplace (Puppeteer, optional, brittle)
+  │    └─ fallback: FALLBACK_PRODUCTS (25 perennial offers)
   │       filtered against last 50 slugs to avoid dupes
   │
   ├─ generateArticleForProduct()  → contentGenerationService.ts
@@ -30,6 +31,9 @@ GET /api/cron/generate-article   (requires Bearer CRON_SECRET)
 
 - ✅ Runs on a Vercel cron nightly.
 - ✅ Picks from curated fallback list when scraper/creds missing.
+- ⚠️ Strategic target is marketplace-informed selection: use ClickBank
+  trend/gravity/commission signals plus editorial-risk flags to choose
+  the next product, not a random fallback product.
 - ✅ Generates SEO-structured ~1500-word reviews.
 - ✅ Humanizes output.
 - ✅ Generates featured images.
@@ -55,9 +59,11 @@ GET /api/cron/generate-article   (requires Bearer CRON_SECRET)
   unblocked at the infrastructure layer; actual numbers require
   Vercel log access (pending Brandon).
 - ⚠️ **Scraper is brittle.** Selectors are guesses. Fallback list
-  has 8 products — limited variety.
-- ⚠️ **No BrowserDB of products.** No history of what's been
-  covered, what was skipped and why.
+  has 25 products, but static coverage cannot tell us what is trending
+  or paying right now.
+- ⚠️ **No marketplace intelligence ledger.** No durable history of
+  what ClickBank products were seen, what was chosen, what was skipped,
+  why it was skipped, or whether clicks later became commissions.
 - ⚠️ **Auto-publish is off.** Every night requires a human to
   publish the draft. Good for safety now, blocker for scale later.
 - ⚠️ **FTC disclosure was not being rendered.** Fixed
@@ -79,13 +85,16 @@ GET /api/cron/generate-article   (requires Bearer CRON_SECRET)
 3. Persist `/go/[slug]` click events to a Payload collection so we
    can query per-product click counts without log access. Requires
    new collection + migration → PR.
-4. Product inventory persistence (so we don't rely on last-50-slugs
-   heuristic for dedup; tonight's token-intersection dedup is a
-   short-term improvement but still not authoritative).
-5. Tune the QA gate based on real output (false positives to back
-   off on, new fabrication patterns to add).
-6. Auto-publish behind a feature flag once QA gate has cleanly
-   passed ≥5 consecutive real drafts.
+4. ClickBank marketplace intelligence loop: product/opportunity ledger,
+   trend and commission signals, editorial-risk flags, and skip-reason
+   logging. See Decision 0005 and the proposed R2 spec.
+5. Product inventory persistence (so we don't rely on last-50-slugs
+   heuristic for dedup; token-intersection dedup is a short-term
+   improvement but still not authoritative).
+6. Tune the QA gate based on real output (false positives to back off
+   on, new fabrication patterns to add).
+7. Auto-publish behind a feature flag once QA gate has cleanly passed
+   ≥5 consecutive real drafts.
 
 ## Run log
 
@@ -161,3 +170,10 @@ Append nightly. Format:
   in DRAFT. Pipeline code is production-ready pending Vercel deploy.
   Escalated to Brandon in Slack with 🔴 URGENT tag. No generated
   drafts tonight; no production environment to generate into.
+
+- `2026-04-29` — G-stack auto documentation pass. Brandon clarified
+  ClickRank as an informational affiliate site: readers arrive for
+  helpful ClickBank product information, then qualified buyers are
+  routed to affiliate links that generate commissions. Captured the
+  need for a ClickBank marketplace intelligence loop so product
+  selection tracks what is trending, paying, and editorially safe.
