@@ -3,6 +3,31 @@
 Outstanding items the autonomous CEO needs from Brandon. Each ask
 is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
 
+
+## 🟡 Needs decision — Approve ClickBank marketplace intelligence loop
+
+**Added: 2026-04-29**
+
+Brandon clarified that ClickRank should capture informational search
+traffic and upsell qualified readers through affiliate links that pay us
+when buyers convert. The next strategy gap is marketplace intelligence:
+we need to know what is happening and trending inside ClickBank so the
+pipeline maximizes exposure to products with demand, commission upside,
+and acceptable editorial risk.
+
+Proposed spec: `ceo/specs/2026-04-29-clickbank-marketplace-intelligence-loop.md`.
+
+Decision needed before implementation:
+
+1. Approve this as R2 ready work after production launch blockers are
+   handled.
+2. Choose the initial ingestion path: authenticated marketplace scrape,
+   Brandon-provided ClickBank export/CSV, or curated manual top-product
+   feed.
+3. Provide a readable commission/export feed if we want EPC and
+   revenue-based optimization instead of click-only optimization.
+
+---
 ## 🟡 Needs decision — Queue ready specs for autonomous CEO work
 
 **Added: 2026-04-27. Updated: 2026-04-28.**
