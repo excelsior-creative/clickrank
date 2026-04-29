@@ -5,19 +5,20 @@ is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
 
 ## 🟡 Needs decision — Queue ready specs for autonomous CEO work
 
-**Added: 2026-04-27. Updated: 2026-04-28.**
+**Added: 2026-04-27. Updated: 2026-04-29.**
 
-`ceo/next.md` currently has zero ready specs. `ceo/specs/` now contains the uploaded editorial design spec, but it is already marked `status: complete`; there is still no executable ready queue. Under the BOS guardrail, the nightly CEO must stop rather than invent roadmap work.
+`ceo/next.md` currently has zero ready specs. `ceo/specs/` contains the uploaded editorial design spec, but it is already marked `status: complete`; there is still no executable ready queue. Under the BOS guardrail, the nightly CEO must stop rather than invent roadmap work.
+
+Update from 2026-04-29: PR #18 (`fix(lint): use Next flat ESLint config`) has merged to `main`, so the prior ESLint flat-config candidate is complete and should not be re-queued.
 
 Please approve at least two of these backlog-to-spec conversions and add them to `ceo/next.md > Ready`:
 
 1. **Launch validation + production cutover support** — after Brandon creates the Vercel project and configures env/DNS, execute the repo's `LAUNCH_CHECKLIST.md`: verify deploy, smoke-test live pages, confirm cron registration/manual trigger, and document any launch blockers.
-2. **ESLint flat-config merge/verification** — formalize open PR #18 as a ready spec: review the lint-config fix, verify the reported lint/type-check/build results, and merge if acceptable.
-3. **Editorial-copy lint gate completion** — formalize DR-0004 / draft PR #13 as a ready spec: review scope, finish any required cleanup, run verification, and move the fabrication-copy CI guardrail toward merge.
-4. **Rating + verdict fields on Posts** — convert the backlog item into a scoped migration/rendering spec so PostCard and featured-card scores come from real editorial data instead of placeholders.
-5. **Legacy review QA audit script** — create a script/report spec for the 93 imported posts that bypassed `qaService`, with execution gated on DB access or a Vercel-side run path.
+2. **Editorial-copy lint gate completion** — formalize DR-0004 / draft PR #13 as a ready spec: review scope, finish any required cleanup, run verification, and move the fabrication-copy CI guardrail toward merge.
+3. **Rating + verdict fields on Posts** — convert the backlog item into a scoped migration/rendering spec so PostCard and featured-card scores come from real editorial data instead of placeholders.
+4. **Legacy review QA audit script** — create a script/report spec for the 93 imported posts that bypassed `qaService`, with execution gated on DB access or a Vercel-side run path.
 
-Recommended first two: launch validation, then ESLint flat-config merge/verification for PR #18 so the app has a working lint gate before PR #13 proceeds.
+Recommended first two: launch validation, then editorial-copy lint gate completion for PR #13 now that the lint configuration is fixed on `main`.
 
 ---
 
