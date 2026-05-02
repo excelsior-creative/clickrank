@@ -48,37 +48,24 @@ Recommended first two: launch validation, then editorial-copy lint gate completi
 
 ---
 
-## 🔴 URGENT — The Next.js app has never been deployed. clickrank.net is still WordPress.
+## 🔴 URGENT — Production deployment exists, but public DNS still serves old WordPress
 
-**Discovered: 2026-04-26**
+**Discovered: 2026-04-26. Updated: 2026-05-02.**
 
-Running `vercel list` against the excelsior-creative team shows **no ClickRank project exists.** The entire Next.js app — all pipeline code, editorial fixes, schema markup, 93-post database, category pages, FTC disclosures — has never been deployed anywhere. clickrank.net is serving the old WordPress site ("over ten years in the business," fake NLP/Prediction Systems copy).
+Status changed since the original blocker: a ClickRank Vercel production deployment now exists under `excelsior-creative/clickrank` (`https://clickrank-3hyemqy4p-excelsior-creative.vercel.app`, Ready, observed in paged `vercel ls` on 2026-05-02). The blocker is now the custom-domain cutover, not project creation.
 
-**This is a complete business blocker. Nothing the pipeline builds matters until this is resolved.**
+`https://clickrank.net` and `www.clickrank.net` still resolve to the old SiteGround/WordPress IP (`35.215.116.196`) and the live headers expose WordPress (`x-pingback`, `wp-json`, nginx/SiteGround cache markers). Search engines and readers are still seeing the old WordPress site even though the Next.js app is deployed on Vercel.
 
-What needs to happen (you need to be in the Vercel dashboard):
+**Remaining required action:** update Cloudflare/DNS for the public domain, then re-run launch validation.
 
-1. Go to vercel.com → Add New → Project
-2. Import repo: `excelsior-creative/clickrank`
-3. Root directory: `apps/app`
-4. Framework: Next.js (auto-detected)
-5. Install command: `cd ../.. && pnpm install --frozen-lockfile`
-6. Configure all env vars per `LAUNCH_CHECKLIST.md` Phase 2 — minimum required:
-   - `PAYLOAD_SECRET` (generate: `openssl rand -hex 32`)
-   - `DATABASE_URL` (Postgres — Neon/Vercel Postgres/Supabase)
-   - `NEXT_PUBLIC_SITE_URL` = `https://clickrank.net`
-   - `NEXT_PUBLIC_SERVER_URL` = `https://clickrank.net`
-   - `BLOB_READ_WRITE_TOKEN` (Vercel Blob)
-   - `REVALIDATION_SECRET` and `CRON_SECRET` (generate: `openssl rand -hex 16`)
-   - `GOOGLE_GENAI_API_KEY` (for the nightly pipeline)
-   - Contact form vars: `RESEND_API_KEY`, `FROM_EMAIL`, `CONTACT_EMAIL`, `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`, `RECAPTCHA_SECRET_KEY`
-7. Run first deploy (expect it may fail first try before env vars are set)
-8. Point `clickrank.net` DNS to Vercel (A record → 76.76.21.21, www CNAME → cname.vercel-dns.com)
-9. Take down / redirect old WordPress
+1. In Cloudflare/DNS, point apex `clickrank.net` to Vercel: `A @ -> 76.76.21.21`.
+2. Point `www` to Vercel: preferably `CNAME www -> cname.vercel-dns.com` (or Vercel's shown record).
+3. Keep records DNS-only/gray-cloud until Vercel validates SSL, unless Vercel/Cloudflare proxy settings are intentionally configured.
+4. Confirm Vercel shows `clickrank.net` and `www.clickrank.net` as valid domains and set apex as primary.
+5. Re-verify with `dig`, `curl -I -L https://clickrank.net`, browser smoke on `/`, `/editorial`, `/blog/...`, and `/go/[slug]` behavior.
+6. Then queue/execute the launch-validation spec in `ceo/next.md` so cron registration, admin/content state, sitemap, and contact form checks happen from the correct public domain.
 
-The full checklist is in `LAUNCH_CHECKLIST.md` at the repo root. It covers every step including DB init, admin user creation, cron verification, sitemap submission, and smoke testing.
-
-**Recommendation:** Do this before end of weekend. Every day the old WordPress runs is a day search engines are indexing the wrong content and readers are bouncing off "NLP Prediction Systems" copy.
+The full checklist remains in `LAUNCH_CHECKLIST.md`.
 
 ---
 
