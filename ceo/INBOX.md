@@ -30,53 +30,42 @@ Decision needed before implementation:
 ---
 ## 🟡 Needs decision — Queue ready specs for autonomous CEO work
 
-**Added: 2026-04-27. Updated: 2026-04-28.**
+**Added: 2026-04-27. Updated: 2026-04-30.**
 
-`ceo/next.md` currently has zero ready specs. `ceo/specs/` now contains the uploaded editorial design spec, but it is already marked `status: complete`; there is still no executable ready queue. Under the BOS guardrail, the nightly CEO must stop rather than invent roadmap work.
+`ceo/next.md` currently has zero ready specs. `ceo/specs/` contains the uploaded editorial design spec, but it is already marked `status: complete`; the new ClickBank marketplace intelligence loop spec is still `status: proposed` / R2 and needs Brandon approval of the ingestion approach before implementation. Under the BOS guardrail, the nightly CEO must stop rather than invent roadmap work.
+
+Status cleanup: PR #18 (`fix(lint): use Next flat ESLint config`) merged into `main` before this run, so it is no longer a valid ready-spec candidate. Open PR #20 is a stale/conflicting nightly status PR, and PR #13 remains draft for the editorial-copy lint gate.
 
 Please approve at least two of these backlog-to-spec conversions and add them to `ceo/next.md > Ready`:
 
 1. **Launch validation + production cutover support** — after Brandon creates the Vercel project and configures env/DNS, execute the repo's `LAUNCH_CHECKLIST.md`: verify deploy, smoke-test live pages, confirm cron registration/manual trigger, and document any launch blockers.
-2. **ESLint flat-config merge/verification** — formalize open PR #18 as a ready spec: review the lint-config fix, verify the reported lint/type-check/build results, and merge if acceptable.
-3. **Editorial-copy lint gate completion** — formalize DR-0004 / draft PR #13 as a ready spec: review scope, finish any required cleanup, run verification, and move the fabrication-copy CI guardrail toward merge.
+2. **Editorial-copy lint gate completion** — formalize DR-0004 / draft PR #13 as a ready spec: review scope, finish any required cleanup, run verification, and move the fabrication-copy CI guardrail toward merge.
+3. **ClickBank marketplace intelligence loop** — approve the R2 spec and choose the initial ingestion path: authenticated marketplace scrape, Brandon-provided ClickBank export/CSV, or curated manual top-product feed.
 4. **Rating + verdict fields on Posts** — convert the backlog item into a scoped migration/rendering spec so PostCard and featured-card scores come from real editorial data instead of placeholders.
 5. **Legacy review QA audit script** — create a script/report spec for the 93 imported posts that bypassed `qaService`, with execution gated on DB access or a Vercel-side run path.
 
-Recommended first two: launch validation, then ESLint flat-config merge/verification for PR #18 so the app has a working lint gate before PR #13 proceeds.
+Recommended first two: launch validation, then editorial-copy lint gate completion. Marketplace intelligence should follow once Brandon approves the data-access path.
 
 ---
 
-## 🔴 URGENT — The Next.js app has never been deployed. clickrank.net is still WordPress.
+## 🔴 URGENT — Production deployment exists, but public DNS still serves old WordPress
 
-**Discovered: 2026-04-26**
+**Discovered: 2026-04-26. Updated: 2026-05-02.**
 
-Running `vercel list` against the excelsior-creative team shows **no ClickRank project exists.** The entire Next.js app — all pipeline code, editorial fixes, schema markup, 93-post database, category pages, FTC disclosures — has never been deployed anywhere. clickrank.net is serving the old WordPress site ("over ten years in the business," fake NLP/Prediction Systems copy).
+Status changed since the original blocker: a ClickRank Vercel production deployment now exists under `excelsior-creative/clickrank` (`https://clickrank-3hyemqy4p-excelsior-creative.vercel.app`, Ready, observed in paged `vercel ls` on 2026-05-02). The blocker is now the custom-domain cutover, not project creation.
 
-**This is a complete business blocker. Nothing the pipeline builds matters until this is resolved.**
+`https://clickrank.net` and `www.clickrank.net` still resolve to the old SiteGround/WordPress IP (`35.215.116.196`) and the live headers expose WordPress (`x-pingback`, `wp-json`, nginx/SiteGround cache markers). Search engines and readers are still seeing the old WordPress site even though the Next.js app is deployed on Vercel.
 
-What needs to happen (you need to be in the Vercel dashboard):
+**Remaining required action:** update Cloudflare/DNS for the public domain, then re-run launch validation.
 
-1. Go to vercel.com → Add New → Project
-2. Import repo: `excelsior-creative/clickrank`
-3. Root directory: `apps/app`
-4. Framework: Next.js (auto-detected)
-5. Install command: `cd ../.. && pnpm install --frozen-lockfile`
-6. Configure all env vars per `LAUNCH_CHECKLIST.md` Phase 2 — minimum required:
-   - `PAYLOAD_SECRET` (generate: `openssl rand -hex 32`)
-   - `DATABASE_URL` (Postgres — Neon/Vercel Postgres/Supabase)
-   - `NEXT_PUBLIC_SITE_URL` = `https://clickrank.net`
-   - `NEXT_PUBLIC_SERVER_URL` = `https://clickrank.net`
-   - `BLOB_READ_WRITE_TOKEN` (Vercel Blob)
-   - `REVALIDATION_SECRET` and `CRON_SECRET` (generate: `openssl rand -hex 16`)
-   - `GOOGLE_GENAI_API_KEY` (for the nightly pipeline)
-   - Contact form vars: `RESEND_API_KEY`, `FROM_EMAIL`, `CONTACT_EMAIL`, `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`, `RECAPTCHA_SECRET_KEY`
-7. Run first deploy (expect it may fail first try before env vars are set)
-8. Point `clickrank.net` DNS to Vercel (A record → 76.76.21.21, www CNAME → cname.vercel-dns.com)
-9. Take down / redirect old WordPress
+1. In Cloudflare/DNS, point apex `clickrank.net` to Vercel: `A @ -> 76.76.21.21`.
+2. Point `www` to Vercel: preferably `CNAME www -> cname.vercel-dns.com` (or Vercel's shown record).
+3. Keep records DNS-only/gray-cloud until Vercel validates SSL, unless Vercel/Cloudflare proxy settings are intentionally configured.
+4. Confirm Vercel shows `clickrank.net` and `www.clickrank.net` as valid domains and set apex as primary.
+5. Re-verify with `dig`, `curl -I -L https://clickrank.net`, browser smoke on `/`, `/editorial`, `/blog/...`, and `/go/[slug]` behavior.
+6. Then queue/execute the launch-validation spec in `ceo/next.md` so cron registration, admin/content state, sitemap, and contact form checks happen from the correct public domain.
 
-The full checklist is in `LAUNCH_CHECKLIST.md` at the repo root. It covers every step including DB init, admin user creation, cron verification, sitemap submission, and smoke testing.
-
-**Recommendation:** Do this before end of weekend. Every day the old WordPress runs is a day search engines are indexing the wrong content and readers are bouncing off "NLP Prediction Systems" copy.
+The full checklist remains in `LAUNCH_CHECKLIST.md`.
 
 ---
 
