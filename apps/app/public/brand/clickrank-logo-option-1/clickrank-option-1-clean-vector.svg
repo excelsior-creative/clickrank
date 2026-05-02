@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="2400" viewBox="0 0 2400 2400">
+<title>ClickRank option 1 logo</title>
+<desc>Clean vector rebuild of option 1: circular ranking badge with upward bars and gold star plus ClickRank wordmark.</desc>
+<circle cx="1200" cy="770" r="520" fill="#13243A"/>
+<circle cx="1200" cy="770" r="405" fill="#FFFFFF"/>
+<rect x="884" y="810" width="120" height="310" rx="42" fill="#1F6FFF"/>
+<rect x="1080" y="670" width="120" height="450" rx="42" fill="#24B8C7"/>
+<rect x="1276" y="520" width="120" height="600" rx="42" fill="#1F6FFF"/>
+<rect x="1472" y="382" width="120" height="738" rx="42" fill="#24B8C7"/>
+<path d="M780 1120H1620" fill="none" stroke="#13243A" stroke-width="42" stroke-linecap="round" opacity="0.12"/>
+<polygon points="1000.00,370.00 1024.69,428.02 1087.48,433.07 1039.85,474.31 1054.38,535.61 1000.00,503.50 945.62,535.61 960.15,474.31 912.52,433.07 975.31,428.02" fill="#F7B733"/>
+<text x="1200" y="1645" text-anchor="middle" font-family="Inter, Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="300" font-weight="800"><tspan fill="#13243A">Click</tspan><tspan fill="#1F6FFF">Rank</tspan></text>
+</svg>
