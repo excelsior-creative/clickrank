@@ -34,7 +34,8 @@ Initial verification already performed:
 - Re-run the public-domain smoke checks from `LAUNCH_CHECKLIST.md` Phase 5, Phase 7, Phase 8, and relevant Phase 9 items.
 - Verify both apex and `www` hosts resolve to Vercel and return HTTPS successfully.
 - Confirm the homepage, editorial page, blog index, about/contact/privacy/terms, sitemap, robots, RSS feed, and one `/go/[slug]` redirect behave as expected.
-- Check whether published content is present; if the site still has `0` reviews published, document the content activation blocker.
+- Check whether published content is present; launch validation found the homepage showing `0` reviews and `0` categories, `/blog` empty aside from the heading, `sitemap.xml` containing only static URLs, and `feed.xml` with 0 items. Treat content activation as the primary launch blocker unless Brandon confirms the empty state is intentional.
+- Confirm/flag possible placeholder publisher/legal copy; a launch-validation pass saw `© 2026 My Site Media Co.` in the footer.
 - Check browser console on the homepage and one important secondary page for runtime errors.
 - Confirm launch-critical headers are present (`Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`).
 - Document what cannot be verified without credentials or manual dashboard access, especially admin login, contact-form email delivery, Vercel Cron status, production env vars, analytics, and Search Console submission.

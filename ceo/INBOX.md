@@ -50,9 +50,10 @@ Status changed: `https://clickrank.net` now serves the Vercel Next.js/Payload ap
 Remaining launch work is no longer DNS cutover; it is final validation and content/admin/cron/access confirmation:
 
 1. Execute `ceo/specs/2026-05-02-production-launch-validation.md` against `LAUNCH_CHECKLIST.md`.
-2. Confirm whether production has intended published reviews/content. The homepage smoke currently shows `0` reviews and `0` categories, which may be correct only if content activation is intentionally pending.
-3. Verify admin access, contact-form delivery, Vercel Cron registration, and production env vars from the Vercel/Payload dashboards.
-4. Confirm GSC/Bing sitemap submission and analytics access once launch validation is complete.
+2. Confirm whether production has intended published reviews/content. Current launch validation found the homepage showing `0` reviews and `0` categories, `/blog` empty aside from the heading, `sitemap.xml` containing only 7 static URLs, and `feed.xml` containing 0 items. This is the primary public-launch blocker if content is supposed to be live.
+3. Confirm/replace possible placeholder publisher/legal copy: homepage/footer visual inspection showed `© 2026 My Site Media Co.`.
+4. Verify admin access, contact-form delivery, Vercel Cron registration, and production env vars from the Vercel/Payload dashboards.
+5. Confirm GSC/Bing sitemap submission and analytics access once launch validation is complete.
 
 ---
 
