@@ -101,6 +101,25 @@ CTA at post-bottom emitted a tracked click.
 
 *(None yet.)*
 
+## Marketplace intelligence target
+
+The fallback list is not the strategy. It is the safety net. The
+strategic target is a product/opportunity ledger fed by ClickBank
+marketplace and affiliate reporting signals so the pipeline can answer:
+
+- What is trending right now?
+- Which products have the best combination of demand, payout, and
+  manageable editorial risk?
+- Which products have we already covered, refreshed, skipped, or
+  rejected?
+- Which pages generate outbound clicks but no commission?
+- Which categories deserve comparison/listicle hubs?
+
+Minimum desired fields are product, vendor, category, gravity/rank,
+initial price, rebill/recurring signal, commission/EPC when available,
+affiliate URL, source timestamp, coverage status, linked post slug, and
+editorial risk flags.
+
 ## Notes
 
 - Gravity scores are directional guesses from the fallback list;

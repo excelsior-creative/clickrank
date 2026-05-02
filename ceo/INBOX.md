@@ -3,7 +3,6 @@
 Outstanding items the autonomous CEO needs from Brandon. Each ask
 is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
 
-## 🟡 Needs decision — Queue ready specs for autonomous CEO work
 
 **Added: 2026-04-27. Updated: 2026-04-29.**
 
@@ -11,7 +10,16 @@ is tagged 🔴 urgent / 🟡 needs decision / 🟢 FYI.
 
 Update from 2026-04-29: PR #18 (`fix(lint): use Next flat ESLint config`) has merged to `main`, so the prior ESLint flat-config candidate is complete and should not be re-queued.
 
-Please approve at least two of these backlog-to-spec conversions and add them to `ceo/next.md > Ready`:
+## 🟡 Needs decision — Approve ClickBank marketplace intelligence loop
+
+**Added: 2026-04-29**
+
+Brandon clarified that ClickRank should capture informational search
+traffic and upsell qualified readers through affiliate links that pay us
+when buyers convert. The next strategy gap is marketplace intelligence:
+we need to know what is happening and trending inside ClickBank so the
+pipeline maximizes exposure to products with demand, commission upside,
+and acceptable editorial risk.
 
 1. **Launch validation + production cutover support** — after Brandon creates the Vercel project and configures env/DNS, execute the repo's `LAUNCH_CHECKLIST.md`: verify deploy, smoke-test live pages, confirm cron registration/manual trigger, and document any launch blockers.
 2. **Editorial-copy lint gate completion** — formalize DR-0004 / draft PR #13 as a ready spec: review scope, finish any required cleanup, run verification, and move the fabrication-copy CI guardrail toward merge.
@@ -20,39 +28,45 @@ Please approve at least two of these backlog-to-spec conversions and add them to
 
 Recommended first two: launch validation, then editorial-copy lint gate completion for PR #13 now that the lint configuration is fixed on `main`.
 
+Proposed spec: `ceo/specs/2026-04-29-clickbank-marketplace-intelligence-loop.md`.
+
+Decision needed before implementation:
+
+1. Approve this as R2 ready work after production launch blockers are
+   handled.
+2. Choose the initial ingestion path: authenticated marketplace scrape,
+   Brandon-provided ClickBank export/CSV, or curated manual top-product
+   feed.
+3. Provide a readable commission/export feed if we want EPC and
+   revenue-based optimization instead of click-only optimization.
+
+---
+## ✅ Resolved — Ready specs queued for autonomous CEO work
+
+**Added: 2026-04-27. Resolved: 2026-05-02.**
+
+Brandon's 2026-05-02 “review and move the project forward” request authorized converting the safest recommended backlog items into ready work. `ceo/next.md` now has two ready specs:
+
+1. `ceo/specs/2026-05-02-production-launch-validation.md` — validate the live public-domain launch and capture remaining launch blockers.
+2. `ceo/specs/2026-05-02-editorial-copy-lint-gate-completion.md` — recover/finish DR-0004 and stale draft PR #13.
+
+The ClickBank marketplace intelligence loop remains proposed/R2 until Brandon approves the ingestion approach and data-access path.
+
 ---
 
-## 🔴 URGENT — The Next.js app has never been deployed. clickrank.net is still WordPress.
+## 🟡 Needs follow-up — Production launch validation/content activation
 
-**Discovered: 2026-04-26**
+**Discovered: 2026-04-26. Updated: 2026-05-02.**
 
-Running `vercel list` against the excelsior-creative team shows **no ClickRank project exists.** The entire Next.js app — all pipeline code, editorial fixes, schema markup, 93-post database, category pages, FTC disclosures — has never been deployed anywhere. clickrank.net is serving the old WordPress site ("over ten years in the business," fake NLP/Prediction Systems copy).
+Status changed: `https://clickrank.net` now serves the Vercel Next.js/Payload app, not the old WordPress/SiteGround site. Initial checks on 2026-05-02 returned `server: Vercel`, `x-powered-by: Next.js, Payload`, the title `ClickRank | Honest ClickBank Product Reviews`, and `200` responses for the main public routes.
 
-**This is a complete business blocker. Nothing the pipeline builds matters until this is resolved.**
+Remaining launch work is no longer DNS cutover; it is final validation and content/admin/cron/access confirmation:
 
-What needs to happen (you need to be in the Vercel dashboard):
-
-1. Go to vercel.com → Add New → Project
-2. Import repo: `excelsior-creative/clickrank`
-3. Root directory: `apps/app`
-4. Framework: Next.js (auto-detected)
-5. Install command: `cd ../.. && pnpm install --frozen-lockfile`
-6. Configure all env vars per `LAUNCH_CHECKLIST.md` Phase 2 — minimum required:
-   - `PAYLOAD_SECRET` (generate: `openssl rand -hex 32`)
-   - `DATABASE_URL` (Postgres — Neon/Vercel Postgres/Supabase)
-   - `NEXT_PUBLIC_SITE_URL` = `https://clickrank.net`
-   - `NEXT_PUBLIC_SERVER_URL` = `https://clickrank.net`
-   - `BLOB_READ_WRITE_TOKEN` (Vercel Blob)
-   - `REVALIDATION_SECRET` and `CRON_SECRET` (generate: `openssl rand -hex 16`)
-   - `GOOGLE_GENAI_API_KEY` (for the nightly pipeline)
-   - Contact form vars: `RESEND_API_KEY`, `FROM_EMAIL`, `CONTACT_EMAIL`, `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`, `RECAPTCHA_SECRET_KEY`
-7. Run first deploy (expect it may fail first try before env vars are set)
-8. Point `clickrank.net` DNS to Vercel (A record → 76.76.21.21, www CNAME → cname.vercel-dns.com)
-9. Take down / redirect old WordPress
-
-The full checklist is in `LAUNCH_CHECKLIST.md` at the repo root. It covers every step including DB init, admin user creation, cron verification, sitemap submission, and smoke testing.
-
-**Recommendation:** Do this before end of weekend. Every day the old WordPress runs is a day search engines are indexing the wrong content and readers are bouncing off "NLP Prediction Systems" copy.
+1. Execute `ceo/specs/2026-05-02-production-launch-validation.md` against `LAUNCH_CHECKLIST.md`.
+2. Confirm whether production has intended published reviews/content. Current launch validation found the homepage showing `0` reviews and `0` categories, `/blog` empty aside from the heading, `sitemap.xml` containing only 7 static URLs, and `feed.xml` containing 0 items. This is the primary public-launch blocker if content is supposed to be live.
+3. Confirm/replace possible placeholder publisher/legal copy: homepage/footer visual inspection showed `© 2026 My Site Media Co.`.
+4. Verify admin access, contact-form delivery, Vercel Cron registration, and production env vars from the Vercel/Payload dashboards.
+5. Confirm GSC/Bing sitemap submission and analytics access once launch validation is complete.
 
 ---
 
@@ -112,9 +126,10 @@ The full checklist is in `LAUNCH_CHECKLIST.md` at the repo root. It covers every
   page rendered three invented testimonials, invented stats (500+
   products, 50K+ readers, 4.9/5 trust score), and copy claiming
   "hands-on testing" and a "community of readers". All fixed
-  structurally on the Next.js app (which still isn't live).
-- `/editorial` public page is now live in the code. Once deployed,
-  it will be linked from the footer.
+  structurally on the Next.js app now serving `clickrank.net`; the
+  remaining risk is any unaudited published content, not the site chrome.
+- `/editorial` public page is live and linked from the footer on the
+  public `clickrank.net` deployment.
 - `/go/[slug]` outbound tracking is in place in code.
 - **93 legacy reviews in Payload** (imported 2026-04-20/21) — quality
   unaudited; body-link tracking is in but FTC compliance of the
